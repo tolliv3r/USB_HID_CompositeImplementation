@@ -84,6 +84,26 @@
 #include <sleepmgr.h>
 #include <xmega/sleepmgr.h>
 
+// the following are imported from JoystickImplementation asf.h
+
+// From module: System Clock Control - XMEGA A1U/A3U/A3BU/A4U/B/C implementation
+#include <sysclk.h>
+
+// From module: USB Device HID Generic (Single Interface Device)
+#include <udi_hid_generic.h>
+
+// From module: USB Device Stack Core (Common API)
+#include <udc.h>
+#include <udd.h>
+
+// From module: USB HID Device protocol
+#include <usb_protocol_hid.h>
+
+// From module: USB HID Library (Device)
+#include <udi_hid.h>
+
+// end imported functions from JoystickImplementation asf.h
+
 // From module: XMEGA compiler driver
 #include <compiler.h>
 #include <status_codes.h>

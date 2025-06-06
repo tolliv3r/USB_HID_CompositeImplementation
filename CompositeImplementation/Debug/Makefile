@@ -76,7 +76,11 @@ SUBDIRS :=  \
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../src/76319_ui.c \
+../src/io.c \
+../src/joystick.c \
+../src/keypad.c \
+../src/led.c \
+../src/ui.c \
 ../src/ASF/common/services/sleepmgr/xmega/sleepmgr.c \
 ../src/ASF/common/services/clock/xmega/sysclk.c \
 ../src/ASF/common/services/usb/class/composite/device/udi_composite_desc.c \
@@ -100,7 +104,11 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-src/76319_ui.o \
+src/io.o \
+src/joystick.o \
+src/keypad.o \
+src/led.o \
+src/ui.o \
 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o \
 src/ASF/common/services/clock/xmega/sysclk.o \
 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o \
@@ -117,7 +125,11 @@ src/ASF/xmega/drivers/usb/usb_device.o \
 src/main.o
 
 OBJS_AS_ARGS +=  \
-src/76319_ui.o \
+src/io.o \
+src/joystick.o \
+src/keypad.o \
+src/led.o \
+src/ui.o \
 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o \
 src/ASF/common/services/clock/xmega/sysclk.o \
 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o \
@@ -134,7 +146,11 @@ src/ASF/xmega/drivers/usb/usb_device.o \
 src/main.o
 
 C_DEPS +=  \
-src/76319_ui.d \
+src/io.d \
+src/joystick.d \
+src/keypad.d \
+src/led.d \
+src/ui.d \
 src/ASF/common/services/sleepmgr/xmega/sleepmgr.d \
 src/ASF/common/services/clock/xmega/sysclk.d \
 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.d \
@@ -151,7 +167,11 @@ src/ASF/xmega/drivers/usb/usb_device.d \
 src/main.d
 
 C_DEPS_AS_ARGS +=  \
-src/76319_ui.d \
+src/io.d \
+src/joystick.d \
+src/keypad.d \
+src/led.d \
+src/ui.d \
 src/ASF/common/services/sleepmgr/xmega/sleepmgr.d \
 src/ASF/common/services/clock/xmega/sysclk.d \
 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.d \
@@ -181,7 +201,35 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-src/76319_ui.o: ../src/76319_ui.c
+src/io.o: ../src/io.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=STK600_RC064X -DCONFIG_NVM_IGNORE_XMEGA_A3_D3_REVB_ERRATA -DIOPORT_XMEGA_COMPAT  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\include" -I"../src/ASF/common/boards" -I"../src/ASF/xmega/utils/preprocessor" -I"../src/ASF/xmega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/xmega/boards/stk600/rc064x" -I"../src/ASF/xmega/boards" -I"../src/ASF/common/services/gpio" -I"../src/ASF/common/services/ioport" -I"../src" -I"../src/config" -I"../src/ASF/xmega/drivers/cpu" -I"../src/ASF/xmega/drivers/nvm" -I"../src/ASF/xmega/drivers/sleep" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/sleepmgr" -I"../src/ASF/common/services/usb" -I"../src/ASF/common/services/usb/class/composite/device" -I"../src/ASF/common/services/usb/class/hid" -I"../src/ASF/common/services/usb/class/hid/device" -I"../src/ASF/common/services/usb/class/hid/device/generic" -I"../src/ASF/common/services/usb/class/hid/device/kbd" -I"../src/ASF/common/services/usb/udc" -I"../src/ASF/xmega/drivers/usb"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -mmcu=atxmega256a3u -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\gcc\dev\atxmega256a3u" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/joystick.o: ../src/joystick.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=STK600_RC064X -DCONFIG_NVM_IGNORE_XMEGA_A3_D3_REVB_ERRATA -DIOPORT_XMEGA_COMPAT  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\include" -I"../src/ASF/common/boards" -I"../src/ASF/xmega/utils/preprocessor" -I"../src/ASF/xmega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/xmega/boards/stk600/rc064x" -I"../src/ASF/xmega/boards" -I"../src/ASF/common/services/gpio" -I"../src/ASF/common/services/ioport" -I"../src" -I"../src/config" -I"../src/ASF/xmega/drivers/cpu" -I"../src/ASF/xmega/drivers/nvm" -I"../src/ASF/xmega/drivers/sleep" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/sleepmgr" -I"../src/ASF/common/services/usb" -I"../src/ASF/common/services/usb/class/composite/device" -I"../src/ASF/common/services/usb/class/hid" -I"../src/ASF/common/services/usb/class/hid/device" -I"../src/ASF/common/services/usb/class/hid/device/generic" -I"../src/ASF/common/services/usb/class/hid/device/kbd" -I"../src/ASF/common/services/usb/udc" -I"../src/ASF/xmega/drivers/usb"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -mmcu=atxmega256a3u -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\gcc\dev\atxmega256a3u" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/keypad.o: ../src/keypad.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=STK600_RC064X -DCONFIG_NVM_IGNORE_XMEGA_A3_D3_REVB_ERRATA -DIOPORT_XMEGA_COMPAT  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\include" -I"../src/ASF/common/boards" -I"../src/ASF/xmega/utils/preprocessor" -I"../src/ASF/xmega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/xmega/boards/stk600/rc064x" -I"../src/ASF/xmega/boards" -I"../src/ASF/common/services/gpio" -I"../src/ASF/common/services/ioport" -I"../src" -I"../src/config" -I"../src/ASF/xmega/drivers/cpu" -I"../src/ASF/xmega/drivers/nvm" -I"../src/ASF/xmega/drivers/sleep" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/sleepmgr" -I"../src/ASF/common/services/usb" -I"../src/ASF/common/services/usb/class/composite/device" -I"../src/ASF/common/services/usb/class/hid" -I"../src/ASF/common/services/usb/class/hid/device" -I"../src/ASF/common/services/usb/class/hid/device/generic" -I"../src/ASF/common/services/usb/class/hid/device/kbd" -I"../src/ASF/common/services/usb/udc" -I"../src/ASF/xmega/drivers/usb"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -mmcu=atxmega256a3u -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\gcc\dev\atxmega256a3u" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/led.o: ../src/led.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=STK600_RC064X -DCONFIG_NVM_IGNORE_XMEGA_A3_D3_REVB_ERRATA -DIOPORT_XMEGA_COMPAT  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\include" -I"../src/ASF/common/boards" -I"../src/ASF/xmega/utils/preprocessor" -I"../src/ASF/xmega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/xmega/boards/stk600/rc064x" -I"../src/ASF/xmega/boards" -I"../src/ASF/common/services/gpio" -I"../src/ASF/common/services/ioport" -I"../src" -I"../src/config" -I"../src/ASF/xmega/drivers/cpu" -I"../src/ASF/xmega/drivers/nvm" -I"../src/ASF/xmega/drivers/sleep" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/sleepmgr" -I"../src/ASF/common/services/usb" -I"../src/ASF/common/services/usb/class/composite/device" -I"../src/ASF/common/services/usb/class/hid" -I"../src/ASF/common/services/usb/class/hid/device" -I"../src/ASF/common/services/usb/class/hid/device/generic" -I"../src/ASF/common/services/usb/class/hid/device/kbd" -I"../src/ASF/common/services/usb/udc" -I"../src/ASF/xmega/drivers/usb"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -mmcu=atxmega256a3u -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\gcc\dev\atxmega256a3u" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ui.o: ../src/ui.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=STK600_RC064X -DCONFIG_NVM_IGNORE_XMEGA_A3_D3_REVB_ERRATA -DIOPORT_XMEGA_COMPAT  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\include" -I"../src/ASF/common/boards" -I"../src/ASF/xmega/utils/preprocessor" -I"../src/ASF/xmega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/xmega/boards/stk600/rc064x" -I"../src/ASF/xmega/boards" -I"../src/ASF/common/services/gpio" -I"../src/ASF/common/services/ioport" -I"../src" -I"../src/config" -I"../src/ASF/xmega/drivers/cpu" -I"../src/ASF/xmega/drivers/nvm" -I"../src/ASF/xmega/drivers/sleep" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/sleepmgr" -I"../src/ASF/common/services/usb" -I"../src/ASF/common/services/usb/class/composite/device" -I"../src/ASF/common/services/usb/class/hid" -I"../src/ASF/common/services/usb/class/hid/device" -I"../src/ASF/common/services/usb/class/hid/device/generic" -I"../src/ASF/common/services/usb/class/hid/device/kbd" -I"../src/ASF/common/services/usb/udc" -I"../src/ASF/xmega/drivers/usb"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -mmcu=atxmega256a3u -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAA_DFP\1.3.146\gcc\dev\atxmega256a3u" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

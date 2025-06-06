@@ -365,10 +365,34 @@
     <Folder Include="src\config\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\76319_ui.c">
+    <Compile Include="src\io.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\76319_ui.h">
+    <Compile Include="src\io.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\joystick.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\joystick.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\keypad.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\keypad.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\led.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\led.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ui.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ui.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\main.h">

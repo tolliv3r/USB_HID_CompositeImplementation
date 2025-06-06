@@ -2,7 +2,15 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-src\76319_ui.c
+src\io.c
+
+src\joystick.c
+
+src\keypad.c
+
+src\led.c
+
+src\ui.c
 
 src\ASF\common\services\sleepmgr\xmega\sleepmgr.c
 

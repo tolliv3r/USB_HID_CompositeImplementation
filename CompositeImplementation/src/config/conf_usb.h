@@ -235,7 +235,7 @@
 #include "udi_hid_generic.h"
 
 #include "main.h"
-#include "76319_ui.h"
+#include "ui.h"
 
 
 #endif // _CONF_USB_H_

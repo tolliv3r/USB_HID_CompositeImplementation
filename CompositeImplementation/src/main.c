@@ -47,7 +47,7 @@ int main (void)
 	sysclk_init();				// initialize clock
 
 	io_init();
-	led_init()
+	led_init();
 	keypad_init();
 
 	udc_start();

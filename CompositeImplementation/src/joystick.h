@@ -1,7 +1,6 @@
 #ifndef JOYSTICK_H
 #define JOYSTICK_H
 
-#include <stdint.h>
 #include "udi_hid_generic.h"
 
 

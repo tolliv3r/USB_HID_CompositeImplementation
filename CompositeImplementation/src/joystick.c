@@ -1,5 +1,4 @@
 #include <asf.h>
-#include <util/delay.h>
 
 #include "led.h"
 #include "joystick.h"
@@ -144,7 +143,6 @@ void joystick(void)
         if (jstk_mask) {
             led_allOff();
             led_on(jstk_mask);
-            _delay_ms(10);
         }
     } else {                                // normal mode
         led_allOff();                       // !! probably remove this later !!

@@ -18,43 +18,16 @@
  * Finished (Place Date here)
  *----------------------------------------
 */
-
-
-/****************************************************/
-// Section - Include File Declarations
-/****************************************************/
 #include <asf.h>
 #include "conf_usb.h"  // Note -Conf_usb.h includes main.h
 
 #include "ui.h"
 #include "joystick.h"
 
-
-/****************************************************/
-/***************** Function Prototypes **************/
-/****************************************************/
-// Declaration Section - Function prototype declarations, for use only by this C file Only
-uint16_t DoSomethingWithPassedValue(uint16_t pui_Value);
-
-
-//  ********************************************************************
-//  Definitions Section
-//  ********************************************************************
-// Definitions for this file only
-//! Sequence process running each \c SEQUENCE_PERIOD ms
 #define SEQUENCE_PERIOD 150
 
-
-//  *************************************************/
-// Variables Section
-//  *************************************************/
-// Variables for this file only
-
-// Variable for Generic_USB class - Refer to Mircrochip example project --> GENERIC_EXAMPLE1
 static uint8_t ui_KeyStatusToReport;
 static uint8_t ui_KeyToReport;
-
-// Variables for Keyboard USB Class - Refer to Mircrochip example project --> KEYBOARD_EXAMPLE1
 
 static struct
 {
@@ -69,17 +42,8 @@ Bd76319_ui_sequence[] =
 	{false,false,false},  // Place holder for keypress code
 };
 
-
-
-//  ********************************************************************
-//Section - Code C Functions
-//  ********************************************************************
-
-// These function can be used if an interrupt is used to send USB information
-// Refer to the AVR example projects --> GENERIC_EXAMPLE1 or KEYBOARD_EXAMPLE1
-
-// Debug only function
-uint16_t DoSomethingWithPassedValue(uint16_t pui_Value)
+uint16_t DoSomethingWithPassedValue(uint16_t pui_Value); // prototype
+uint16_t DoSomethingWithPassedValue(uint16_t pui_Value) // Debug only function
 {
 	// Function - Just a way to debug a parameter.
 	if (pui_Value == 0)
@@ -96,7 +60,6 @@ uint16_t DoSomethingWithPassedValue(uint16_t pui_Value)
 	}
 }
 
-
 void BD76319_KeyToReport(uint16_t pui_KeyStatus, uint16_t pui_KeyValue)
 {
 
@@ -105,7 +68,7 @@ void BD76319_KeyToReport(uint16_t pui_KeyStatus, uint16_t pui_KeyValue)
 }
 
 
-// Procedure for Keyboard USB Class - Slightly modified - Refer to Mircrochip example project --> KEYBOARD_EXAMPLE1
+// Procedure for Keyboard USB Class
 void BD76319_ui_process(uint16_t pui_framenumber)
 {
 	//	   bool b_btn_state, sucess;
@@ -117,7 +80,6 @@ void BD76319_ui_process(uint16_t pui_framenumber)
 	static uint16_t lui_cpt_sof = 0;
 
 	// Scan process running each 2ms
-
 	lui_cpt_sof++;
 	if ((lui_cpt_sof % 2) == 0)
 	{
@@ -155,8 +117,6 @@ void BD76319_ui_process(uint16_t pui_framenumber)
 				{
 					lui_sucess = udi_hid_kbd_modifier_up(lui_u8_value);
 				}
-				// ui_KeyStatusToReport = false;
-				// ui_KeyToReport = false;
 			}
 			else
 			{
@@ -167,8 +127,6 @@ void BD76319_ui_process(uint16_t pui_framenumber)
 				{
 					lui_sucess = udi_hid_kbd_up(lui_u8_value);
 				}
-				// ui_KeyStatusToReport = false;
-				// ui_KeyToReport = false;
 			}
 			if (!lui_sucess)
 			{
@@ -181,21 +139,19 @@ void BD76319_ui_process(uint16_t pui_framenumber)
 		if (lui_u8_sequence_pos >= sizeof(Bd76319_ui_sequence) / sizeof(Bd76319_ui_sequence[0]))
 		{
 			lui_u8_sequence_pos = 0;
-			// ui_KeyStatusToReport = false;
-			// ui_KeyToReport = false;
 			lui_sequence_running = false;
 		}
 	}
 }
 
 
-// Procedure for Keyboard USB Class - Slightly modified - Refer to Mircrochip example project --> KEYBOARD_EXAMPLE1
+// Procedure for Keyboard USB Class
 void BD76319_ui_kbd_led(uint8_t value)
 {
 	// Write Alarm information to Alarm LEDs
 	PORTA.OUT = ~value;
 }
 
-void ui_process(uint16_t framenumber) {
+void jstk_ui_process(uint16_t framenumber) {
     joystick();
 }

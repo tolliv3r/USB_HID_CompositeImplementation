@@ -16,7 +16,7 @@ void keypad_init(void);		// initialize keypad matrix
 void keypad_poll(void);		// scan keypad matrix
 void keypad_report(void);
 
-uint8_t keypad_getState(void);	// get current key press state (P or R)
+uint8_t keypad_getState(void);	// get current key press state
 uint8_t keypad_getCode(void);	// get HID code of last detected key
 
 

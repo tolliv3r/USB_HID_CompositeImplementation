@@ -15,24 +15,10 @@
 #ifndef _UI_H_
 #define _UI_H_
 
-
-/****************************************************/
-/***************** Function Prototypes **************/
-/****************************************************/
 void BD76319_KeyToReport(uint16_t pui_KeyStatus, uint16_t pui_KeyValue);
 void BD76319_ui_process(uint16_t pui_framenumber);
 void BD76319_ui_kbd_led(uint8_t value);
 
-void ui_process(uint16_t framenumber);
+void jstk_ui_process(uint16_t framenumber);
 
-//  *************************************************/
-//  Definitions Section
-//  *************************************************/
-//  No Definitions defined
-
-
-//  *************************************************/
-// Variables Section (externals)
-//  *************************************************/
-// No External Global Variables
 #endif // _UI_H_

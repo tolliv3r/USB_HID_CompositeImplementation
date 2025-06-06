@@ -41,16 +41,16 @@ static volatile bool main_b_generic_enable = false;
 
 int main (void)
 {
-	irq_initialize_vectors();
-	cpu_irq_enable();
+	irq_initialize_vectors();	// initializes vector table
+	cpu_irq_enable();			// enables CPU interrupts
 	sleepmgr_init();			// initialize sleep manager
 	sysclk_init();				// initialize clock
 
-	io_init();
-	led_init();
-	keypad_init();
+	io_init();					// initializes board i/o pins
+	led_init();					// initalizes LEDs
+	keypad_init();				// initializes keypad driver
 
-	udc_start();
+	udc_start();				// starts USB device controller
 
 	while (true) { }
 }
@@ -60,17 +60,18 @@ int main (void)
 void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
-void main_sof_action(void) {
+void main_sof_action(void) {	// called each Start of Frame event (1 ms)
+	// keypad logic
 	if (!main_b_kbd_enable)
 	return;
-	if (!main_b_generic_enable)
-		return;
 	keypad_poll();
 	keypad_report();
-	
 	BD76319_ui_process(udd_get_frame_number());
 
-	ui_process(udd_get_frame_number());
+	// joystick logic
+	if (!main_b_generic_enable)
+		return;
+	jstk_ui_process(udd_get_frame_number());
 }
 
 void main_remotewakeup_enable(void) { }
@@ -87,13 +88,11 @@ void main_kbd_disable(void) {
 
 /* --------------------------------------------------------------------- */
 
-bool main_generic_enable(void)
-{
+bool main_generic_enable(void) { // joystick enable
 	main_b_generic_enable = true;
 	return true;
 }
 
-void main_generic_disable(void)
-{
+void main_generic_disable(void) { // joystick disable
 	main_b_generic_enable = false;
 }

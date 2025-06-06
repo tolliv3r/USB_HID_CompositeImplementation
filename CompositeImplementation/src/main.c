@@ -31,23 +31,27 @@
 #include <asf.h>
 #include "conf_usb.h"
 
-// #include "76319_ui.h"
+#include "io.h"
+#include "ui.h"
+#include "led.h"
+#include "keypad.h"
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
 
 int main (void)
 {
-	/* Insert system clock initialization code here (sysclk_init()). */
-
 	irq_initialize_vectors();
 	cpu_irq_enable();
 	sleepmgr_init();			// initialize sleep manager
 	sysclk_init();				// initialize clock
 
+	io_init();
+	led_init()
+	keypad_init();
+
 	udc_start();
 
-	/* Insert application code here, after the board has been initialized. */
 	while (true) { }
 }
 
@@ -61,11 +65,12 @@ void main_sof_action(void) {
 	return;
 	if (!main_b_generic_enable)
 		return;
-
-	// keypad_poll();
-	// keypad_report();
+	keypad_poll();
+	keypad_report();
 	
-	// BD76319_ui_process(udd_get_frame_number());
+	BD76319_ui_process(udd_get_frame_number());
+
+	ui_process(udd_get_frame_number());
 }
 
 void main_remotewakeup_enable(void) { }

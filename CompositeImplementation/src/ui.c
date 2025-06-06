@@ -25,7 +25,9 @@
 /****************************************************/
 #include <asf.h>
 #include "conf_usb.h"  // Note -Conf_usb.h includes main.h
+
 #include "ui.h"
+#include "joystick.h"
 
 
 /****************************************************/

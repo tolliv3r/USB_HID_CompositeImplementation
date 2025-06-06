@@ -1,6 +1,4 @@
 #include <asf.h>
-#include <avr/io.h>
-#include <conf_usb.h>
 
 #include "ui.h"
 #include "keypad.h"

@@ -2,8 +2,6 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
-#include <stdint.h>
-
 
 #define KEYPAD_PRESSED	1
 #define KEYPAD_RELEASED	0

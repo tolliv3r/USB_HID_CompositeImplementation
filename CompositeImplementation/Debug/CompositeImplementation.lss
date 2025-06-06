@@ -29,7 +29,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_ranges 000004b0  00000000  00000000  00054210  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000cd45  00000000  00000000  000546c0  2**0
+ 13 .debug_macro  0000cd37  00000000  00000000  000546c0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -6745,10 +6745,10 @@ static volatile bool main_b_generic_enable = false;
 
 int main (void)
 {
-	irq_initialize_vectors();
+	irq_initialize_vectors();	// initializes vector table
     2630:	87 e0       	ldi	r24, 0x07	; 7
     2632:	80 93 a2 00 	sts	0x00A2, r24	; 0x8000a2 <__TEXT_REGION_LENGTH__+0x7be0a2>
-	cpu_irq_enable();
+	cpu_irq_enable();			// enables CPU interrupts
     2636:	78 94       	sei
 {
 #ifdef CONFIG_SLEEPMGR_ENABLE
@@ -6771,14 +6771,14 @@ int main (void)
 	sysclk_init();				// initialize clock
     264a:	0e 94 60 04 	call	0x8c0	; 0x8c0 <sysclk_init>
 
-	io_init();
+	io_init();					// initializes board i/o pins
     264e:	0e 94 30 01 	call	0x260	; 0x260 <io_init>
-	led_init();
+	led_init();					// initalizes LEDs
     2652:	0e 94 d9 03 	call	0x7b2	; 0x7b2 <led_init>
-	keypad_init();
+	keypad_init();				// initializes keypad driver
     2656:	0e 94 88 02 	call	0x510	; 0x510 <keypad_init>
 
-	udc_start();
+	udc_start();				// starts USB device controller
     265a:	0e 94 4e 08 	call	0x109c	; 0x109c <udc_start>
     265e:	ff cf       	rjmp	.-2      	; 0x265e <main+0x2e>
 
@@ -6797,7 +6797,7 @@ void main_resume_action(void) { }
 
 00002664 <main_sof_action>:
 
-void main_sof_action(void) {
+void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 	// keypad logic
 	if (!main_b_kbd_enable)
     2664:	80 91 9a 22 	lds	r24, 0x229A	; 0x80229a <main_b_kbd_enable>
@@ -6851,11 +6851,11 @@ void main_kbd_disable(void) {
     269a:	08 95       	ret
 
 0000269c <main_generic_enable>:
+}
 
 /* --------------------------------------------------------------------- */
 
-bool main_generic_enable(void)
-{
+bool main_generic_enable(void) { // joystick enable
 	main_b_generic_enable = true;
     269c:	81 e0       	ldi	r24, 0x01	; 1
     269e:	80 93 99 22 	sts	0x2299, r24	; 0x802299 <main_b_generic_enable>
@@ -6865,8 +6865,7 @@ bool main_generic_enable(void)
 
 000026a4 <main_generic_disable>:
 
-void main_generic_disable(void)
-{
+void main_generic_disable(void) { // joystick disable
 	main_b_generic_enable = false;
     26a4:	10 92 99 22 	sts	0x2299, r1	; 0x802299 <main_b_generic_enable>
     26a8:	08 95       	ret

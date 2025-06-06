@@ -187,7 +187,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x79 src/joystick.o
  .debug_macro   0x00000000       0x2f src/joystick.o
  .debug_macro   0x00000000      0x154 src/joystick.o
- .debug_macro   0x00000000       0xe6 src/joystick.o
+ .debug_macro   0x00000000       0xdf src/joystick.o
  .debug_macro   0x00000000      0x241 src/joystick.o
  .debug_macro   0x00000000      0x162 src/joystick.o
  .debug_macro   0x00000000      0x44f src/joystick.o
@@ -302,7 +302,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x79 src/keypad.o
  .debug_macro   0x00000000       0x2f src/keypad.o
  .debug_macro   0x00000000      0x154 src/keypad.o
- .debug_macro   0x00000000       0xe6 src/keypad.o
+ .debug_macro   0x00000000       0xdf src/keypad.o
  .debug_macro   0x00000000      0x241 src/keypad.o
  .debug_macro   0x00000000      0x162 src/keypad.o
  .debug_macro   0x00000000      0x44f src/keypad.o
@@ -415,7 +415,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x79 src/led.o
  .debug_macro   0x00000000       0x2f src/led.o
  .debug_macro   0x00000000      0x154 src/led.o
- .debug_macro   0x00000000       0xe6 src/led.o
+ .debug_macro   0x00000000       0xdf src/led.o
  .debug_macro   0x00000000      0x241 src/led.o
  .debug_macro   0x00000000      0x162 src/led.o
  .debug_macro   0x00000000      0x44f src/led.o
@@ -526,7 +526,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x79 src/ui.o
  .debug_macro   0x00000000       0x2f src/ui.o
  .debug_macro   0x00000000      0x154 src/ui.o
- .debug_macro   0x00000000       0xe6 src/ui.o
+ .debug_macro   0x00000000       0xdf src/ui.o
  .debug_macro   0x00000000      0x241 src/ui.o
  .debug_macro   0x00000000      0x162 src/ui.o
  .debug_macro   0x00000000      0x44f src/ui.o
@@ -840,7 +840,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x69 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
  .debug_macro   0x00000000       0x31 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
  .debug_macro   0x00000000       0xe4 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
- .debug_macro   0x00000000       0xe0 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
+ .debug_macro   0x00000000       0xd9 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
  .debug_macro   0x00000000      0x241 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
  .debug_macro   0x00000000      0x162 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
  .debug_macro   0x00000000      0x44f src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
@@ -922,7 +922,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x69 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
  .debug_macro   0x00000000       0x31 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
  .debug_macro   0x00000000       0xe4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
- .debug_macro   0x00000000       0xe0 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
+ .debug_macro   0x00000000       0xd9 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
  .debug_macro   0x00000000      0x241 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
  .debug_macro   0x00000000      0x162 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
  .debug_macro   0x00000000      0x44f src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
@@ -1004,7 +1004,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x69 src/ASF/common/services/usb/class/hid/device/udi_hid.o
  .debug_macro   0x00000000       0x31 src/ASF/common/services/usb/class/hid/device/udi_hid.o
  .debug_macro   0x00000000       0xe4 src/ASF/common/services/usb/class/hid/device/udi_hid.o
- .debug_macro   0x00000000       0xe0 src/ASF/common/services/usb/class/hid/device/udi_hid.o
+ .debug_macro   0x00000000       0xd9 src/ASF/common/services/usb/class/hid/device/udi_hid.o
  .debug_macro   0x00000000      0x241 src/ASF/common/services/usb/class/hid/device/udi_hid.o
  .debug_macro   0x00000000      0x162 src/ASF/common/services/usb/class/hid/device/udi_hid.o
  .debug_macro   0x00000000      0x44f src/ASF/common/services/usb/class/hid/device/udi_hid.o
@@ -1087,7 +1087,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x69 src/ASF/common/services/usb/udc/udc.o
  .debug_macro   0x00000000       0x31 src/ASF/common/services/usb/udc/udc.o
  .debug_macro   0x00000000       0xe4 src/ASF/common/services/usb/udc/udc.o
- .debug_macro   0x00000000       0xe0 src/ASF/common/services/usb/udc/udc.o
+ .debug_macro   0x00000000       0xd9 src/ASF/common/services/usb/udc/udc.o
  .debug_macro   0x00000000      0x241 src/ASF/common/services/usb/udc/udc.o
  .debug_macro   0x00000000      0x162 src/ASF/common/services/usb/udc/udc.o
  .debug_macro   0x00000000      0x44f src/ASF/common/services/usb/udc/udc.o
@@ -1492,7 +1492,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x69 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_macro   0x00000000       0x31 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_macro   0x00000000       0xe4 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_macro   0x00000000       0xe0 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_macro   0x00000000       0xd9 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_macro   0x00000000      0x241 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_macro   0x00000000      0x162 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_macro   0x00000000      0x44f src/ASF/xmega/drivers/usb/usb_device.o
@@ -1613,7 +1613,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x79 src/main.o
  .debug_macro   0x00000000       0x2f src/main.o
  .debug_macro   0x00000000      0x154 src/main.o
- .debug_macro   0x00000000       0xe6 src/main.o
+ .debug_macro   0x00000000       0xdf src/main.o
  .debug_macro   0x00000000      0x241 src/main.o
  .debug_macro   0x00000000      0x162 src/main.o
  .debug_macro   0x00000000      0x44f src/main.o
@@ -2755,7 +2755,7 @@ END GROUP
  .debug_ranges  0x00000318      0x140 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_ranges  0x00000458       0x58 src/main.o
 
-.debug_macro    0x00000000     0xcd45
+.debug_macro    0x00000000     0xcd37
  *(.debug_macro)
  .debug_macro   0x00000000      0x338 src/io.o
  .debug_macro   0x00000338      0xa96 src/io.o
@@ -2803,37 +2803,37 @@ END GROUP
  .debug_macro   0x0000960a       0x79 src/io.o
  .debug_macro   0x00009683       0x2f src/io.o
  .debug_macro   0x000096b2      0x154 src/io.o
- .debug_macro   0x00009806       0xe6 src/io.o
- .debug_macro   0x000098ec      0x241 src/io.o
- .debug_macro   0x00009b2d      0x162 src/io.o
- .debug_macro   0x00009c8f      0x44f src/io.o
- .debug_macro   0x0000a0de       0x16 src/io.o
- .debug_macro   0x0000a0f4       0x16 src/io.o
- .debug_macro   0x0000a10a       0x10 src/io.o
- .debug_macro   0x0000a11a       0x22 src/io.o
- .debug_macro   0x0000a13c      0x36a src/joystick.o
- .debug_macro   0x0000a4a6      0x160 src/joystick.o
- .debug_macro   0x0000a606       0x3a src/joystick.o
- .debug_macro   0x0000a640      0x344 src/keypad.o
- .debug_macro   0x0000a984       0x22 src/keypad.o
- .debug_macro   0x0000a9a6      0x343 src/led.o
- .debug_macro   0x0000ace9       0x34 src/led.o
- .debug_macro   0x0000ad1d      0x302 src/led.o
- .debug_macro   0x0000b01f      0x342 src/ui.o
- .debug_macro   0x0000b361      0x1a3 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
- .debug_macro   0x0000b504      0x1db src/ASF/common/services/clock/xmega/sysclk.o
- .debug_macro   0x0000b6df      0x201 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
- .debug_macro   0x0000b8e0       0xe0 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
- .debug_macro   0x0000b9c0       0x16 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
- .debug_macro   0x0000b9d6       0x1c src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
- .debug_macro   0x0000b9f2      0x235 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
- .debug_macro   0x0000bc27       0x16 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
- .debug_macro   0x0000bc3d      0x23b src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
- .debug_macro   0x0000be78      0x219 src/ASF/common/services/usb/class/hid/device/udi_hid.o
- .debug_macro   0x0000c091      0x21e src/ASF/common/services/usb/udc/udc.o
- .debug_macro   0x0000c2af      0x2e7 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_macro   0x0000c596      0x461 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_macro   0x0000c9f7      0x34e src/main.o
+ .debug_macro   0x00009806       0xdf src/io.o
+ .debug_macro   0x000098e5      0x241 src/io.o
+ .debug_macro   0x00009b26      0x162 src/io.o
+ .debug_macro   0x00009c88      0x44f src/io.o
+ .debug_macro   0x0000a0d7       0x16 src/io.o
+ .debug_macro   0x0000a0ed       0x16 src/io.o
+ .debug_macro   0x0000a103       0x10 src/io.o
+ .debug_macro   0x0000a113       0x22 src/io.o
+ .debug_macro   0x0000a135      0x36a src/joystick.o
+ .debug_macro   0x0000a49f      0x160 src/joystick.o
+ .debug_macro   0x0000a5ff       0x3a src/joystick.o
+ .debug_macro   0x0000a639      0x344 src/keypad.o
+ .debug_macro   0x0000a97d       0x22 src/keypad.o
+ .debug_macro   0x0000a99f      0x343 src/led.o
+ .debug_macro   0x0000ace2       0x34 src/led.o
+ .debug_macro   0x0000ad16      0x302 src/led.o
+ .debug_macro   0x0000b018      0x342 src/ui.o
+ .debug_macro   0x0000b35a      0x1a3 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
+ .debug_macro   0x0000b4fd      0x1db src/ASF/common/services/clock/xmega/sysclk.o
+ .debug_macro   0x0000b6d8      0x201 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_macro   0x0000b8d9       0xd9 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_macro   0x0000b9b2       0x16 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_macro   0x0000b9c8       0x1c src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_macro   0x0000b9e4      0x235 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
+ .debug_macro   0x0000bc19       0x16 src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
+ .debug_macro   0x0000bc2f      0x23b src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
+ .debug_macro   0x0000be6a      0x219 src/ASF/common/services/usb/class/hid/device/udi_hid.o
+ .debug_macro   0x0000c083      0x21e src/ASF/common/services/usb/udc/udc.o
+ .debug_macro   0x0000c2a1      0x2e7 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_macro   0x0000c588      0x461 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_macro   0x0000c9e9      0x34e src/main.o
 OUTPUT(CompositeImplementation.elf elf32-avr)
 LOAD linker stubs
 

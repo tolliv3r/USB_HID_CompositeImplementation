@@ -38,9 +38,6 @@
 #include "udd.h"
 #include "udc_desc.h"
 
-#include "udi_hid_generic.h"
-#include "udi_hid_kbd.h"
-
 /**
  * \defgroup udi_group_desc Descriptors for a USB Device
  * composite
@@ -48,8 +45,7 @@
  * @{
  */
 
-#define USB_DEVICE_NB_INTERFACE 2
-
+/**INDENT-OFF**/
 
 //! USB Device Descriptor
 COMPILER_WORD_ALIGNED

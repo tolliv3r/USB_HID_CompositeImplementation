@@ -111,7 +111,7 @@ UDC_DESC_STORAGE udi_hid_generic_report_desc_t udi_hid_generic_report_desc = { {
 		0x15, 0x00,			/* Logical Minimum (0)			*/
 		0x26, 0xFF, 0x00,	/* Logical Maximum (255)		*/
 		0x75, 0x08,			/* Report Size (8 bits)			*/
-		0x95, 0x02,			/* Report Count (2 → X & Y)		*/
+		0x95, 0x02,			/* Report Count (2 ? X & Y)		*/
 		0x81, 0x02,			/* Input (Data,Var,Abs)			*/
 	  0xC0,					/* End Collection				*/
 	0xC0					/* End Collection				*/

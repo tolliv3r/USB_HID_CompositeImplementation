@@ -12,6 +12,8 @@
  * Finished (Place Date here)
  *----------------------------------------
 */
+#ifndef _UI_H_
+#define _UI_H_
 
 
 /****************************************************/
@@ -33,3 +35,4 @@ void ui_process(uint16_t framenumber);
 // Variables Section (externals)
 //  *************************************************/
 // No External Global Variables
+#endif // _UI_H_

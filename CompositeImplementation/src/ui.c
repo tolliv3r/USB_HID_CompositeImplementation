@@ -25,7 +25,7 @@
 /****************************************************/
 #include <asf.h>
 #include "conf_usb.h"  // Note -Conf_usb.h includes main.h
-#include "76319_ui.h"
+#include "ui.h"
 
 
 /****************************************************/
@@ -195,5 +195,5 @@ void BD76319_ui_kbd_led(uint8_t value)
 }
 
 void ui_process(uint16_t framenumber) {
-    // joystick();
+    joystick();
 }

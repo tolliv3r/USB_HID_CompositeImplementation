@@ -45,7 +45,6 @@ Bd76319_ui_sequence[] =
 uint16_t DoSomethingWithPassedValue(uint16_t pui_Value); // prototype
 uint16_t DoSomethingWithPassedValue(uint16_t pui_Value) // Debug only function
 {
-	// Function - Just a way to debug a parameter.
 	if (pui_Value == 0)
 	{
 	  return(0);

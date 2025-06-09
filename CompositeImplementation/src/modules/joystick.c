@@ -77,8 +77,8 @@ uint8_t jstk_readMask(void)
         return 0;                           // no contact
 
     // decide which slider is moved furthest from center buy computing 'distance' from middle
-    uint8_t dV = (vi < 0) ? 0 : (vi > 5 ? vi - 5 : 5 - vi); // vertical slider 'distance'   (dV)
-    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider 'distance' (dH)
+    uint8_t dV = (vi < 0) ? 0 : (vi > 5 ? vi - 5 : 5 - vi); // vertical slider distance   (dV)
+    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider distance (dH)
 
     int8_t jstk_use = (dV >= dH) ? vi : hi; // slider with greatest distance wins
 
@@ -145,7 +145,7 @@ void joystick(void)
             led_on(jstk_mask);
         }
     } else {                                // normal mode
-        led_allOff();                       // !! probably remove this later !!
+        // led_allOff();                       // for testing
         jstk_usbTask();                     // send to USB
     }
 }

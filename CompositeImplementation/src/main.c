@@ -35,9 +35,9 @@
 #include "ui.h"
 #include "keypad.h"
 
-#include "Modules/io.h"
-#include "Modules/ui.h"
-#include "Modules/keypad.h"
+// #include "modules/io.h"
+// #include "modules/ui.h"
+// #include "modules/keypad.h"
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;

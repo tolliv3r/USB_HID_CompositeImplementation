@@ -2647,7 +2647,7 @@ END GROUP
  .debug_abbrev  0x00004759      0x585 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_abbrev  0x00004cde      0x1ab src/main.o
 
-.debug_line     0x00000000     0x8adc
+.debug_line     0x00000000     0x8ac0
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x39d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.3.146/gcc/dev/atxmega256a3u/avrxmega6/crtatxmega256a3u.o
  .debug_line    0x0000039d      0x9e7 src/modules/io.o
@@ -2665,7 +2665,7 @@ END GROUP
  .debug_line    0x00006a93      0x11f src/ASF/xmega/drivers/nvm/nvm_asm.o
  .debug_line    0x00006bb2       0x6e src/ASF/xmega/drivers/cpu/ccp.o
  .debug_line    0x00006c20     0x14c6 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_line    0x000080e6      0x9f6 src/main.o
+ .debug_line    0x000080e6      0x9da src/main.o
 
 .debug_frame    0x00000000      0xad4
  *(.debug_frame)
@@ -2761,7 +2761,7 @@ END GROUP
  .debug_ranges  0x00000328      0x140 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_ranges  0x00000468       0x58 src/main.o
 
-.debug_macro    0x00000000     0xcbc3
+.debug_macro    0x00000000     0xcbb7
  *(.debug_macro)
  .debug_macro   0x00000000      0x341 src/modules/io.o
  .debug_macro   0x00000341      0xa96 src/modules/io.o
@@ -2838,7 +2838,7 @@ END GROUP
  .debug_macro   0x0000bf10      0x21e src/ASF/common/services/usb/udc/udc.o
  .debug_macro   0x0000c12e      0x2e7 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_macro   0x0000c415      0x461 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_macro   0x0000c876      0x34d src/main.o
+ .debug_macro   0x0000c876      0x341 src/main.o
 OUTPUT(CompositeImplementation.elf elf32-avr)
 LOAD linker stubs
 

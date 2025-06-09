@@ -124,27 +124,27 @@ void keypad_poll(void)
 		// decode row bit pattern to row index
 		switch(kpd_rowVal) // kpd_rowVal is the bit value read from the port
 		{
-			case 0x0E0:		// 1110 0000b -> row 0
+			case 0x0E0: // 1110 0000b -> row 0
 				kpd_detectedRow = 0;
 				kpd_detectedCol = kpd_count;
 				kpd_count = KEYPAD_COLS;
 				break;
-			case 0x0D0:		// 1101 0000b -> row 1
+			case 0x0D0: // 1101 0000b -> row 1
 				kpd_detectedRow = 1;
 				kpd_detectedCol = kpd_count;
 				kpd_count = KEYPAD_COLS;
 				break;
-			case 0x0B0:		// 1011 0000b -> row 2
+			case 0x0B0: // 1011 0000b -> row 2
 				kpd_detectedRow = 2;
 				kpd_detectedCol = kpd_count;
 				kpd_count = KEYPAD_COLS;
 				break;
-			case 0x070:		// 0111 0000b -> row 3
+			case 0x070: // 0111 0000b -> row 3
 				kpd_detectedRow = 3;
 				kpd_detectedCol = kpd_count;
 				kpd_count = KEYPAD_COLS;
 				break;
-			default:		// no valid row
+			default:    // no valid row
 				kpd_detectedRow = KEYPAD_ROWS;
 				kpd_detectedCol = kpd_count;
 				if (kpd_count >= KEYPAD_COLS)

@@ -11,20 +11,20 @@ static volatile uint8_t kpd_keyAssign[KEYPAD_COLS][KEYPAD_ROWS];
 static volatile uint8_t kpd_colAddr[KEYPAD_COLS];
 
 // raw scan values and detected indices
-static volatile uint8_t kpd_rowVal;			// raw row input bits (PF4-PF7)
-static volatile uint8_t kpd_detectedRow;	// detected row index
-static volatile uint8_t kpd_detectedCol;	// detected column index
+static volatile uint8_t kpd_rowVal;       // raw row input bits (PF4-PF7)
+static volatile uint8_t kpd_detectedRow;  // detected row index
+static volatile uint8_t kpd_detectedCol;  // detected column index
 
 // current and previous press state and last key code
-static volatile uint8_t kpd_keyPressed;		// KEYPAD_PRESSED or KEYPAD_RELEASED
-static volatile uint8_t kpd_code; 			// last HID code detected
-static volatile uint8_t kpd_prevState;		// previous button state
-static volatile uint8_t kpd_currState;		// current button state
-static volatile uint8_t kpd_codeOut;		// code sent over USB
+static volatile uint8_t kpd_keyPressed;   // KEYPAD_PRESSED or KEYPAD_RELEASED
+static volatile uint8_t kpd_code;         // last HID code detected
+static volatile uint8_t kpd_prevState;    // previous button state
+static volatile uint8_t kpd_currState;    // current button state
+static volatile uint8_t kpd_codeOut;      // code sent over USB
 
 // test mode flags		
-static volatile uint8_t kpd_exitTestMode;	// flag to clear LEDs after test
-volatile uint8_t kpd_testMode;				// hardware (switch) test mode input
+static volatile uint8_t kpd_exitTestMode; // flag to clear LEDs after test
+volatile uint8_t kpd_testMode;            // hardware (switch) test mode input
 
 /*
  * sets initial states and creates kpd_keyAssign matrix with HID codes.
@@ -53,7 +53,7 @@ void keypad_init(void)
 	F2 Button       --> Column 4, Row 2 (HID_KEYPAD_3)
 	F4 Button       --> Column 4, Row 3 (HID_KEYPAD_4)
 	*/
-	kpd_keyPressed = KEYPAD_RELEASED;	// no key pressed initially
+	kpd_keyPressed = KEYPAD_RELEASED; // no key pressed initially
 	kpd_currState = KEYPAD_RELEASED;
 	kpd_prevState = KEYPAD_RELEASED;
 	kpd_exitTestMode = 0;

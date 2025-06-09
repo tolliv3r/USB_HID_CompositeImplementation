@@ -16,15 +16,15 @@ static volatile bool main_b_generic_enable = false;
 
 int main (void)
 {
-	irq_initialize_vectors();	// initializes vector table
-	cpu_irq_enable();			// enables CPU interrupts
-	sleepmgr_init();			// initialize sleep manager
-	sysclk_init();				// initialize clock
+	irq_initialize_vectors();  // initializes vector table
+	cpu_irq_enable();          // enables CPU interrupts
+	sleepmgr_init();           // initialize sleep manager
+	sysclk_init();             // initialize clock
 
-	io_init();					// initializes board i/o pins
-	keypad_init();				// initializes keypad driver
+	io_init();                 // initializes board i/o pins
+	keypad_init();             // initializes keypad matrix
 
-	udc_start();				// starts USB device controller
+	udc_start();               // starts USB device controller
 
 	while (true) { }
 }

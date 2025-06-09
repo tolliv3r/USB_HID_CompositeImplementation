@@ -44,7 +44,7 @@
  * --------------------------- Device Definition --------------------------
  * ----------------------------------------------------------------------*/
 #ifndef USB_PID_ATMEL_ASF_HIDCOMPOSITE
-#  define USB_PID_ATMEL_ASF_HIDCOMPOSITE 0x2133
+#  define USB_PID_ATMEL_ASF_HIDCOMPOSITE  0x2133
 #endif
 #define  USB_DEVICE_VENDOR_ID             USB_VID_ATMEL
 #define  USB_DEVICE_PRODUCT_ID            USB_PID_ATMEL_ASF_HIDCOMPOSITE
@@ -96,7 +96,7 @@
 #define  UDI_HID_KBD_DISABLE_EXT()      main_kbd_disable()
 #define  UDI_HID_KBD_CHANGE_LED(value)  BD76319_ui_kbd_led(value)
 
-#define  UDI_HID_KBD_EP_IN           (1 | USB_EP_DIR_IN)
+#define  UDI_HID_KBD_EP_IN          (1 | USB_EP_DIR_IN)
 #define  UDI_HID_KBD_IFACE_NUMBER    0
 
 
@@ -111,8 +111,8 @@
 #define  UDI_HID_REPORT_FEATURE_SIZE        0
 #define  UDI_HID_GENERIC_EP_SIZE            8
 
-#define  UDI_HID_GENERIC_EP_IN    (2 | USB_EP_DIR_IN)
-#define  UDI_HID_GENERIC_IFACE_NUMBER    1
+#define  UDI_HID_GENERIC_EP_IN             (2 | USB_EP_DIR_IN)
+#define  UDI_HID_GENERIC_IFACE_NUMBER       1
 
 
 /* ------------------------------------------------------------------------

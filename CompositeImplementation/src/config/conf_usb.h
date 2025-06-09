@@ -85,9 +85,7 @@
  * -------------------------- USB Configurations --------------------------
  * ----------------------------------------------------------------------*/
 #define  USB_DEVICE_EP_CTRL_SIZE       8
-
 #define  USB_DEVICE_NB_INTERFACE       2 // total # of interfaces
-
 #define  USB_DEVICE_MAX_EP             2 // 0 to max endpoint requested by interfaces
 
 
@@ -99,7 +97,6 @@
 #define  UDI_HID_KBD_CHANGE_LED(value)  BD76319_ui_kbd_led(value)
 
 #define  UDI_HID_KBD_EP_IN           (1 | USB_EP_DIR_IN)
-
 #define  UDI_HID_KBD_IFACE_NUMBER    0
 
 

@@ -1,4 +1,4 @@
-src/joystick.d src/joystick.o: ../src/joystick.c ../src/asf.h \
+src/modules/io.d src/modules/io.o: ../src/modules/io.c ../src/asf.h \
  ../src/ASF/xmega/drivers/cpu/ccp.h ../src/ASF/xmega/utils/compiler.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -60,13 +60,14 @@ src/joystick.d src/joystick.o: ../src/joystick.c ../src/asf.h \
  ../src/ASF/common/services/usb/class/hid/usb_protocol_hid.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udi.h \
- ../src/ASF/common/services/usb/udc/udi.h ../src/main.h ../src/ui.h \
- ../src/ASF/common/services/usb/udc/udc.h \
+ ../src/ASF/common/services/usb/udc/udi.h ../src/main.h \
+ ../src/modules/ui.h ../src/ASF/common/services/usb/udc/udc.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/class/hid/device/udi_hid.h \
- ../src/ASF/xmega/utils/status_codes.h ../src/led.h ../src/joystick.h
+ ../src/ASF/xmega/utils/status_codes.h ../src/modules/io.h \
+ ../src/modules/led.h
 
 ../src/asf.h:
 
@@ -200,7 +201,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/main.h:
 
-../src/ui.h:
+../src/modules/ui.h:
 
 ../src/ASF/common/services/usb/udc/udc.h:
 
@@ -214,6 +215,6 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/ASF/xmega/utils/status_codes.h:
 
-../src/led.h:
+../src/modules/io.h:
 
-../src/joystick.h:
+../src/modules/led.h:

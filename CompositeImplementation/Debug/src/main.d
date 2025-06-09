@@ -60,14 +60,15 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/common/services/usb/class/hid/usb_protocol_hid.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udi.h \
- ../src/ASF/common/services/usb/udc/udi.h ../src/main.h ../src/ui.h \
- ../src/ASF/common/services/usb/udc/udc.h \
+ ../src/ASF/common/services/usb/udc/udi.h ../src/main.h \
+ ../src/modules/ui.h ../src/ASF/common/services/usb/udc/udc.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/class/hid/device/udi_hid.h \
- ../src/ASF/xmega/utils/status_codes.h ../src/io.h ../src/ui.h \
- ../src/led.h ../src/keypad.h
+ ../src/ASF/xmega/utils/status_codes.h ../src/modules/io.h \
+ ../src/modules/keypad.h ../src/Modules/io.h ../src/Modules/ui.h \
+ ../src/Modules/keypad.h
 
 ../src/asf.h:
 
@@ -201,7 +202,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/main.h:
 
-../src/ui.h:
+../src/modules/ui.h:
 
 ../src/ASF/common/services/usb/udc/udc.h:
 
@@ -215,10 +216,12 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/ASF/xmega/utils/status_codes.h:
 
-../src/io.h:
+../src/modules/io.h:
 
-../src/ui.h:
+../src/modules/keypad.h:
 
-../src/led.h:
+../src/Modules/io.h:
 
-../src/keypad.h:
+../src/Modules/ui.h:
+
+../src/Modules/keypad.h:

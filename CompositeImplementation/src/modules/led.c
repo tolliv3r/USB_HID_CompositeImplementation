@@ -1,4 +1,3 @@
-// led.c
 #include "led.h"
 #include <asf.h>
 

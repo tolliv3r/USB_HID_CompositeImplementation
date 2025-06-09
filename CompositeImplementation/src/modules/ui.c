@@ -22,6 +22,7 @@
 #include "conf_usb.h"  // Note -Conf_usb.h includes main.h
 
 #include "ui.h"
+#include "keypad.h"
 #include "joystick.h"
 
 #define SEQUENCE_PERIOD 150
@@ -151,6 +152,10 @@ void BD76319_ui_kbd_led(uint8_t value)
 	PORTA.OUT = ~value;
 }
 
-void jstk_ui_process(uint16_t framenumber) {
-    joystick();
+void jstk_ui_process(void) {
+	joystick();
+}
+
+void kbd_ui_process(void) {
+	keypad();
 }

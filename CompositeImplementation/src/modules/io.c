@@ -23,8 +23,9 @@
 // Section - Include File Declarations
 /****************************************************/
 #include <asf.h>
-#include "io.h"
 
+#include "io.h"
+#include "led.h"
 
 //********************************************************************
 //  Section - Code - C Functions
@@ -166,4 +167,6 @@ void io_init(void)
 	initialize_PortD_io();		// (Vertical Slider Switch signals), (USB signals)
 	initialize_PortE_io();		// (Horizontal Slider Switch signals)
 	initialize_PortF_io();		// (COLUMN & ROW Keypad Scan Code signals)
+
+	led_init();
 }

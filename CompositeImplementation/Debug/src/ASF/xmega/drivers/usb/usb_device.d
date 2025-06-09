@@ -38,8 +38,8 @@ src/ASF/xmega/drivers/usb/usb_device.d \
  ../src/ASF/common/services/usb/udc/udi.h \
  ../src/ASF/common/services/usb/udc/udi.h \
  ../src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.h \
- ../src/main.h ../src/ui.h ../src/ASF/common/services/clock/sysclk.h \
- ../src/config/conf_clock.h \
+ ../src/main.h ../src/modules/ui.h \
+ ../src/ASF/common/services/clock/sysclk.h ../src/config/conf_clock.h \
  ../src/ASF/common/services/clock/xmega/sysclk.h \
  ../src/ASF/common/boards/board.h \
  ../src/ASF/xmega/boards/stk600/rc064x/stk600_rc064x.h \
@@ -136,7 +136,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/main.h:
 
-../src/ui.h:
+../src/modules/ui.h:
 
 ../src/ASF/common/services/clock/sysclk.h:
 

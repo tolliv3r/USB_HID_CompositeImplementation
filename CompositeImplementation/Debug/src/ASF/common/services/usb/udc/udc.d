@@ -38,7 +38,8 @@ src/ASF/common/services/usb/udc/udc.d \
  ../src/ASF/common/services/usb/udc/udi.h \
  ../src/ASF/common/services/usb/udc/udi.h \
  ../src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.h \
- ../src/main.h ../src/ui.h ../src/ASF/common/services/usb/udc/udd.h \
+ ../src/main.h ../src/modules/ui.h \
+ ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udc.h
 
@@ -120,7 +121,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/main.h:
 
-../src/ui.h:
+../src/modules/ui.h:
 
 ../src/ASF/common/services/usb/udc/udd.h:
 

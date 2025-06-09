@@ -230,3 +230,9 @@ void keypad_report(void)
 	// update previous state for next cycle
 	kpd_prevState = kpd_currState;
 }
+
+void keypad(void) {
+	keypad_poll();
+	keypad_report();
+	BD76319_ui_process(udd_get_frame_number());
+}

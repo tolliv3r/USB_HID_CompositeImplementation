@@ -33,11 +33,16 @@
 
 #include "io.h"
 #include "ui.h"
-#include "led.h"
 #include "keypad.h"
+
+#include "Modules/io.h"
+#include "Modules/ui.h"
+#include "Modules/keypad.h"
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
+
+/* --------------------------------------------------------------------- */
 
 int main (void)
 {
@@ -47,7 +52,6 @@ int main (void)
 	sysclk_init();				// initialize clock
 
 	io_init();					// initializes board i/o pins
-	led_init();					// initalizes LEDs
 	keypad_init();				// initializes keypad driver
 
 	udc_start();				// starts USB device controller
@@ -61,17 +65,13 @@ void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
 void main_sof_action(void) {	// called each Start of Frame event (1 ms)
-	// keypad logic
 	if (!main_b_kbd_enable)
 	return;
-	keypad_poll();
-	keypad_report();
-	BD76319_ui_process(udd_get_frame_number());
+	kbd_ui_process();
 
-	// joystick logic
 	if (!main_b_generic_enable)
 		return;
-	jstk_ui_process(udd_get_frame_number());
+	jstk_ui_process();
 }
 
 void main_remotewakeup_enable(void) { }
@@ -88,11 +88,11 @@ void main_kbd_disable(void) {
 
 /* --------------------------------------------------------------------- */
 
-bool main_generic_enable(void) { // joystick enable
+bool main_generic_enable(void) {
 	main_b_generic_enable = true;
 	return true;
 }
 
-void main_generic_disable(void) { // joystick disable
+void main_generic_disable(void) {
 	main_b_generic_enable = false;
 }

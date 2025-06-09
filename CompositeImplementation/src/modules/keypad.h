@@ -17,5 +17,7 @@ void keypad_report(void);
 uint8_t keypad_getState(void);	// get current key press state
 uint8_t keypad_getCode(void);	// get HID code of last detected key
 
+void keypad(void);
+
 
 #endif // keypad.h

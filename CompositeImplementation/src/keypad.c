@@ -32,26 +32,26 @@ volatile uint8_t kpd_testMode;				// hardware (switch) test mode input
 void keypad_init(void)
 {
 	/*
-	NULL Button		--> Column 0, Row 0	(HID_KEYPAD_9)
-	CLEAR Button	--> Column 0, Row 1	(HID_KEYPAD_8)
-	No Button		--> Column 0, Row 2	(0)
-	No Button		--> Column 0, Row 3	(0)
-	ENTER Button	--> Column 1, Row 0	(HID_KEYPAD_7)
-	CANCEL Button	--> Column 1, Row 1	(HID_KEYPAD_6)
-	No Button		--> Column 1, Row 2	(0)
-	No Button		--> Column 1, Row 3	(0)
-	Display Button	--> Column 2, Row 0	(HID_KEYPAD_5)
-	No Button		--> Column 2, Row 1	(0)
-	No Button		--> Column 2, Row 2	(0)
-	No Button		--> Column 2, Row 3	(0)
-	No Button		--> Column 3, Row 0	(0)
-	No Button		--> Column 3, Row 1	(0)
-	F1 Button		--> Column 3, Row 2	(HID_KEYPAD_1)
-	F3 Button		--> Column 3, Row 3	(HID_KEYPAD_2)
-	No Button		--> Column 4, Row 0	(0)
-	No Button		--> Column 4, Row 1	(0)
-	F2 Button		--> Column 4, Row 2	(HID_KEYPAD_3)
-	F4 Button		--> Column 4, Row 3	(HID_KEYPAD_4)
+	NULL Button     --> Column 0, Row 0 (HID_KEYPAD_9)
+	CLEAR Button    --> Column 0, Row 1 (HID_KEYPAD_8)
+	No Button       --> Column 0, Row 2 (0)
+	No Button       --> Column 0, Row 3 (0)
+	ENTER Button    --> Column 1, Row 0 (HID_KEYPAD_7)
+	CANCEL Button   --> Column 1, Row 1 (HID_KEYPAD_6)
+	No Button       --> Column 1, Row 2 (0)
+	No Button       --> Column 1, Row 3 (0)
+	Display Button  --> Column 2, Row 0 (HID_KEYPAD_5)
+	No Button       --> Column 2, Row 1 (0)
+	No Button       --> Column 2, Row 2 (0)
+	No Button       --> Column 2, Row 3 (0)
+	No Button       --> Column 3, Row 0 (0)
+	No Button       --> Column 3, Row 1 (0)
+	F1 Button       --> Column 3, Row 2 (HID_KEYPAD_1)
+	F3 Button       --> Column 3, Row 3 (HID_KEYPAD_2)
+	No Button       --> Column 4, Row 0 (0)
+	No Button       --> Column 4, Row 1 (0)
+	F2 Button       --> Column 4, Row 2 (HID_KEYPAD_3)
+	F4 Button       --> Column 4, Row 3 (HID_KEYPAD_4)
 	*/
 	kpd_keyPressed = KEYPAD_RELEASED;	// no key pressed initially
 	kpd_currState = KEYPAD_RELEASED;
@@ -110,7 +110,7 @@ void keypad_poll(void)
 	// iterate through each column
 	while (kpd_count < KEYPAD_COLS)
 	{
-		PORTF.OUT = kpd_colAddr[kpd_count];		// drive column lines
+		PORTF.OUT = kpd_colAddr[kpd_count]; // drive column lines
 
 		// disables row driver for column 4, enabled otherwise
 		if (kpd_count == 4)
@@ -122,7 +122,7 @@ void keypad_poll(void)
 		kpd_rowVal = PORTF.IN & 0X0f0;
 
 		// decode row bit pattern to row index
-		switch(kpd_rowVal)	// kpd_rowVal is the bit value read from the port
+		switch(kpd_rowVal) // kpd_rowVal is the bit value read from the port
 		{
 			case 0x0E0:		// 1110 0000b -> row 0
 				kpd_detectedRow = 0;
@@ -153,7 +153,7 @@ void keypad_poll(void)
 				break;
 		}
 	}
-	PORTB.OUTSET = (PIN7_bm);	// restores row driver
+	PORTB.OUTSET = (PIN7_bm); // restores row driver
 
 	// if a key was found and previously released
 	if ((kpd_detectedRow < KEYPAD_ROWS) && (kpd_detectedCol < KEYPAD_COLS))
@@ -181,11 +181,11 @@ uint8_t keypad_getCode(void) {
 // toggles LED's in test mode, sends HID code over USB in normal mode
 void keypad_report(void)
 {	
-	kpd_testMode = PORTB.IN;			// read test mode switch
-	kpd_currState = keypad_getState();	// feel like this one's select explanatory
-	kpd_codeOut = keypad_getCode();		// current code to be outputed
+	kpd_testMode = PORTB.IN;           // read test mode switch
+	kpd_currState = keypad_getState(); // feel like this one's select explanatory
+	kpd_codeOut = keypad_getCode();    // current code to be outputed
 
-	if ((kpd_testMode & 0x010) == 0) // test mode enabled
+	if ((kpd_testMode & 0x010) == 0)   // test mode enabled
 	{
 		// on press edge, toggle corresponding LED
 		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED)

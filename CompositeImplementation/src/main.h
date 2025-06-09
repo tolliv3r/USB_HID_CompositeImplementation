@@ -39,5 +39,11 @@ void main_remotewakeup_disable(void);
 bool main_generic_enable(void);
 void main_generic_disable(void);
 
+/* --------------------------------------------------------------------- */
+
+void main_led_enable(void);
+void main_led_disable(void);
+
+void main_led_report_out(uint8_t const *report);
 
 #endif /* MAIN_H_ */

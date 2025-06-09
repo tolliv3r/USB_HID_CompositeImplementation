@@ -66,3 +66,9 @@ bool main_generic_enable(void) {
 void main_generic_disable(void) {
 	main_b_generic_enable = false;
 }
+
+/* --------------------------------------------------------------------- */
+
+void main_led_report_out(uint8_t const *report) {
+	// set_status_leds(report[0]);
+}

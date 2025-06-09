@@ -30,9 +30,6 @@
  * \asf_license_stop
  *
  */
-/*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
- */
 
 #ifndef _CONF_USB_H_
 #define _CONF_USB_H_
@@ -85,8 +82,8 @@
  * -------------------------- USB Configurations --------------------------
  * ----------------------------------------------------------------------*/
 #define  USB_DEVICE_EP_CTRL_SIZE       8
-#define  USB_DEVICE_NB_INTERFACE       2 // total # of interfaces
-#define  USB_DEVICE_MAX_EP             2 // 0 to max endpoint requested by interfaces
+#define  USB_DEVICE_NB_INTERFACE       3 // total # of interfaces
+#define  USB_DEVICE_MAX_EP             3 // 0 to max endpoint
 
 
 /* ------------------------------------------------------------------------
@@ -114,25 +111,43 @@
 #define  UDI_HID_GENERIC_EP_IN             (2 | USB_EP_DIR_IN)
 #define  UDI_HID_GENERIC_IFACE_NUMBER       1
 
+/* ------------------------------------------------------------------------
+ * ------------------------  LED interface settings -----------------------
+ * ----------------------------------------------------------------------*/
+#define UDI_HID_LED_ENABLE_EXT()  main_led_enable()
+#define UDI_HID_LED_DISABLE_EXT() main_led_disable()
+#define UDI_HID_LED_REPORT_OUT(ptr) main_led_report_out(ptr)
+
+#define UDI_HID_LED_REPORT_IN_SIZE       0
+#define UDI_HID_LED_REPORT_OUT_SIZE      1
+#define UDI_HID_LED_REPORT_FEATURE_SIZE  0
+#define UDI_HID_LED_EP_SIZE              8
+
+#define UDI_HID_LED_EP_OUT              (3 | USB_EP_DIR_OUT)
+#define UDI_HID_LED_IFACE_NUMBER         2
 
 /* ------------------------------------------------------------------------
  * -------------------------  HID-COMPOSITE stuff -------------------------
  * ----------------------------------------------------------------------*/
 #define UDI_COMPOSITE_DESC_T \
-		udi_hid_kbd_desc_t udi_hid_kbd; \
-		udi_hid_generic_desc_t udi_hid_generic;
+		udi_hid_kbd_desc_t      udi_hid_kbd; \
+		udi_hid_generic_desc_t  udi_hid_generic; \
+		udi_hid_led_desc_t      udi_hid_led;
 
 #define UDI_COMPOSITE_DESC_FS \
-		.udi_hid_kbd = UDI_HID_KBD_DESC, \
-		.udi_hid_generic = UDI_HID_GENERIC_DESC
+		.udi_hid_kbd      = UDI_HID_KBD_DESC, \
+		.udi_hid_generic  = UDI_HID_GENERIC_DESC, \
+		.udi_hid_led      = UDI_HID_LED_DESC
 
 #define UDI_COMPOSITE_DESC_HS \
-		.udi_hid_kbd = UDI_HID_KBD_DESC, \
-		.udi_hid_generic = UDI_HID_GENERIC_DESC
+		.udi_hid_kbd      = UDI_HID_KBD_DESC, \
+		.udi_hid_generic  = UDI_HID_GENERIC_DESC, \
+		.udi_hid_led      = UDI_HID_LED_DESC
 
 #define UDI_COMPOSITE_API \
 		&udi_api_hid_kbd, \
-		&udi_api_hid_generic
+		&udi_api_hid_generic, \
+		&udi_api_hid_led
 
 
 /* ------------------------------------------------------------------------
@@ -140,6 +155,7 @@
  * ----------------------------------------------------------------------*/
 #include "udi_hid_kbd.h"
 #include "udi_hid_generic.h"
+#include "udi_hid_led.h"
 
 #include "main.h"
 #include "ui.h"

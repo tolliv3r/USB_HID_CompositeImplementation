@@ -62,8 +62,10 @@ src/modules/led.d src/modules/led.o: ../src/modules/led.c \
  ../src/ASF/common/services/usb/class/hid/usb_protocol_hid.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udi.h \
- ../src/ASF/common/services/usb/udc/udi.h ../src/main.h \
- ../src/modules/ui.h ../src/ASF/common/services/usb/udc/udc.h \
+ ../src/ASF/common/services/usb/udc/udi.h \
+ ../src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.h \
+ ../src/main.h ../src/modules/ui.h \
+ ../src/ASF/common/services/usb/udc/udc.h \
  ../src/ASF/common/services/usb/udc/udc_desc.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/udc/udd.h \
@@ -201,6 +203,8 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../src/ASF/common/services/usb/udc/udi.h:
 
 ../src/ASF/common/services/usb/udc/udi.h:
+
+../src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.h:
 
 ../src/main.h:
 

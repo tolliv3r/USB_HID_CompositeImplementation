@@ -276,6 +276,7 @@
       <Value>../src/ASF/common/services/usb/udc</Value>
       <Value>../src/ASF/xmega/drivers/usb</Value>
       <Value>../src/modules</Value>
+      <Value>../src/ASF/common/services/usb/class/hid/device/led</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -346,6 +347,7 @@
     <Folder Include="src\ASF\common\services\usb\class\hid\device\" />
     <Folder Include="src\ASF\common\services\usb\class\hid\device\generic\" />
     <Folder Include="src\ASF\common\services\usb\class\hid\device\kbd\" />
+    <Folder Include="src\ASF\common\services\usb\class\hid\device\led" />
     <Folder Include="src\ASF\common\services\usb\udc\" />
     <Folder Include="src\ASF\common\utils\" />
     <Folder Include="src\ASF\common\utils\interrupt\" />
@@ -367,6 +369,12 @@
     <Folder Include="src\modules" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\ASF\common\services\usb\class\hid\device\led\udi_hid_led.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ASF\common\services\usb\class\hid\device\led\udi_hid_led.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\modules\io.c">
       <SubType>compile</SubType>
     </Compile>

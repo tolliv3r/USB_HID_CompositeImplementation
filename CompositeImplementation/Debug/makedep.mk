@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\ASF\common\services\usb\class\hid\device\led\udi_hid_led.c
+
 src\modules\io.c
 
 src\modules\joystick.c

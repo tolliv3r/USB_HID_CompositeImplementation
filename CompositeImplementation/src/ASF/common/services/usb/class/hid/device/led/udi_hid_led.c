@@ -62,12 +62,9 @@ UDC_DESC_STORAGE udi_hid_led_report_desc_t udi_hid_led_report_desc = { {
 
 static bool udi_hid_led_setreport(void);
 
-// static void udi_hid_led_report_out_received(udd_ep_status_t status,
-// 		                                    iram_size_t nb_received,
-// 		                                    udd_ep_id_t ep);
-
 static void udi_hid_led_report_out_received(udd_ep_status_t status,
-		                                    iram_size_t nb_received);
+		                                    iram_size_t     nb_received,
+		                                    udd_ep_id_t     ep);
 
 static bool udi_hid_led_report_out_enable(void);
 
@@ -87,9 +84,9 @@ void udi_hid_led_disable(void) {
 
 bool udi_hid_led_setup(void) {
 	return udi_hid_setup(&udi_hid_led_rate,
-							&udi_hid_led_protocol,
-							(uint8_t *) &udi_hid_led_report_desc,
-							udi_hid_led_setreport);
+		                 &udi_hid_led_protocol,
+		                (uint8_t *) &udi_hid_led_report_desc,
+		                 udi_hid_led_setreport);
 }
 
 uint8_t udi_hid_led_getsetting(void) {
@@ -111,8 +108,10 @@ static bool udi_hid_led_setreport(void)
 }
 
 static void udi_hid_led_report_out_received(udd_ep_status_t status, 
-	                                        iram_size_t nb_received)
+	                                        iram_size_t     nb_received,
+	                                        udd_ep_id_t     ep)
 {
+	UNUSED(ep);
 	if (status == UDD_EP_TRANSFER_OK && 
 		nb_received == UDI_HID_LED_REPORT_OUT_SIZE) {
 		UDI_HID_LED_REPORT_OUT(udi_hid_led_report_out);
@@ -123,7 +122,7 @@ static void udi_hid_led_report_out_received(udd_ep_status_t status,
 static bool udi_hid_led_report_out_enable(void) {
 	return udd_ep_run(UDI_HID_LED_EP_OUT,
 		              false,
-		              (uint8_t *)&udi_hid_led_report_out,
+		             (uint8_t *)&udi_hid_led_report_out,
 		              UDI_HID_LED_REPORT_OUT_SIZE,
 		              udi_hid_led_report_out_received);
 }

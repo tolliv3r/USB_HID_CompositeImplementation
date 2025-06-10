@@ -28,3 +28,8 @@ void led_off(uint8_t mask) {	// LED off
 void led_toggle(uint8_t mask) {	// toggle LED
     LED_PORT.OUTTGL = mask;
 }
+
+void led_setStatus(uint8_t mask) {
+    LED_PORT.OUTSET = LED_MASK;
+    LED_PORT.OUTCLR = mask;
+}

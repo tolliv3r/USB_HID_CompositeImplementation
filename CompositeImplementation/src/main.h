@@ -41,7 +41,7 @@ void main_generic_disable(void);
 
 /* --------------------------------------------------------------------- */
 
-void main_led_enable(void);
+bool main_led_enable(void);
 void main_led_disable(void);
 
 void main_led_report_out(uint8_t const *report);

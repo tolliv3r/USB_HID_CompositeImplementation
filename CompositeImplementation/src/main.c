@@ -3,10 +3,12 @@
 
 #include "io.h"
 #include "ui.h"
+// #include "led.h"
 #include "keypad.h"
 
 // #include "modules/io.h"
 // #include "modules/ui.h"
+#include "modules/led.h"
 // #include "modules/keypad.h"
 
 static volatile bool main_b_kbd_enable = false;
@@ -43,6 +45,10 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 	if (!main_b_generic_enable)
 		return;
 	jstk_ui_process();
+
+	// if(!main_b_led_enable)
+	// 	return;
+	// led_ui_process();
 }
 
 void main_remotewakeup_enable(void) { }
@@ -70,7 +76,7 @@ void main_generic_disable(void) {
 
 /* --------------------------------------------------------------------- */
 
-void main_led_enable(void) {
+bool main_led_enable(void) {
 	main_b_led_enable = true;
 	return true;
 }
@@ -80,5 +86,5 @@ void main_led_disable(void) {
 }
 
 void main_led_report_out(uint8_t const *report) {
-	// set_status_leds(report[0]);
+	led_setStatus(report[0]);
 }

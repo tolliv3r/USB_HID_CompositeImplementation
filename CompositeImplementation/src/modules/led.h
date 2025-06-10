@@ -13,11 +13,14 @@
 #define LED7_PIN    (1 << 6)
 #define LED8_PIN    (1 << 7)
 
+// #define LED_MASK (LED1_PIN|LED2_PIN|LED3_PIN|LED4_PIN|LED5_PIN|LED6_PIN|LED7_PIN|LED8_PIN)
+
 void led_init(void);
 void led_allOn(void);
 void led_allOff(void);
 void led_on(uint8_t mask);
 void led_off(uint8_t mask);
 void led_toggle(uint8_t mask);
+void led_setStatus(uint8_t mask);
 
-#endif
+#endif // LED_H

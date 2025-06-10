@@ -23,13 +23,14 @@ extern "C" {
 extern UDC_DESC_STORAGE udi_api_t udi_api_hid_led;
 
 typedef struct {
-	usb_iface_desc_t iface;
-	usb_hid_descriptor_t hid;
-	usb_ep_desc_t ep_out;
+	usb_iface_desc_t        iface;
+	usb_hid_descriptor_t	hid;
+	usb_ep_desc_t           ep_in;
+	usb_ep_desc_t           ep_out;
 } udi_hid_led_desc_t;
 
 typedef struct {
-	uint8_t array[18];
+	uint8_t array[19];
 } udi_hid_led_report_desc_t;
 
 #ifndef   UDI_HID_LED_STRING_ID
@@ -42,7 +43,7 @@ typedef struct {
    .iface.bDescriptorType     = USB_DT_INTERFACE,\
    .iface.bInterfaceNumber    = UDI_HID_LED_IFACE_NUMBER,\
    .iface.bAlternateSetting   = 0,\
-   .iface.bNumEndpoints       = 1,\
+   .iface.bNumEndpoints       = 2,\
    .iface.bInterfaceClass     = HID_CLASS,\
    .iface.bInterfaceSubClass  = HID_SUB_CLASS_NOBOOT,\
    .iface.bInterfaceProtocol  = HID_PROTOCOL_GENERIC,\
@@ -54,6 +55,12 @@ typedef struct {
    .hid.bNumDescriptors       = USB_HID_NUM_DESC,\
    .hid.bRDescriptorType      = USB_DT_HID_REPORT,\
    .hid.wDescriptorLength     = LE16(sizeof(udi_hid_led_report_desc_t)),\
+   .ep_in.bLength             = sizeof(usb_ep_desc_t),\
+   .ep_in.bDescriptorType     = USB_DT_ENDPOINT,\
+   .ep_in.bEndpointAddress    = UDI_HID_LED_EP_IN,\
+   .ep_in.bmAttributes        = USB_EP_TYPE_INTERRUPT,\
+   .ep_in.wMaxPacketSize      = LE16(UDI_HID_LED_EP_SIZE),\
+   .ep_in.bInterval           = 4,\
    .ep_out.bLength            = sizeof(usb_ep_desc_t),\
    .ep_out.bDescriptorType    = USB_DT_ENDPOINT,\
    .ep_out.bEndpointAddress   = UDI_HID_LED_EP_OUT,\

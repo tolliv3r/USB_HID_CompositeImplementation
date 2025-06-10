@@ -83,7 +83,7 @@
  * ----------------------------------------------------------------------*/
 #define  USB_DEVICE_EP_CTRL_SIZE       8
 #define  USB_DEVICE_NB_INTERFACE       3 // total # of interfaces
-#define  USB_DEVICE_MAX_EP             3 // 0 to max endpoint
+#define  USB_DEVICE_MAX_EP             4 // 0 to max endpoint
 
 
 /* ------------------------------------------------------------------------
@@ -118,11 +118,12 @@
 #define UDI_HID_LED_DISABLE_EXT() main_led_disable()
 #define UDI_HID_LED_REPORT_OUT(ptr) main_led_report_out(ptr)
 
-#define UDI_HID_LED_REPORT_IN_SIZE       0
+#define UDI_HID_LED_REPORT_IN_SIZE       1
 #define UDI_HID_LED_REPORT_OUT_SIZE      1
 #define UDI_HID_LED_REPORT_FEATURE_SIZE  0
 #define UDI_HID_LED_EP_SIZE              8
 
+#define UDI_HID_LED_EP_IN               (4 | USB_EP_DIR_IN)
 #define UDI_HID_LED_EP_OUT              (3 | USB_EP_DIR_OUT)
 #define UDI_HID_LED_IFACE_NUMBER         2
 

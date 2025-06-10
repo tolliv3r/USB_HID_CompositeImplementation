@@ -11,6 +11,7 @@
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
+static volatile bool main_b_led_enable = false;
 
 /* --------------------------------------------------------------------- */
 
@@ -68,6 +69,15 @@ void main_generic_disable(void) {
 }
 
 /* --------------------------------------------------------------------- */
+
+void main_led_enable(void) {
+	main_b_led_enable = true;
+	return true;
+}
+
+void main_led_disable(void) {
+	main_b_led_enable = false;
+}
 
 void main_led_report_out(uint8_t const *report) {
 	// set_status_leds(report[0]);

@@ -32,16 +32,16 @@ UDC_DESC_STORAGE udi_api_t udi_api_hid_led = {
 	.setup      = udi_hid_led_setup,
 	.getsetting = udi_hid_led_getsetting,
 	.sof_notify = NULL,
-}
+};
 
 COMPILER_WORD_ALIGNED
-	static uint8_t udi_hid_led_rate;
+		static uint8_t udi_hid_led_rate;
 
 COMPILER_WORD_ALIGNED
-	static uint8_t udi_hid_led_protocol;
+		static uint8_t udi_hid_led_protocol;
 
 COMPILER_WORD_ALIGNED
-	static uint8_t udi_hid_led_report_out[UDI_HID_REPORT_OUT_SIZE];
+		static uint8_t udi_hid_led_report_out[UDI_HID_REPORT_OUT_SIZE];
 
 // COMPILER_WORD_ALIGNED
 // 	static uint8_t udi_hid_led_report_feature[UDI_HID_REPORT_FEATURE_SIZE];
@@ -62,8 +62,12 @@ UDC_DESC_STORAGE udi_hid_led_report_desc_t udi_hid_led_report_desc = { {
 
 static bool udi_hid_led_setreport(void);
 
+// static void udi_hid_led_report_out_received(udd_ep_status_t status,
+// 		                                    iram_size_t nb_received,
+// 		                                    udd_ep_id_t ep);
+
 static void udi_hid_led_report_out_received(udd_ep_status_t status,
-		iram_size_t nb_received, udd_ep_id_t ep);
+		                                    iram_size_t nb_received);
 
 static bool udi_hid_led_report_out_enable(void);
 
@@ -73,7 +77,8 @@ bool udi_hid_led_enable(void) {
 
 	if(!udi_hid_led_report_out_enable())
 		return false;
-	return UDI_HID_LED_ENABLE_EXT();
+	UDI_HID_LED_ENABLE_EXT();
+	return true;
 }
 
 void udi_hid_led_disable(void) {
@@ -91,11 +96,13 @@ uint8_t udi_hid_led_getsetting(void) {
 	return 0;
 }
 
-static bool udi_hid_led_setreport(void) {
+static bool udi_hid_led_setreport(void)
+{
 	if ((USB_HID_REPORT_TYPE_OUTPUT == (udd_g_ctrlreq.req.wValue >> 8)) &&
-		                    (0 == (0xFF & udd_g_ctrlreq.req.wValue)) &&
-		 (UDI_HID_LED_REPORT_OUT_SIZE == udd_g_ctrlreq.req.wLength)) {
-		udd_g_ctrlreq.payload      = (uint8_t *)udi_hid_led_report_out;
+	   (0 == (0xFF & udd_g_ctrlreq.req.wValue))                         &&
+	   (UDI_HID_LED_REPORT_OUT_SIZE == udd_g_ctrlreq.req.wLength))
+	{
+		udd_g_ctrlreq.payload      = udi_hid_led_report_out;
 		udd_g_ctrlreq.payload_size = UDI_HID_LED_REPORT_OUT_SIZE;
 		udd_g_ctrlreq.callback     = udi_hid_led_report_out_received;
 		return true;
@@ -104,9 +111,8 @@ static bool udi_hid_led_setreport(void) {
 }
 
 static void udi_hid_led_report_out_received(udd_ep_status_t status, 
-	                                        iram_size_t nb_received,
-	                                        udd_ep_id_t ep) {
-	UNUSED(ep);
+	                                        iram_size_t nb_received)
+{
 	if (status == UDD_EP_TRANSFER_OK && 
 		nb_received == UDI_HID_LED_REPORT_OUT_SIZE) {
 		UDI_HID_LED_REPORT_OUT(udi_hid_led_report_out);

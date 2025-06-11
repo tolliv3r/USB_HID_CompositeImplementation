@@ -17,7 +17,7 @@
 
 void BD76319_KeyToReport(uint16_t pui_KeyStatus, uint16_t pui_KeyValue);
 void BD76319_ui_process(uint16_t pui_framenumber);
-void BD76319_ui_kbd_led(uint8_t value);
+// void BD76319_ui_kbd_led(uint8_t value);
 
 void kbd_ui_process(void);
 void jstk_ui_process(void);

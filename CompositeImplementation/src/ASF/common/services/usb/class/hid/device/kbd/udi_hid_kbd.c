@@ -90,9 +90,6 @@ COMPILER_WORD_ALIGNED
 //! To store current protocol of HID keyboard
 COMPILER_WORD_ALIGNED
 		static uint8_t udi_hid_kbd_protocol;
-//! To store report feedback from USB host
-COMPILER_WORD_ALIGNED
-		static uint8_t udi_hid_kbd_report_set;
 //! To signal if a valid report is ready to send
 static bool udi_hid_kbd_b_report_valid;
 //! Report ready to send
@@ -174,14 +171,6 @@ static bool udi_hid_kbd_send_report(void);
 static void udi_hid_kbd_report_sent(udd_ep_status_t status, iram_size_t nb_sent,
 		udd_ep_id_t ep);
 
-/**
- * \brief Callback called to update report from USB host
- * udi_hid_kbd_report_set is updated before callback execution
- */
-static void udi_hid_kbd_setreport_valid(void);
-
-//@}
-
 
 //--------------------------------------------
 //------ Interface for UDI HID level
@@ -221,15 +210,6 @@ uint8_t udi_hid_kbd_getsetting(void)
 
 static bool udi_hid_kbd_setreport(void)
 {
-	if ((USB_HID_REPORT_TYPE_OUTPUT == (udd_g_ctrlreq.req.wValue >> 8))
-			&& (0 == (0xFF & udd_g_ctrlreq.req.wValue))
-			&& (1 == udd_g_ctrlreq.req.wLength)) {
-		// Report OUT type on report ID 0 from USB Host
-		udd_g_ctrlreq.payload = &udi_hid_kbd_report_set;
-		udd_g_ctrlreq.callback = udi_hid_kbd_setreport_valid;
-		udd_g_ctrlreq.payload_size = 1;
-		return true;
-	}
 	return false;
 }
 
@@ -371,11 +351,6 @@ static void udi_hid_kbd_report_sent(udd_ep_status_t status, iram_size_t nb_sent,
 	if (udi_hid_kbd_b_report_valid) {
 		udi_hid_kbd_send_report();
 	}
-}
-
-static void udi_hid_kbd_setreport_valid(void)
-{
-	UDI_HID_KBD_CHANGE_LED(udi_hid_kbd_report_set);
 }
 
 //@}

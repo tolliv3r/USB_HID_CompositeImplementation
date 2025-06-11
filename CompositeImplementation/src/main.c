@@ -1,26 +1,18 @@
 #include <asf.h>
 #include "conf_usb.h"
-// #include <util/delay.h>
 
 // #include "io.h"
 // #include "ui.h"
-// #include "led.h"
-// #include "keypad.h"
 // #include "startup.h"
-// #include "joystick.h"
 
 #include "modules/io.h"
 #include "modules/ui.h"
-// #include "modules/led.h"
-// #include "modules/keypad.h"
 #include "modules/startup.h"
-// #include "modules/joystick.h"
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
 static volatile bool main_b_led_enable = false;
 
-/* --------------------------------------------------------------------- */
 
 int main (void)
 {
@@ -38,8 +30,7 @@ int main (void)
 	while (true) { }
 }
 
-/* --------------------------------------------------------------------- */
-
+/* -------------------------------- USB -------------------------------- */
 void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
@@ -56,6 +47,7 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 void main_remotewakeup_enable(void) { }
 void main_remotewakeup_disable(void) { }
 
+/* ----------------------------- keyboard ------------------------------ */
 bool main_kbd_enable(void) {
 	main_b_kbd_enable = true;
 	return true;
@@ -65,8 +57,7 @@ void main_kbd_disable(void) {
 	main_b_kbd_enable = false;
 }
 
-/* --------------------------------------------------------------------- */
-
+/* ----------------------------- joystick ------------------------------ */
 bool main_generic_enable(void) {
 	main_b_generic_enable = true;
 	return true;
@@ -76,8 +67,7 @@ void main_generic_disable(void) {
 	main_b_generic_enable = false;
 }
 
-/* --------------------------------------------------------------------- */
-
+/* ------------------------------- LEDs -------------------------------- */
 bool main_led_enable(void) {
 	main_b_led_enable = true;
 	return true;

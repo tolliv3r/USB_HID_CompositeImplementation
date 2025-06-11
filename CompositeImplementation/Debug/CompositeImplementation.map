@@ -2919,7 +2919,7 @@ END GROUP
  .debug_abbrev  0x00004a9d      0x585 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_abbrev  0x00005022      0x1e1 src/main.o
 
-.debug_line     0x00000000     0xa254
+.debug_line     0x00000000     0xa252
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x39d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.3.146/gcc/dev/atxmega256a3u/avrxmega6/crtatxmega256a3u.o
  .debug_line    0x0000039d      0x6dc src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.o
@@ -2939,7 +2939,7 @@ END GROUP
  .debug_line    0x0000812e      0x11f src/ASF/xmega/drivers/nvm/nvm_asm.o
  .debug_line    0x0000824d       0x6e src/ASF/xmega/drivers/cpu/ccp.o
  .debug_line    0x000082bb     0x1533 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_line    0x000097ee      0xa66 src/main.o
+ .debug_line    0x000097ee      0xa64 src/main.o
 
 .debug_frame    0x00000000      0xc00
  *(.debug_frame)

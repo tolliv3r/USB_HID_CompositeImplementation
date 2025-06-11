@@ -30,11 +30,10 @@ int main (void)
 	sysclk_init();             // initialize clock
 
 	io_init();                 // initializes board i/o pins
-	// keypad_init();             // initializes keypad matrix
 
 	udc_start();               // starts USB device controller
 
-	startupSequence(1);
+	startupSequence(1);        // pick preferred sequence (1-5)
 
 	while (true) { }
 }

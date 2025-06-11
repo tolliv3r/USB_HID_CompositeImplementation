@@ -30,7 +30,7 @@ typedef struct {
 } udi_hid_led_desc_t;
 
 typedef struct {
-	uint8_t array[19];
+	uint8_t array[28];
 } udi_hid_led_report_desc_t;
 
 #ifndef   UDI_HID_LED_STRING_ID

@@ -46,16 +46,20 @@ COMPILER_WORD_ALIGNED
 // COMPILER_WORD_ALIGNED
 // 	static uint8_t udi_hid_led_report_feature[UDI_HID_REPORT_FEATURE_SIZE];
 UDC_DESC_STORAGE udi_hid_led_report_desc_t udi_hid_led_report_desc = { {
-		0x05, 0x01,		/* Usage Page (Vendor)			*/
-		0x09, 0x80,		/* usage (undefined collection)	*/
-		0xA1, 0x01,		/* begin collection				*/
-		  0x95, 0x08,	/* report count (8 LEDs)		*/
-		  0x75, 0x01,	/* report size (1 bit each)		*/
-		  0x19, 0x01,	/* usage min					*/
-		  0x29, 0x08,	/* usage max					*/
-	      0X81, 0X02,	/* input						*/
-		  0x91, 0x02,	/* output						*/
-		0xC0          	/* end collection				*/
+		0x06, 0x00, 0xFF,	/* usage page (vendor)      */
+		0x09, 0x01,			/* usage (vendor usage 1)   */
+		0xA1, 0x01,			/* collection (application) */
+		  0x95, 0x08,		/* report count             */
+		  0x75, 0x01,		/* report size              */
+		  0x19, 0x01,		/* usage minimum            */
+		  0x29, 0x08,		/* usage max                */
+		  0x81, 0x02,		/* input (data,var,abs)     */
+		  0x95, 0x08,		/* report count             */
+		  0x75, 0x01,		/* report size              */
+		  0x19, 0x01,		/* usage min                */
+		  0x29, 0x08,		/* usage max                */
+		  0x91, 0x02,		/* output                   */
+		0xC0          		/* end collection           */
 	}
 };
 

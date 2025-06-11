@@ -12,6 +12,8 @@ src\modules\keypad.c
 
 src\modules\led.c
 
+src\modules\startup.c
+
 src\modules\ui.c
 
 src\ASF\common\services\sleepmgr\xmega\sleepmgr.c

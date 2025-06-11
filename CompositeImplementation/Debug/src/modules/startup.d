@@ -1,5 +1,6 @@
-src/modules/ui.d src/modules/ui.o: ../src/modules/ui.c ../src/asf.h \
- ../src/ASF/xmega/drivers/cpu/ccp.h ../src/ASF/xmega/utils/compiler.h \
+src/modules/startup.d src/modules/startup.o: ../src/modules/startup.c \
+ ../src/asf.h ../src/ASF/xmega/drivers/cpu/ccp.h \
+ ../src/ASF/xmega/utils/compiler.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -68,8 +69,12 @@ src/modules/ui.d src/modules/ui.o: ../src/modules/ui.c ../src/asf.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/class/hid/device/udi_hid.h \
- ../src/ASF/xmega/utils/status_codes.h ../src/modules/ui.h \
- ../src/modules/led.h ../src/modules/keypad.h ../src/modules/joystick.h
+ ../src/ASF/xmega/utils/status_codes.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
+ ../src/modules/led.h ../src/modules/keypad.h ../src/modules/startup.h \
+ ../src/modules/joystick.h
 
 ../src/asf.h:
 
@@ -219,10 +224,16 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/ASF/xmega/utils/status_codes.h:
 
-../src/modules/ui.h:
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
 
 ../src/modules/led.h:
 
 ../src/modules/keypad.h:
+
+../src/modules/startup.h:
 
 ../src/modules/joystick.h:

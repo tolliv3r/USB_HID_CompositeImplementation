@@ -26,6 +26,7 @@
 
 #include "io.h"
 #include "led.h"
+#include "keypad.h"
 
 //********************************************************************
 //  Section - Code - C Functions
@@ -169,4 +170,5 @@ void io_init(void)
 	initialize_PortF_io();		// (COLUMN & ROW Keypad Scan Code signals)
 
 	led_init();
+	keypad_init();
 }

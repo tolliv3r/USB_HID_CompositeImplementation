@@ -69,7 +69,7 @@ src/modules/io.d src/modules/io.o: ../src/modules/io.c ../src/asf.h \
  ../src/ASF/common/services/usb/udc/udd.h \
  ../src/ASF/common/services/usb/class/hid/device/udi_hid.h \
  ../src/ASF/xmega/utils/status_codes.h ../src/modules/io.h \
- ../src/modules/led.h
+ ../src/modules/led.h ../src/modules/keypad.h
 
 ../src/asf.h:
 
@@ -222,3 +222,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../src/modules/io.h:
 
 ../src/modules/led.h:
+
+../src/modules/keypad.h:

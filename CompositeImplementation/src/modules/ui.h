@@ -22,4 +22,6 @@ void BD76319_ui_process(uint16_t pui_framenumber);
 void kbd_ui_process(void);
 void jstk_ui_process(void);
 
+void led_ui_process(uint8_t mask);
+
 #endif // _UI_H_

@@ -2,7 +2,6 @@
 
 #include "led.h"
 #include "joystick.h"
-#include "udi_hid_generic.h"
 
 #define SLIDER_COUNT   12
 

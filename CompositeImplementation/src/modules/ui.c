@@ -35,5 +35,5 @@ void kbd_ui_process(void) {
 }
 
 void led_ui_process(uint8_t mask) {
-	led_setStatus(mask);
+	led_setState(mask);
 }

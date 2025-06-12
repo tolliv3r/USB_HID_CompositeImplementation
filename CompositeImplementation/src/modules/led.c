@@ -1,12 +1,12 @@
 #include "led.h"
 #include <asf.h>
 
-#define LED_PORT	PORTA
-#define LED_MASK	0xFF		// PA0–PA7
-
 void led_init(void) {
-    LED_PORT.DIRSET = LED_MASK;	// outputs
+    LED_PORT.DIRSET = LED_MASK;
     LED_PORT.OUTSET = LED_MASK;
+
+    STATUS_LED_PORT.DIRSET = LEDS_PIN;
+    STATUS_LED_PORT.OUTCLR = LEDS_PIN;
 }
 
 void led_allOn(void) {			// turns all LED's on
@@ -29,7 +29,15 @@ void led_toggle(uint8_t mask) {	// toggle LED
     LED_PORT.OUTTGL = mask;
 }
 
-void led_setStatus(uint8_t mask) {
+void led_setState(uint8_t mask) {
     LED_PORT.OUTSET = LED_MASK;
     LED_PORT.OUTCLR = mask;
+}
+
+void led_statusOn(void) {
+    STATUS_LED_PORT.OUTCLR = LEDS_PIN;
+}
+
+void led_statusOff(void) {
+    STATUS_LED_PORT.OUTSET = LEDS_PIN;
 }

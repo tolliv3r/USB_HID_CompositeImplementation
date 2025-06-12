@@ -1,18 +1,14 @@
 #include <asf.h>
 #include "conf_usb.h"
 
-// #include "io.h"
 // #include "ui.h"
-// #include "startup.h"
-
-#include "modules/io.h"
 #include "modules/ui.h"
-#include "modules/startup.h"
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
 static volatile bool main_b_led_enable = false;
 
+static const uint8_t sequence = 4;
 
 int main (void)
 {
@@ -21,11 +17,11 @@ int main (void)
 	sleepmgr_init();           // initialize sleep manager
 	sysclk_init();             // initialize clock
 
-	io_init();                 // initializes board i/o pins
+	io_ui_process(); // initializes board i/o pins
 
 	udc_start();               // starts USB device controller
 
-	startupSequence(4);        // pick preferred sequence (1-5)
+	startup_ui_process(sequence); // pick preferred sequence (1-5)
 
 	while (true) { }
 }
@@ -42,6 +38,8 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 	if (!main_b_generic_enable)
 		return;
 	jstk_ui_process();
+
+	status_ui_process();
 }
 
 void main_remotewakeup_enable(void) { }

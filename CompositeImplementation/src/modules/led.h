@@ -39,5 +39,9 @@ void led_setState(uint8_t mask);
 
 void led_statusOn(void);
 void led_statusOff(void);
+void led_statusToggle(void);
+
+void testIndicator(void);
+// void startupSequence(int sequence)
 
 #endif // LED_H

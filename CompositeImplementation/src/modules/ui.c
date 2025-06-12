@@ -22,8 +22,10 @@
 #include "conf_usb.h"  // Note -Conf_usb.h includes main.h
 
 #include "ui.h"
+#include "io.h"
 #include "led.h"
 #include "keypad.h"
+#include "startup.h"
 #include "joystick.h"
 
 void jstk_ui_process(void) {
@@ -36,4 +38,16 @@ void kbd_ui_process(void) {
 
 void led_ui_process(uint8_t mask) {
 	led_setState(mask);
+}
+
+void status_ui_process(void) {
+	testIndicator();
+}
+
+void io_ui_process(void) {
+	io_init();
+}
+
+void startup_ui_process(uint8_t sequence) {
+	startupSequence(sequence);
 }

@@ -18,5 +18,8 @@
 void kbd_ui_process(void);
 void jstk_ui_process(void);
 void led_ui_process(uint8_t mask);
+void status_ui_process(void);
+void io_ui_process(void);
+void startup_ui_process(uint8_t sequence);
 
 #endif // _UI_H_

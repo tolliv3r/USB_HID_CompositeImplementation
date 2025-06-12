@@ -99,70 +99,114 @@ void keypad_init(void)
 /*
  * scans the keypad matrix, updates kpd_keyPressed & kpd_code based on detected presses
  */
+// void keypad_poll(void)
+// {
+// 	static volatile uint8_t kpd_count;
+
+// 	// reset detection on each pass through
+// 	kpd_detectedCol = 0;
+// 	kpd_count = 0;
+
+// 	// iterate through each column
+// 	while (kpd_count < KEYPAD_COLS)
+// 	{
+// 		PORTF.OUT = kpd_colAddr[kpd_count]; // drive column lines
+
+// 		// disables row driver for column 4, enabled otherwise
+// 		if (kpd_count == 4)
+// 			PORTB.OUTCLR = (PIN7_bm);
+// 		else
+// 			PORTB.OUTSET = (PIN7_bm);
+
+// 		// read row inputs (PF4-PF7)
+// 		kpd_rowVal = PORTF.IN & 0X0f0;
+
+// 		// decode row bit pattern to row index
+// 		switch(kpd_rowVal) // kpd_rowVal is the bit value read from the port
+// 		{
+// 			case 0x0E0: // 1110 0000b -> row 0
+// 				kpd_detectedRow = 0;
+// 				kpd_detectedCol = kpd_count;
+// 				kpd_count = KEYPAD_COLS;
+// 				break;
+// 			case 0x0D0: // 1101 0000b -> row 1
+// 				kpd_detectedRow = 1;
+// 				kpd_detectedCol = kpd_count;
+// 				kpd_count = KEYPAD_COLS;
+// 				break;
+// 			case 0x0B0: // 1011 0000b -> row 2
+// 				kpd_detectedRow = 2;
+// 				kpd_detectedCol = kpd_count;
+// 				kpd_count = KEYPAD_COLS;
+// 				break;
+// 			case 0x070: // 0111 0000b -> row 3
+// 				kpd_detectedRow = 3;
+// 				kpd_detectedCol = kpd_count;
+// 				kpd_count = KEYPAD_COLS;
+// 				break;
+// 			default:    // no valid row
+// 				kpd_detectedRow = KEYPAD_ROWS;
+// 				kpd_detectedCol = kpd_count;
+// 				if (kpd_count >= KEYPAD_COLS)
+// 					kpd_detectedCol = KEYPAD_COLS;
+// 				kpd_count++;
+// 				break;
+// 		}
+// 	}
+// 	PORTB.OUTSET = (PIN7_bm); // restores row driver
+
+// 	// if a key was found and previously released
+// 	if ((kpd_detectedRow < KEYPAD_ROWS) && (kpd_detectedCol < KEYPAD_COLS))
+// 	{
+// 		if (kpd_keyPressed == KEYPAD_RELEASED) {
+// 			kpd_code = kpd_keyAssign[kpd_detectedCol][kpd_detectedRow];
+// 			kpd_keyPressed = KEYPAD_PRESSED;
+// 		}
+// 	} else { // return to released state on release
+// 		if (kpd_keyPressed == KEYPAD_PRESSED) {
+// 			kpd_keyPressed = KEYPAD_RELEASED;
+// 		}
+// 	}
+// }
+
 void keypad_poll(void)
 {
-	static volatile uint8_t kpd_count;
+	uint8_t lastRow = KEYPAD_ROWS, lastCol = KEYPAD_COLS;
 
-	// reset detection on each pass through
-	kpd_detectedCol = 0;
-	kpd_count = 0;
-
-	// iterate through each column
-	while (kpd_count < KEYPAD_COLS)
-	{
-		PORTF.OUT = kpd_colAddr[kpd_count]; // drive column lines
-
-		// disables row driver for column 4, enabled otherwise
-		if (kpd_count == 4)
-			PORTB.OUTCLR = (PIN7_bm);
-		else
-			PORTB.OUTSET = (PIN7_bm);
-
-		// read row inputs (PF4-PF7)
-		kpd_rowVal = PORTF.IN & 0X0f0;
-
-		// decode row bit pattern to row index
-		switch(kpd_rowVal) // kpd_rowVal is the bit value read from the port
-		{
-			case 0x0E0: // 1110 0000b -> row 0
-				kpd_detectedRow = 0;
-				kpd_detectedCol = kpd_count;
-				kpd_count = KEYPAD_COLS;
-				break;
-			case 0x0D0: // 1101 0000b -> row 1
-				kpd_detectedRow = 1;
-				kpd_detectedCol = kpd_count;
-				kpd_count = KEYPAD_COLS;
-				break;
-			case 0x0B0: // 1011 0000b -> row 2
-				kpd_detectedRow = 2;
-				kpd_detectedCol = kpd_count;
-				kpd_count = KEYPAD_COLS;
-				break;
-			case 0x070: // 0111 0000b -> row 3
-				kpd_detectedRow = 3;
-				kpd_detectedCol = kpd_count;
-				kpd_count = KEYPAD_COLS;
-				break;
-			default:    // no valid row
-				kpd_detectedRow = KEYPAD_ROWS;
-				kpd_detectedCol = kpd_count;
-				if (kpd_count >= KEYPAD_COLS)
-					kpd_detectedCol = KEYPAD_COLS;
-				kpd_count++;
-				break;
+	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
+		PORTF.OUT = kpd_colAddr[col];
+		if (col == 4) {
+			PORTB.OUTCLR = PIN7_bm;
+		} else {
+			PORTB.OUTSET = PIN7_bm;
+		}
+		uint8_t rowBits = PORTF.IN & 0xF0;
+		bool pressed = true;
+		uint8_t rowIndex;
+		
+		switch (rowBits) {
+		case 0x0E0: rowIndex = 0;     break;
+		case 0x0D0: rowIndex = 1;     break;
+		case 0x0B0: rowIndex = 2;     break;
+		case 0x070: rowIndex = 3;     break;
+		default:   pressed  = false; break;
+		}
+		if (pressed) {
+			lastRow = rowIndex;
+			lastCol = col;
 		}
 	}
-	PORTB.OUTSET = (PIN7_bm); // restores row driver
 
-	// if a key was found and previously released
-	if ((kpd_detectedRow < KEYPAD_ROWS) && (kpd_detectedCol < KEYPAD_COLS))
-	{
+	PORTB.OUTSET = PIN7_bm;
+	if (lastRow < KEYPAD_ROWS) {
+		uint8_t newCode = kpd_keyAssign[lastCol][lastRow];
 		if (kpd_keyPressed == KEYPAD_RELEASED) {
-			kpd_code = kpd_keyAssign[kpd_detectedCol][kpd_detectedRow];
+			kpd_code = newCode;
 			kpd_keyPressed = KEYPAD_PRESSED;
+		} else if (newCode != kpd_code) {
+			kpd_code = newCode;
 		}
-	} else { // return to released state on release
+	} else {
 		if (kpd_keyPressed == KEYPAD_PRESSED) {
 			kpd_keyPressed = KEYPAD_RELEASED;
 		}
@@ -210,15 +254,28 @@ void keypad_report(void)
 	}
 	else // normal mode
 	{
+		// if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED) {
+		// 	kpd_codeOut = keypad_getCode();
+		// 	BD76319_KeyToReport(kpd_currState, kpd_codeOut);
+		// } else if (kpd_currState == KEYPAD_RELEASED && kpd_prevState == KEYPAD_PRESSED) {
+		// 	kpd_codeOut = keypad_getCode();
+		// 	BD76319_KeyToReport(kpd_currState, kpd_codeOut);
+		// }
+		// if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED) {
+		// 	kpd_codeOut = keypad_getCode();
+		// }
+		static uint8_t kpd_prevCode = 0;
+		uint8_t currCode = keypad_getCode();
+
 		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED) {
-			kpd_codeOut = keypad_getCode();
-			BD76319_KeyToReport(kpd_currState, kpd_codeOut);
+			kpd_prevCode = currCode;
+			BD76319_KeyToReport(KEYPAD_PRESSED, currCode);
+		} else if (kpd_currState == KEYPAD_PRESSED && currCode != kpd_prevCode) {
+			// BD76319_KeyToReport(KEYPAD_RELEASED, kpd_prevCode);
+			kpd_prevCode = currCode;
+			BD76319_KeyToReport(KEYPAD_PRESSED, currCode);
 		} else if (kpd_currState == KEYPAD_RELEASED && kpd_prevState == KEYPAD_PRESSED) {
-			kpd_codeOut = keypad_getCode();
-			BD76319_KeyToReport(kpd_currState, kpd_codeOut);
-		}
-		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED) {
-			kpd_codeOut = keypad_getCode();
+			BD76319_KeyToReport(KEYPAD_RELEASED, kpd_prevCode);
 		}
 	}
 	

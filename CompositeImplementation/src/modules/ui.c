@@ -36,7 +36,7 @@ static uint8_t ui_KeyToReport;
 // 	bool b_modifier;
 // 	bool b_down;
 // 	uint8_t u8_value;
-// };
+// }
 
 // Bd76319_ui_sequence[] =
 // {
@@ -69,7 +69,7 @@ void BD76319_KeyToReport(uint16_t pui_KeyStatus, uint16_t pui_KeyValue)
 }
 
 
-// Procedure for Keyboard USB Class
+// // Procedure for Keyboard USB Class
 // void BD76319_ui_process(uint16_t pui_framenumber)
 // {
 // 	//	   bool b_btn_state, sucess;
@@ -145,18 +145,66 @@ void BD76319_KeyToReport(uint16_t pui_KeyStatus, uint16_t pui_KeyValue)
 // 	}
 // }
 
-void BD76319_ui_process(uint16_t pui_framenumber) {
-	static bool last_state = false;
+// void BD76319_ui_process(uint16_t pui_framenumber) {
+// 	static bool last_state = false;
 
-	bool curr = ui_KeyStatusToReport;
-	if (curr != last_state) {
-		last_state = curr;
-		uint8_t v = ui_KeyToReport;
-		if (curr)
-			udi_hid_kbd_down(v);
-		else
-			udi_hid_kbd_up(v);
+// 	bool curr = ui_KeyStatusToReport;
+// 	if (curr != last_state) {
+// 		last_state = curr;
+// 		uint8_t v = ui_KeyToReport;
+// 		if (curr)
+// 			udi_hid_kbd_down(v);
+// 		else
+// 			udi_hid_kbd_up(v);
+// 	}
+// }
+
+// void BD76319_ui_process(uint16_t pui_framenumber)
+// {
+// 	static bool key_was_down = false;
+// 	static uint8_t last_val = 0;
+// 	static uint8_t active_key = 0;
+
+// 	bool key_down = ui_KeyStatusToReport;
+// 	uint8_t key_val = ui_KeyToReport;
+
+// 	if (key_down) {
+// 		if (!key_was_down)
+// 			active_key = key_val;
+// 		else if (key_val != last_val)
+// 			active_key = key_val;
+// 	} else if (key_was_down) {
+// 		if (active_key) {
+// 			udi_hid_kbd_down(active_key);
+// 			udi_hid_kbd_up(active_key);
+// 		}
+// 		active_key = 0;
+// 	}
+// 	key_was_down = key_down;
+// 	last_val = key_val;
+// }
+
+void BD76319_ui_process(uint16_t pui_framenumber)
+{
+	static bool key_was_down = false;
+	static uint8_t active_key = 0;
+
+	bool key_down = ui_KeyStatusToReport;
+	uint8_t key_val = ui_KeyToReport;
+
+	if (key_down) {
+		if (!key_was_down)
+			active_key = key_val;
+		else if (key_val != active_key)
+			active_key = key_val;
+	} else if (key_was_down) {
+		if (active_key) {
+			udi_hid_kbd_down(active_key);
+			udi_hid_kbd_up(active_key);
+		}
+		active_key = 0;
 	}
+	key_was_down = key_down;
 }
 
 

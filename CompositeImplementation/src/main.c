@@ -25,7 +25,7 @@ int main (void)
 
 	udc_start();               // starts USB device controller
 
-	startupSequence(1);        // pick preferred sequence (1-5)
+	startupSequence(4);        // pick preferred sequence (1-5)
 
 	while (true) { }
 }

@@ -25,8 +25,16 @@
 #include "io.h"
 #include "led.h"
 #include "keypad.h"
-#include "startup.h"
 #include "joystick.h"
+
+
+void io_ui_process(void) {
+	io_init();
+}
+
+void startup_ui_process(uint8_t sequence) {
+	startupSequence(sequence);
+}
 
 void jstk_ui_process(void) {
 	joystick();
@@ -42,12 +50,4 @@ void led_ui_process(uint8_t mask) {
 
 void status_ui_process(void) {
 	testIndicator();
-}
-
-void io_ui_process(void) {
-	io_init();
-}
-
-void startup_ui_process(uint8_t sequence) {
-	startupSequence(sequence);
 }

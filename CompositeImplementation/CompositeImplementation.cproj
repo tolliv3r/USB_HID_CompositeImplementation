@@ -399,12 +399,6 @@
     <Compile Include="src\modules\led.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\modules\startup.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\modules\startup.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\modules\ui.c">
       <SubType>compile</SubType>
     </Compile>

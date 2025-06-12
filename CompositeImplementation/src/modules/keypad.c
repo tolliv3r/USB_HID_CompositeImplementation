@@ -102,78 +102,38 @@ void keypad_init(void)
 /*
  * scans the keypad matrix
  */
-// void keypad_poll(void)
-// {
-// 	uint8_t lastRow = KEYPAD_ROWS, lastCol = KEYPAD_COLS;
-
-// 	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
-// 		PORTF.OUT = kpd_colAddr[col];
-// 		if (col == 4) {
-// 			PORTB.OUTCLR = PIN7_bm;
-// 		} else {
-// 			PORTB.OUTSET = PIN7_bm;
-// 		}
-// 		uint8_t rowBits = PORTF.IN & 0xF0;
-// 		bool pressed = true;
-// 		uint8_t rowIndex;
-		
-// 		switch (rowBits) {
-// 		case 0xE0: rowIndex = 0;     break;
-// 		case 0xD0: rowIndex = 1;     break;
-// 		case 0xB0: rowIndex = 2;     break;
-// 		case 0x70: rowIndex = 3;     break;
-// 		default:   pressed  = false; break;
-// 		}
-// 		if (pressed) {
-// 			lastRow = rowIndex;
-// 			lastCol = col;
-// 		}
-// 	}
-
-// 	PORTB.OUTSET = PIN7_bm;
-// 	if (lastRow < KEYPAD_ROWS) {
-// 		uint8_t newCode = kpd_keyAssign[lastCol][lastRow];
-// 		if (kpd_keyPressed == KEYPAD_RELEASED) {
-// 			kpd_code = newCode;
-// 			kpd_keyPressed = KEYPAD_PRESSED;
-// 		} else if (newCode != kpd_code) {
-// 			kpd_code = newCode;
-// 		}
-// 	} else {
-// 		if (kpd_keyPressed == KEYPAD_PRESSED) {
-// 			kpd_keyPressed = KEYPAD_RELEASED;
-// 		}
-// 	}
-// }
-
 void keypad_poll(void)
 {
+	// remember the previous raw row mask between scans
 	static uint8_t prevRowMask = 0;
+	// track the last detected key position
 	uint8_t lastRow = KEYPAD_ROWS, lastCol = KEYPAD_COLS;
 
+	// scan each column
 	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
-		PORTF.OUT = kpd_colAddr[col];
+		PORTF.OUT = kpd_colAddr[col]; // drive column select (active = low)
 		if (col == 4) {
 			PORTB.OUTCLR = PIN7_bm;
 		} else {
 			PORTB.OUTSET = PIN7_bm;
 		}
 
-		uint8_t rowBits = PORTF.IN & 0xF0;
-		uint8_t rowMask = (~rowBits) & 0xF0;
+		uint8_t rowBits = PORTF.IN & 0xF0;   // read raw row bits (PortF4-7)
+		uint8_t rowMask = (~rowBits) & 0xF0; // invert & mask to get 1s wherever pressed
 
-		uint8_t selectMask;
+		uint8_t selectMask; // if >1 bit is set, isolate the newest bit
 		if ((rowMask & (rowMask - 1)) != 0) {
-			uint8_t newMask = rowMask & ~prevRowMask;
+			uint8_t newMask = rowMask & ~prevRowMask; // 2 or more rows r low
 			if (!newMask) {
-				newMask = rowMask;
+				newMask = rowMask; // shouldn't happen but for redundancy
 			}
-			selectMask = newMask & (uint8_t)(-newMask);
+			selectMask = newMask & (uint8_t)(-newMask); // pick LSB that's set (newest)
 		} else {
-			selectMask = rowMask;
+			selectMask = rowMask; // single key press (or none ig)
 		}
-		prevRowMask = rowMask;
+		prevRowMask = rowMask; // save for next pass
 
+		// decode to row index
 		bool pressed = (selectMask != 0);
 		uint8_t rowIndex = 0;
 		switch (selectMask) {
@@ -188,9 +148,9 @@ void keypad_poll(void)
 			lastCol = col;
 		}
 	}
-	PORTB.OUTSET = PIN7_bm;
+	PORTB.OUTSET = PIN7_bm; // deselect all columns
 
-	if (lastRow < KEYPAD_ROWS) {
+	if (lastRow < KEYPAD_ROWS) { // update global press state & code
 		uint8_t newCode = kpd_keyAssign[lastCol][lastRow];
 		if (kpd_keyPressed == KEYPAD_RELEASED) {
 			kpd_code = newCode;

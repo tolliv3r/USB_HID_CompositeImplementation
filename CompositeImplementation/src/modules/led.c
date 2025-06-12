@@ -51,7 +51,6 @@ void led_statusToggle(void) { // toggle status LED
     STATUS_LED_PORT.OUTTGL = LEDS_PIN;
 }
 
-
 static volatile uint16_t sof_ms = 0;
 void testIndicator(void) { // blink status LED when in test mode
     sof_ms++;

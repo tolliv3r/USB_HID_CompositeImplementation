@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-// define LED's (PORTA)
+
 #define LED1_PIN    (1u << 0)
 #define LED2_PIN    (1u << 1)
 #define LED3_PIN    (1u << 2)
@@ -27,21 +27,21 @@
 
 #define LED_PORT         PORTA
 #define STATUS_LED_PORT  PORTB
-#define STATUS_LED_PIN   PIN6_bm
 
-void led_init(void);
-void led_allOn(void);
-void led_allOff(void);
-void led_on(uint8_t mask);
-void led_off(uint8_t mask);
-void led_toggle(uint8_t mask);
-void led_setState(uint8_t mask);
 
-void led_statusOn(void);
-void led_statusOff(void);
-void led_statusToggle(void);
+void led_init         (void);
+void led_allOn        (void);
+void led_allOff       (void);
+void led_on           (uint8_t mask);
+void led_off          (uint8_t mask);
+void led_toggle       (uint8_t mask);
+void led_setState     (uint8_t mask);
 
-void testIndicator(void);
-void startupSequence(uint8_t sequence);
+void led_statusOn     (void);
+void led_statusOff    (void);
+void led_statusToggle (void);
+
+void testIndicator    (void);
+void startupSequence  (uint8_t sequence);
 
 #endif // LED_H

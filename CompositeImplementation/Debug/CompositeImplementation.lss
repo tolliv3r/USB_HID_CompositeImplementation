@@ -19,17 +19,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 000051c4  00000000  00000000  0000e4c1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00009a6b  00000000  00000000  00013685  2**0
+  8 .debug_line   00009a6a  00000000  00000000  00013685  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000c48  00000000  00000000  0001d0f0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00036c8f  00000000  00000000  0001dd38  2**0
+ 10 .debug_str    00036c78  00000000  00000000  0001dd38  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000035cb  00000000  00000000  000549c7  2**0
+ 11 .debug_loc    000035cb  00000000  00000000  000549b0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000760  00000000  00000000  00057f98  2**3
+ 12 .debug_ranges 00000760  00000000  00000000  00057f80  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000cd6f  00000000  00000000  000586f8  2**0
+ 13 .debug_macro  0000cd69  00000000  00000000  000586e0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1599,11 +1599,11 @@ void keypad(void) {
 
 00000880 <led_init>:
      880:	e0 e0       	ldi	r30, 0x00	; 0
-void led_statusOff(void) {
+void led_statusOff(void) { // status LED off
     STATUS_LED_PORT.OUTSET = LEDS_PIN;
 }
 
-void led_statusToggle(void) {
+void led_statusToggle(void) { // toggle status LED
     STATUS_LED_PORT.OUTTGL = LEDS_PIN;
      882:	f6 e0       	ldi	r31, 0x06	; 6
      884:	8f ef       	ldi	r24, 0xFF	; 255
@@ -1640,9 +1640,8 @@ void led_statusToggle(void) {
 000008b6 <testIndicator>:
 }
 
-
 static volatile uint16_t sof_ms = 0;
-void testIndicator(void) {
+void testIndicator(void) { // blink status LED when in test mode
     sof_ms++;
      8b6:	80 91 c4 21 	lds	r24, 0x21C4	; 0x8021c4 <sof_ms>
      8ba:	90 91 c5 21 	lds	r25, 0x21C5	; 0x8021c5 <sof_ms+0x1>
@@ -1660,11 +1659,11 @@ void testIndicator(void) {
      8d8:	84 3f       	cpi	r24, 0xF4	; 244
      8da:	91 40       	sbci	r25, 0x01	; 1
      8dc:	78 f0       	brcs	.+30     	; 0x8fc <testIndicator+0x46>
-void led_statusOff(void) {
+void led_statusOff(void) { // status LED off
     STATUS_LED_PORT.OUTSET = LEDS_PIN;
 }
 
-void led_statusToggle(void) {
+void led_statusToggle(void) { // toggle status LED
     STATUS_LED_PORT.OUTTGL = LEDS_PIN;
      8de:	80 e4       	ldi	r24, 0x40	; 64
      8e0:	80 93 27 06 	sts	0x0627, r24	; 0x800627 <__TEXT_REGION_LENGTH__+0x7be627>
@@ -1681,7 +1680,7 @@ void led_statusToggle(void) {
     LED_PORT.OUTCLR = mask;
 }
 
-void led_statusOn(void) {
+void led_statusOn(void) { // status LED on
     STATUS_LED_PORT.OUTCLR = LEDS_PIN;
      8ee:	80 e4       	ldi	r24, 0x40	; 64
      8f0:	80 93 26 06 	sts	0x0626, r24	; 0x800626 <__TEXT_REGION_LENGTH__+0x7be626>
@@ -1700,7 +1699,7 @@ void led_statusOn(void) {
 }
 
 
-void startupSequence(uint8_t sequence)
+void startupSequence(uint8_t sequence) // startup LED animation
 {
      8fe:	7f 92       	push	r7
      900:	8f 92       	push	r8

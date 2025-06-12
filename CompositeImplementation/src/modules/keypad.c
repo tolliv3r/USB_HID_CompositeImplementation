@@ -102,8 +102,53 @@ void keypad_init(void)
 /*
  * scans the keypad matrix
  */
+// void keypad_poll(void)
+// {
+// 	uint8_t lastRow = KEYPAD_ROWS, lastCol = KEYPAD_COLS;
+
+// 	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
+// 		PORTF.OUT = kpd_colAddr[col];
+// 		if (col == 4) {
+// 			PORTB.OUTCLR = PIN7_bm;
+// 		} else {
+// 			PORTB.OUTSET = PIN7_bm;
+// 		}
+// 		uint8_t rowBits = PORTF.IN & 0xF0;
+// 		bool pressed = true;
+// 		uint8_t rowIndex;
+		
+// 		switch (rowBits) {
+// 		case 0xE0: rowIndex = 0;     break;
+// 		case 0xD0: rowIndex = 1;     break;
+// 		case 0xB0: rowIndex = 2;     break;
+// 		case 0x70: rowIndex = 3;     break;
+// 		default:   pressed  = false; break;
+// 		}
+// 		if (pressed) {
+// 			lastRow = rowIndex;
+// 			lastCol = col;
+// 		}
+// 	}
+
+// 	PORTB.OUTSET = PIN7_bm;
+// 	if (lastRow < KEYPAD_ROWS) {
+// 		uint8_t newCode = kpd_keyAssign[lastCol][lastRow];
+// 		if (kpd_keyPressed == KEYPAD_RELEASED) {
+// 			kpd_code = newCode;
+// 			kpd_keyPressed = KEYPAD_PRESSED;
+// 		} else if (newCode != kpd_code) {
+// 			kpd_code = newCode;
+// 		}
+// 	} else {
+// 		if (kpd_keyPressed == KEYPAD_PRESSED) {
+// 			kpd_keyPressed = KEYPAD_RELEASED;
+// 		}
+// 	}
+// }
+
 void keypad_poll(void)
 {
+	static uint8_t prevRowMask = 0;
 	uint8_t lastRow = KEYPAD_ROWS, lastCol = KEYPAD_COLS;
 
 	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
@@ -113,24 +158,38 @@ void keypad_poll(void)
 		} else {
 			PORTB.OUTSET = PIN7_bm;
 		}
+
 		uint8_t rowBits = PORTF.IN & 0xF0;
-		bool pressed = true;
-		uint8_t rowIndex;
-		
-		switch (rowBits) {
-		case 0x0E0: rowIndex = 0;     break;
-		case 0x0D0: rowIndex = 1;     break;
-		case 0x0B0: rowIndex = 2;     break;
-		case 0x070: rowIndex = 3;     break;
-		default:   pressed  = false; break;
+		uint8_t rowMask = (~rowBits) & 0xF0;
+
+		uint8_t selectMask;
+		if ((rowMask & (rowMask - 1)) != 0) {
+			uint8_t newMask = rowMask & ~prevRowMask;
+			if (!newMask) {
+				newMask = rowMask;
+			}
+			selectMask = newMask & (uint8_t)(-newMask);
+		} else {
+			selectMask = rowMask;
+		}
+		prevRowMask = rowMask;
+
+		bool pressed = (selectMask != 0);
+		uint8_t rowIndex = 0;
+		switch (selectMask) {
+			case 0x10: rowIndex = 0;     break;
+			case 0x20: rowIndex = 1;     break;
+			case 0x40: rowIndex = 2;     break;
+			case 0x80: rowIndex = 3;     break;
+			default:   pressed  = false; break;
 		}
 		if (pressed) {
 			lastRow = rowIndex;
 			lastCol = col;
 		}
 	}
-
 	PORTB.OUTSET = PIN7_bm;
+
 	if (lastRow < KEYPAD_ROWS) {
 		uint8_t newCode = kpd_keyAssign[lastCol][lastRow];
 		if (kpd_keyPressed == KEYPAD_RELEASED) {
@@ -192,19 +251,17 @@ void keypad_report(void)
 
 		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED) {
 			kpd_prevCode = currCode;
-			// BD76319_KeyToReport(KEYPAD_PRESSED, currCode);
 
 			keyStatus2Report = KEYPAD_PRESSED;
 			key2Report = currCode;
-		} else if (kpd_currState == KEYPAD_PRESSED && currCode != kpd_prevCode) {
+		} else if (kpd_currState == KEYPAD_PRESSED &&
+			       currCode != kpd_prevCode) {
 			kpd_prevCode = currCode;
-			// BD76319_KeyToReport(KEYPAD_PRESSED, currCode);
-
+			
 			keyStatus2Report = KEYPAD_PRESSED;
 			key2Report = currCode;
-		} else if (kpd_currState == KEYPAD_RELEASED && kpd_prevState == KEYPAD_PRESSED) {
-			// BD76319_KeyToReport(KEYPAD_RELEASED, kpd_prevCode);
-
+		} else if (kpd_currState == KEYPAD_RELEASED &&
+			       kpd_prevState == KEYPAD_PRESSED) {
 			keyStatus2Report = KEYPAD_RELEASED;
 			key2Report = kpd_prevCode;
 		}

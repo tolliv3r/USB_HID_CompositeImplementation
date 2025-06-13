@@ -18,13 +18,6 @@ void udi_hid_led_disable(void);
 bool udi_hid_led_setup(void);
 uint8_t udi_hid_led_getsetting(void);
 
-// UDC_DESC_STORAGE udi_api_t udi_api_hid_led = {
-// 	.enable = (bool(*)(void))udi_hid_led_enable,
-// 	.disable = (void (*)(void))udi_hid_led_disable,
-// 	.setup = (bool(*)(void))udi_hid_led_setup,
-// 	.getsetting = (uint8_t(*)(void))udi_hid_led_getsetting,
-// 	.sof_notify = NULL,
-// };
 
 UDC_DESC_STORAGE udi_api_t udi_api_hid_led = {
 	.enable     = udi_hid_led_enable,
@@ -44,7 +37,6 @@ COMPILER_WORD_ALIGNED
 		static uint8_t udi_hid_led_report_out[UDI_HID_REPORT_OUT_SIZE];
 
 // COMPILER_WORD_ALIGNED
-// 	static uint8_t udi_hid_led_report_feature[UDI_HID_REPORT_FEATURE_SIZE];
 UDC_DESC_STORAGE udi_hid_led_report_desc_t udi_hid_led_report_desc = { {
 		0x06, 0x00, 0xFF,	/* usage page (vendor)      */
 		0x09, 0x01,			/* usage (vendor usage 1)   */

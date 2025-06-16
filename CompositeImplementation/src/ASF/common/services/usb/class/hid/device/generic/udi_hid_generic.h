@@ -75,7 +75,7 @@ typedef struct {
 
 //! Report descriptor for HID generic
 typedef struct {
-	uint8_t array[27]; // changed from 53 -> 27
+	uint8_t array[24]; // changed from 53 -> 27 -> 29
 } udi_hid_generic_report_desc_t;
 
 

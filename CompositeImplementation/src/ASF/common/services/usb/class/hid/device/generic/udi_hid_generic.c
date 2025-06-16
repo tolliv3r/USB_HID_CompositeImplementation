@@ -100,23 +100,21 @@ COMPILER_WORD_ALIGNED
 //@}
 
 //! HID report descriptor for HID Joystick, modified by UniWest
-UDC_DESC_STORAGE udi_hid_generic_report_desc_t udi_hid_generic_report_desc = { {
-	0x05, 0x01,				/* Usage Page (Generic Desktop)	*/
-	0x09, 0x04,				/* Usage (Joystick)				*/
-	0xA1, 0x01,				/* Collection (Application)		*/
-	  0xA1, 0x00,			/* Collection (Physical)		*/
-		0x05, 0x01,			/* Usage Page (Generic Desktop)	*/
-		0x09, 0x30, 		/* Usage (X)					*/
-		0x09, 0x31,			/* Usage (Y)					*/
-		0x15, 0x00,			/* Logical Minimum (0)			*/
-		0x26, 0xFF, 0x00,	/* Logical Maximum (255)		*/
-		0x75, 0x08,			/* Report Size (8 bits)			*/
-		0x95, 0x02,			/* Report Count (2 ? X & Y)		*/
-		0x81, 0x02,			/* Input (Data,Var,Abs)			*/
-	  0xC0,					/* End Collection				*/
-	0xC0					/* End Collection				*/
-		}
-};	// array modified by UniWest
+UDC_DESC_STORAGE udi_hid_generic_report_desc_t udi_hid_generic_report_desc = { { 
+	0x05, 0x01,
+	0x09, 0x04,
+	0xA1, 0x01,
+	  0x05, 0x01,
+	  0x09, 0x30,
+	  0x09, 0x31,
+	  0x15, 0x00,
+	  0x26, 0xFF, 0x00,
+	  0x75, 0x08,
+	  0x95, 0x02,
+	  0x81, 0x02,
+	0xC0
+	}
+};
 
 /**
  * \name Internal routines

@@ -69,6 +69,8 @@ typedef struct {
    .ep_out.bInterval          = 4,\
 }
 
+bool udi_hid_led_send_report_in(uint8_t *data);
+
 
 #ifdef __cplusplus
 }

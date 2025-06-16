@@ -33,10 +33,17 @@ COMPILER_WORD_ALIGNED
 COMPILER_WORD_ALIGNED
 		static uint8_t udi_hid_led_protocol;
 
+static bool udi_hid_led_b_report_in_free;
+
+COMPILER_WORD_ALIGNED
+		static uint8_t udi_hid_led_report_in[UDI_HID_REPORT_IN_SIZE];
+
 COMPILER_WORD_ALIGNED
 		static uint8_t udi_hid_led_report_out[UDI_HID_REPORT_OUT_SIZE];
 
 // COMPILER_WORD_ALIGNED
+// 		static uint8_t udi_hid_led_report_feature[UDI_HID_REPORT_FEATURE_SIZE];
+
 UDC_DESC_STORAGE udi_hid_led_report_desc_t udi_hid_led_report_desc = { {
 		0x06, 0x00, 0xFF,	/* usage page (vendor)      */
 		0x09, 0x01,			/* usage (vendor usage 1)   */
@@ -63,9 +70,18 @@ static void udi_hid_led_report_out_received(udd_ep_status_t status,
 
 static bool udi_hid_led_report_out_enable(void);
 
+// static void udi_hid_led_setfeature_valid(void);
+
+static void udi_hid_led_report_in_sent(udd_ep_status_t status,
+	                                   iram_size_t     nb_sent,
+	                                   udd_ep_id_t     ep);
+
+/* --------------------------------------------------------------------- */
+
 bool udi_hid_led_enable(void) {
 	udi_hid_led_rate = 0;
 	udi_hid_led_protocol = 0;
+	udi_hid_led_b_report_in_free = true;
 
 	if(!udi_hid_led_report_out_enable())
 		return false;
@@ -120,4 +136,40 @@ static bool udi_hid_led_report_out_enable(void) {
 		             (uint8_t *)&udi_hid_led_report_out,
 		              UDI_HID_LED_REPORT_OUT_SIZE,
 		              udi_hid_led_report_out_received);
+}
+
+
+bool udi_hid_led_send_report_in(uint8_t *data)
+{
+	if (!udi_hid_led_b_report_in_free)
+		return false;
+	irqflags_t flags = cpu_irq_save();
+
+	memset(&udi_hid_led_report_in,
+		   0,
+		   sizeof(udi_hid_led_report_in));
+	memcpy(&udi_hid_led_report_in,
+		   data,
+		   sizeof(udi_hid_led_report_in));
+	udi_hid_led_b_report_in_free = !udd_ep_run(UDI_HID_LED_EP_IN,
+		                                       false,
+		                                       (uint8_t *) & udi_hid_led_report_in,
+		                                       sizeof(udi_hid_led_report_in),
+		                                       udi_hid_led_report_in_sent);
+	cpu_irq_restore(flags);
+	return !udi_hid_led_b_report_in_free;
+}
+
+// static void udi_hid_led_setfeature_valid(void) {
+// 	if (sizeof(udi_hid_led_report_feature) != udd_g_ctrlreq.payload_size)
+// 		return; //BAD BAD BAD
+// }
+
+static void udi_hid_led_report_in_sent(udd_ep_status_t status,
+	                                   iram_size_t     nb_sent,
+	                                   udd_ep_id_t     ep) {
+	UNUSED(status);
+	UNUSED(nb_sent);
+	UNUSED(ep);
+	udi_hid_led_b_report_in_free = true;
 }

@@ -42,10 +42,13 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 
 	status_ui_process();
 
-	if (main_b_led_enable) {
-		uint8_t map = led_getMap();
-		main_led_report_in(&map);
-	}
+	// if (main_b_led_enable) {
+	// 	uint8_t map = led_getMap();
+	// 	main_led_report_in(&map);
+	// }
+	if (!main_b_led_enable)
+		return;
+	led_ui_process();
 }
 
 void main_remotewakeup_enable(void) { }
@@ -82,9 +85,9 @@ void main_led_disable(void) {
 }
 
 void main_led_report_out(uint8_t const *report) {
-	led_ui_process(report[0]);
+	led_set(report[0]);
 }
 
-void main_led_report_in(uint8_t const *report) {
-	udi_hid_led_send_report_in((uint8_t*)report);
-}
+// void main_led_report_in(uint8_t const *report) {
+// 	udi_hid_led_send_report_in((uint8_t*)report);
+// }

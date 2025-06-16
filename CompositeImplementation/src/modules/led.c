@@ -14,6 +14,14 @@ static void led_updateState(uint8_t mask, bool state);
 static bool ledMap[8] = {0};
 
 /* ---------------------------- Regular LEDs ---------------------------- */
+void led_usbTask(void) {
+    uint8_t map = led_getMap();
+    udi_hid_led_send_report_in(&map);
+}
+
+
+
+/* ---------------------------- Regular LEDs ---------------------------- */
 void led_init(void) {
     LED_PORT.DIRSET = LED_MASK;
     LED_PORT.OUTSET = LED_MASK;

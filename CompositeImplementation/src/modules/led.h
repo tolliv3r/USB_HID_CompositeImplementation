@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-
+/* ---------------------------- Definitions ---------------------------- */
 #define LED1_PIN    (1u << 0)
 #define LED2_PIN    (1u << 1)
 #define LED3_PIN    (1u << 2)
@@ -28,7 +28,7 @@
 #define LED_PORT         PORTA
 #define STATUS_LED_PORT  PORTB
 
-
+/* ----------------------------- Prototypes ---------------------------- */
 void led_init         (void);
 void led_allOn        (void);
 void led_allOff       (void);
@@ -47,6 +47,8 @@ uint8_t led_getMap(void);
 
 void startupSequence (uint8_t sequence);
 void testIndicator   (void);
+
+void led_usbTask(void);
 
 
 #endif // LED_H

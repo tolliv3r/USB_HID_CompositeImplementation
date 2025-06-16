@@ -44,8 +44,12 @@ void kbd_ui_process(void) {
 	keypad();
 }
 
-void led_ui_process(uint8_t mask) {
+void led_set(uint8_t mask) {
 	led_setState(mask);
+}
+
+void led_ui_process(void) {
+	led_usbTask();
 }
 
 void status_ui_process(void) {

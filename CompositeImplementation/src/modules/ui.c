@@ -19,7 +19,7 @@
  *----------------------------------------
 */
 #include <asf.h>
-#include "conf_usb.h"  // Note -Conf_usb.h includes main.h
+#include "conf_usb.h"
 
 #include "ui.h"
 #include "io.h"
@@ -44,8 +44,8 @@ void kbd_ui_process(void) {
 	keypad();
 }
 
-void led_set(uint8_t mask) {
-	led_setState(mask);
+void ui_led_report(uint8_t const *mask) {
+	led_setState(mask[0]);
 }
 
 void led_ui_process(void) {

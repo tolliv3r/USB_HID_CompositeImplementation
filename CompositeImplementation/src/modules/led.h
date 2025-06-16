@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 
-/* ---------------------------- Definitions ---------------------------- */
+/* -------------------------------------------- */
+/* ---------------- Definitions --------------- */
+/* -------------------------------------------- */
 #define LED1_PIN    (1u << 0)
 #define LED2_PIN    (1u << 1)
 #define LED3_PIN    (1u << 2)
@@ -15,20 +17,22 @@
 #define LEDS_PIN    (1u << 6)
 
 #define LED_MASK (\
-	LED1_PIN | \
-	LED2_PIN | \
-	LED3_PIN | \
-	LED4_PIN | \
-	LED5_PIN | \
-	LED6_PIN | \
-	LED7_PIN | \
-	LED8_PIN   \
+	LED1_PIN |    \
+	LED2_PIN |    \
+	LED3_PIN |    \
+	LED4_PIN |    \
+	LED5_PIN |    \
+	LED6_PIN |    \
+	LED7_PIN |    \
+	LED8_PIN      \
 )
 
 #define LED_PORT         PORTA
 #define STATUS_LED_PORT  PORTB
 
-/* ----------------------------- Prototypes ---------------------------- */
+/* -------------------------------------------- */
+/* ---------------- Prototypes ---------------- */
+/* -------------------------------------------- */
 void led_init         (void);
 void led_allOn        (void);
 void led_allOff       (void);

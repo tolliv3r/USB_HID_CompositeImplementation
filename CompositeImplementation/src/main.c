@@ -3,7 +3,6 @@
 
 // #include "ui.h"
 #include "modules/ui.h"
-#include "modules/led.h"
 
 static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
@@ -27,7 +26,9 @@ int main (void)
 	while (true) { }
 }
 
+/* --------------------------------------------------------------------- */
 /* -------------------------------- USB -------------------------------- */
+/* --------------------------------------------------------------------- */
 void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
@@ -40,21 +41,19 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 		return;
 	jstk_ui_process();
 
-	status_ui_process();
-
-	// if (main_b_led_enable) {
-	// 	uint8_t map = led_getMap();
-	// 	main_led_report_in(&map);
-	// }
 	if (!main_b_led_enable)
 		return;
 	led_ui_process();
+
+	status_ui_process();
 }
 
 void main_remotewakeup_enable(void) { }
 void main_remotewakeup_disable(void) { }
 
+/* --------------------------------------------------------------------- */
 /* ----------------------------- keyboard ------------------------------ */
+/* --------------------------------------------------------------------- */
 bool main_kbd_enable(void) {
 	main_b_kbd_enable = true;
 	return true;
@@ -64,7 +63,9 @@ void main_kbd_disable(void) {
 	main_b_kbd_enable = false;
 }
 
+/* --------------------------------------------------------------------- */
 /* ----------------------------- joystick ------------------------------ */
+/* --------------------------------------------------------------------- */
 bool main_generic_enable(void) {
 	main_b_generic_enable = true;
 	return true;
@@ -74,7 +75,9 @@ void main_generic_disable(void) {
 	main_b_generic_enable = false;
 }
 
+/* --------------------------------------------------------------------- */
 /* ------------------------------- LEDs -------------------------------- */
+/* --------------------------------------------------------------------- */
 bool main_led_enable(void) {
 	main_b_led_enable = true;
 	return true;
@@ -83,11 +86,3 @@ bool main_led_enable(void) {
 void main_led_disable(void) {
 	main_b_led_enable = false;
 }
-
-void main_led_report_out(uint8_t const *report) {
-	led_set(report[0]);
-}
-
-// void main_led_report_in(uint8_t const *report) {
-// 	udi_hid_led_send_report_in((uint8_t*)report);
-// }

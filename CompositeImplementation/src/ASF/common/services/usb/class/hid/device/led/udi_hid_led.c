@@ -36,10 +36,10 @@ COMPILER_WORD_ALIGNED
 static bool udi_hid_led_b_report_in_free;
 
 COMPILER_WORD_ALIGNED
-		static uint8_t udi_hid_led_report_in[UDI_HID_REPORT_IN_SIZE];
+		static uint8_t udi_hid_led_report_in[UDI_HID_LED_REPORT_IN_SIZE];
 
 COMPILER_WORD_ALIGNED
-		static uint8_t udi_hid_led_report_out[UDI_HID_REPORT_OUT_SIZE];
+		static uint8_t udi_hid_led_report_out[UDI_HID_LED_REPORT_OUT_SIZE];
 
 // COMPILER_WORD_ALIGNED
 // 		static uint8_t udi_hid_led_report_feature[UDI_HID_REPORT_FEATURE_SIZE];

@@ -114,9 +114,10 @@
 /* ------------------------------------------------------------------------
  * ------------------------  LED interface settings -----------------------
  * ----------------------------------------------------------------------*/
-#define UDI_HID_LED_ENABLE_EXT()  main_led_enable()
-#define UDI_HID_LED_DISABLE_EXT() main_led_disable()
-#define UDI_HID_LED_REPORT_OUT(ptr) main_led_report_out(ptr)
+#define UDI_HID_LED_ENABLE_EXT()         main_led_enable()
+#define UDI_HID_LED_DISABLE_EXT()        main_led_disable()
+#define UDI_HID_LED_REPORT_OUT(ptr)      main_led_report_out(ptr)
+#define UDI_HID_LED_REPORT_IN(ptr)       main_led_report_in(ptr)
 
 #define UDI_HID_LED_REPORT_IN_SIZE       1
 #define UDI_HID_LED_REPORT_OUT_SIZE      1
@@ -130,23 +131,23 @@
 /* ------------------------------------------------------------------------
  * -------------------------  HID-COMPOSITE stuff -------------------------
  * ----------------------------------------------------------------------*/
-#define UDI_COMPOSITE_DESC_T \
-		udi_hid_kbd_desc_t      udi_hid_kbd; \
+#define UDI_COMPOSITE_DESC_T                     \
+		udi_hid_kbd_desc_t      udi_hid_kbd;     \
 		udi_hid_generic_desc_t  udi_hid_generic; \
 		udi_hid_led_desc_t      udi_hid_led;
 
-#define UDI_COMPOSITE_DESC_FS \
-		.udi_hid_kbd      = UDI_HID_KBD_DESC, \
+#define UDI_COMPOSITE_DESC_FS                     \
+		.udi_hid_kbd      = UDI_HID_KBD_DESC,     \
 		.udi_hid_generic  = UDI_HID_GENERIC_DESC, \
 		.udi_hid_led      = UDI_HID_LED_DESC
 
-#define UDI_COMPOSITE_DESC_HS \
-		.udi_hid_kbd      = UDI_HID_KBD_DESC, \
+#define UDI_COMPOSITE_DESC_HS                     \
+		.udi_hid_kbd      = UDI_HID_KBD_DESC,     \
 		.udi_hid_generic  = UDI_HID_GENERIC_DESC, \
 		.udi_hid_led      = UDI_HID_LED_DESC
 
-#define UDI_COMPOSITE_API \
-		&udi_api_hid_kbd, \
+#define UDI_COMPOSITE_API     \
+		&udi_api_hid_kbd,     \
 		&udi_api_hid_generic, \
 		&udi_api_hid_led
 

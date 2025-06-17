@@ -129,7 +129,7 @@ void keypad_poll(void)
 			}
 			selectMask = newMask & (uint8_t)(-newMask); // pick LSB that's set (newest)
 		} else {
-			selectMask = rowMask; // single key press (or none ig)
+			selectMask = rowMask; // single key press (or none)
 		}
 		prevRowMask = rowMask; // save for next pass
 
@@ -237,27 +237,56 @@ void keypad_report(void)
 }
 
 
+// void keypad(void) {
+// 	keypad_poll();
+// 	keypad_report();
+
+// 	static bool key_was_down = false;
+// 	static uint8_t active_key = 0;
+
+// 	bool key_down = keyStatus2Report;
+// 	uint8_t key_val = key2Report;
+
+// 	if (key_down) {
+// 		if (!key_was_down)
+// 			active_key = key_val;
+// 		else if (key_val != active_key)
+// 			active_key = key_val;
+// 	} else if (key_was_down) {
+// 		if (active_key) {
+// 			udi_hid_kbd_down(active_key);
+// 			udi_hid_kbd_up(active_key);
+// 		}
+// 		active_key = 0;
+// 	}
+// 	key_was_down = key_down;
+// }
+
 void keypad(void) {
 	keypad_poll();
 	keypad_report();
 
 	static bool key_was_down = false;
+	static bool simult_press = false;
 	static uint8_t active_key = 0;
 
-	bool key_down = keyStatus2Report;
+	bool key_down = (keyStatus2Report == KEYPAD_PRESSED);
 	uint8_t key_val = key2Report;
 
 	if (key_down) {
-		if (!key_was_down)
+		if (!key_was_down) {
 			active_key = key_val;
-		else if (key_val != active_key)
-			active_key = key_val;
+			simult_press = false;
+		} else if (key_val != active_key) {
+			simult_press = true;
+		}
 	} else if (key_was_down) {
-		if (active_key) {
+		if (!simult_press && active_key) {
 			udi_hid_kbd_down(active_key);
 			udi_hid_kbd_up(active_key);
 		}
 		active_key = 0;
+		simult_press = false;
 	}
 	key_was_down = key_down;
 }

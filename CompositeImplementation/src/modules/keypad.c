@@ -20,14 +20,15 @@ static volatile uint8_t kpd_keyPressed;   // KEYPAD_PRESSED or KEYPAD_RELEASED
 static volatile uint8_t kpd_code;         // last HID code detected
 static volatile uint8_t kpd_prevState;    // previous button state
 static volatile uint8_t kpd_currState;    // current button state
-static volatile uint8_t kpd_codeOut;      // code sent over USB
+static volatile uint8_t kpd_currentCode;      // code sent over USB
 
 // test mode flags		
 static volatile uint8_t kpd_exitTestMode; // flag to clear LEDs after test
 volatile uint8_t kpd_testMode;            // hardware (switch) test mode input
 
-static uint8_t keyStatus2Report;
-static uint8_t key2Report;
+// static uint8_t keyStatus2Report;
+// static uint8_t key2Report;
+static volatile bool kpd_multiPress = false;
 
 /*
  * sets initial states and creates kpd_keyAssign matrix with HID codes.
@@ -108,6 +109,8 @@ void keypad_poll(void)
 	static uint8_t prevRowMask = 0;
 	// track the last detected key position
 	uint8_t lastRow = KEYPAD_ROWS, lastCol = KEYPAD_COLS;
+	// total keys seen this scan
+	uint8_t pressedCount = 0;
 
 	// scan each column
 	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
@@ -120,6 +123,12 @@ void keypad_poll(void)
 
 		uint8_t rowBits = PORTF.IN & 0xF0;   // read raw row bits (PortF4-7)
 		uint8_t rowMask = (~rowBits) & 0xF0; // invert & mask to get 1s wherever pressed
+
+		// add up the bits in column
+		if (rowMask & 0x10) pressedCount++;
+		if (rowMask & 0x20) pressedCount++;
+		if (rowMask & 0x40) pressedCount++;
+		if (rowMask & 0x80) pressedCount++;
 
 		uint8_t selectMask; // if >1 bit is set, isolate the newest bit
 		if ((rowMask & (rowMask - 1)) != 0) {
@@ -163,6 +172,7 @@ void keypad_poll(void)
 			kpd_keyPressed = KEYPAD_RELEASED;
 		}
 	}
+	kpd_multiPress = (pressedCount > 1);
 }
 
 // get current press state
@@ -179,7 +189,7 @@ void keypad_report(void)
 {	
 	kpd_testMode = PORTB.IN;           // read test mode switch
 	kpd_currState = keypad_getState(); // feel like this one's select explanatory
-	kpd_codeOut = keypad_getCode();    // current code to be outputed
+	kpd_currentCode = keypad_getCode();    // current code to be outputed
 
 	if ((kpd_testMode & 0x010) == 0)   // test mode enabled
 	{
@@ -187,7 +197,7 @@ void keypad_report(void)
 		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED)
 		{
 			uint8_t kpd_testMask = 0;
-			switch (kpd_codeOut) 
+			switch (kpd_currentCode) 
 			{
 				case HID_KEYPAD_1:	kpd_testMask = LED1_PIN;	break;	// F1
 				case HID_KEYPAD_2:	kpd_testMask = LED2_PIN;	break;	// F2
@@ -206,87 +216,42 @@ void keypad_report(void)
 	}
 	else // normal mode
 	{
-		static uint8_t kpd_prevCode = 0;
-		uint8_t currCode = keypad_getCode();
+		bool kpd_anyPressed = (keypad_getState() == KEYPAD_PRESSED);
 
-		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED) {
-			kpd_prevCode = currCode;
+		static bool    kpd_firstKey  = false;
+		static uint8_t kpd_firstCode = 0;
+		static bool    kpd_block     = false;
 
-			keyStatus2Report = KEYPAD_PRESSED;
-			key2Report = currCode;
-		} else if (kpd_currState == KEYPAD_PRESSED &&
-			       currCode != kpd_prevCode) {
-			kpd_prevCode = currCode;
-			
-			keyStatus2Report = KEYPAD_PRESSED;
-			key2Report = currCode;
-		} else if (kpd_currState == KEYPAD_RELEASED &&
-			       kpd_prevState == KEYPAD_PRESSED) {
-			keyStatus2Report = KEYPAD_RELEASED;
-			key2Report = kpd_prevCode;
+		if (!kpd_firstKey) {
+			if (kpd_anyPressed) {
+				kpd_firstKey = true;
+				kpd_firstCode = kpd_currentCode;
+				kpd_block = false;
+			}
+		} else {
+			if (kpd_anyPressed && !kpd_block && kpd_multiPress) {
+				kpd_block = true;
+			}
+			if (!kpd_anyPressed) {
+				if (!kpd_block) {
+					udi_hid_kbd_down(kpd_firstCode);
+					udi_hid_kbd_up(kpd_firstCode);
+				}
+				kpd_firstKey = false;
+				kpd_block = false;
+			}
 		}
 	}
-	
-	// clears LEDs when exiting test mode
+
 	if (((kpd_testMode & 0x010) != 0) && (kpd_exitTestMode == 1)) {
 		led_allOff();
 		kpd_exitTestMode = 0;
 	}
-	// update previous state for next cycle
 	kpd_prevState = kpd_currState;
 }
 
-
-// void keypad(void) {
-// 	keypad_poll();
-// 	keypad_report();
-
-// 	static bool key_was_down = false;
-// 	static uint8_t active_key = 0;
-
-// 	bool key_down = keyStatus2Report;
-// 	uint8_t key_val = key2Report;
-
-// 	if (key_down) {
-// 		if (!key_was_down)
-// 			active_key = key_val;
-// 		else if (key_val != active_key)
-// 			active_key = key_val;
-// 	} else if (key_was_down) {
-// 		if (active_key) {
-// 			udi_hid_kbd_down(active_key);
-// 			udi_hid_kbd_up(active_key);
-// 		}
-// 		active_key = 0;
-// 	}
-// 	key_was_down = key_down;
-// }
-
-void keypad(void) {
+void keypad(void)
+{
 	keypad_poll();
 	keypad_report();
-
-	static bool key_was_down = false;
-	static bool simult_press = false;
-	static uint8_t active_key = 0;
-
-	bool key_down = (keyStatus2Report == KEYPAD_PRESSED);
-	uint8_t key_val = key2Report;
-
-	if (key_down) {
-		if (!key_was_down) {
-			active_key = key_val;
-			simult_press = false;
-		} else if (key_val != active_key) {
-			simult_press = true;
-		}
-	} else if (key_was_down) {
-		if (!simult_press && active_key) {
-			udi_hid_kbd_down(active_key);
-			udi_hid_kbd_up(active_key);
-		}
-		active_key = 0;
-		simult_press = false;
-	}
-	key_was_down = key_down;
 }

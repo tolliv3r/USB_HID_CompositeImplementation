@@ -13,6 +13,8 @@ static void led_updateState(uint8_t mask, bool state);
 
 static bool ledMap[8] = {0};
 
+// static void delay_ms_var(uint16_t ms);
+
 /* ---------------------------------------------------------------------- */
 /* ------------------------- Regular LED Control ------------------------ */
 /* ---------------------------------------------------------------------- */
@@ -318,7 +320,84 @@ void startupSequence(uint8_t sequence) // startup LED animation
             }
             led_allOff();
             break;
+        case 6:
+            /* ---------------- stripes idk ---------------- */
+            while (!user_active) {
+                led_allOn();
+                _delay_ms(2000);
+                user_active = userActivity();
+
+                led_allOff();
+                _delay_ms(2000);
+                user_active = userActivity();
+
+                led_setState(0x55);
+                _delay_ms(2000);
+                user_active = userActivity();
+
+                led_setState(0xAA);
+                _delay_ms(2000);
+                user_active = userActivity();
+            }
+            led_allOff();
+            break;
+        case 7: {
+            /* ---------------- 3 led bounce --------------- */
+            uint8_t pos = 0;
+            int8_t  dir = +1;
+
+            while (!user_active) {
+                uint8_t mask = (0x07 << pos);
+                led_setState(mask);
+
+                _delay_ms(1500);
+                user_active = userActivity();
+
+                pos += dir;
+                if (pos == 0 || pos == (8 - 3)) {
+                    dir = -dir;
+                }
+            }
+            led_allOff();
+            break;
+        }
+        case 8: {
+            /* ---------- warp-speed acceleration ---------- */
+            uint16_t delay_ms = 2500;
+
+            while (!user_active) {
+                for (uint8_t p = 0; p < 8 && !user_active; ++p) {
+                    for (uint8_t i = 0; i < 8; ++i) {
+                        led_setState(1 << i);
+                        delay_ms_var(delay_ms);
+                        
+                        if (userActivity()) {
+                            user_active = true;
+                            break;
+                        }
+                    }
+                    if (delay_ms > 500)
+                        delay_ms -= 250;
+                }
+
+                while (!user_active) {
+                    for (uint8_t i = 0; i < 8; ++i) {
+                        led_setState(1 << i);
+                        _delay_ms(500);
+                        
+                        if (userActivity()) {
+                            user_active = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            led_allOff();
+            break;
+        }
         default:
             break;
     }
 }
+
+

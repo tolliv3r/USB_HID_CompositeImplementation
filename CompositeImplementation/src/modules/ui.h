@@ -27,4 +27,6 @@ void io_ui_process(void);
 
 void startup_ui_process(uint8_t sequence);
 
+void delay_ms_var(uint16_t ms);
+
 #endif // _UI_H_

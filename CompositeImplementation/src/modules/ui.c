@@ -19,6 +19,8 @@
  *----------------------------------------
 */
 #include <asf.h>
+#include <util/delay.h>
+
 #include "conf_usb.h"
 
 #include "ui.h"
@@ -27,7 +29,9 @@
 #include "keypad.h"
 #include "joystick.h"
 
-
+/* -------------------------------------- */
+/* -------- UI process callbacks -------- */
+/* -------------------------------------- */
 void io_ui_process(void) {
 	io_init();
 }
@@ -54,4 +58,13 @@ void led_ui_process(void) {
 
 void status_ui_process(void) {
 	testIndicator();
+}
+
+/* -------------------------------------- */
+/* ---------- helper functions ---------- */
+/* -------------------------------------- */
+void delay_ms_var(uint16_t ms) {
+    while (ms--) {
+        _delay_ms(1);
+    }
 }

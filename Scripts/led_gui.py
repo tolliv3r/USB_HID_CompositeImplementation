@@ -32,7 +32,7 @@ class LED_Toggler(tk.Tk):
             self.destroy()
             return
 
-        # build 8 plain buttons
+        # 8 buttons
         for i in range(8):
             btn = tk.Button(
                 self,
@@ -48,7 +48,7 @@ class LED_Toggler(tk.Tk):
         self.poll()
 
     def toggle(self, idx):
-        # flip our local state
+        # flip local state
         self.states[idx] = not self.states[idx]
 
         # build the mask & write it
@@ -59,9 +59,8 @@ class LED_Toggler(tk.Tk):
             messagebox.showerror("HID Write Error", str(e))
             return
 
-        # immediately update visuals (no bounce)
         self.update_buttons()
-        # skip the next 40 polls (for visual buttons fluidity)
+        # skip the next 40 polls (idk man buttons look weird otherwise)
         self.skip_count = 40
 
     def update_buttons(self):

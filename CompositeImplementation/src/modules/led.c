@@ -13,7 +13,7 @@ static void led_updateState(uint8_t mask, bool state);
 
 static bool ledMap[8] = {0};
 
-// static void delay_ms_var(uint16_t ms);
+static void delay_ms_var(uint16_t ms);
 
 /* ---------------------------------------------------------------------- */
 /* ------------------------- Regular LED Control ------------------------ */
@@ -401,3 +401,8 @@ void startupSequence(uint8_t sequence) // startup LED animation
 }
 
 
+void delay_ms_var(uint16_t ms) {
+    while (ms--) {
+        _delay_ms(1);
+    }
+}

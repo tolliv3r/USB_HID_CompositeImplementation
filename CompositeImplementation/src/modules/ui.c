@@ -19,7 +19,7 @@
  *----------------------------------------
 */
 #include <asf.h>
-#include <util/delay.h>
+// #include <util/delay.h>
 
 #include "conf_usb.h"
 
@@ -63,8 +63,8 @@ void status_ui_process(void) {
 /* -------------------------------------- */
 /* ---------- helper functions ---------- */
 /* -------------------------------------- */
-void delay_ms_var(uint16_t ms) {
-    while (ms--) {
-        _delay_ms(1);
-    }
-}
+// void delay_ms_var(uint16_t ms) {
+//     while (ms--) {
+//         _delay_ms(1);
+//     }
+// }

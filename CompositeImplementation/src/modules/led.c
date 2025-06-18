@@ -11,7 +11,7 @@ static volatile uint16_t sof_ms = 0;
 static volatile uint8_t testMode = false;
 static void led_updateState(uint8_t mask, bool state);
 
-static bool ledMap[8] = {0};
+static bool ledMap[16] = {0};
 
 static void delay_ms_var(uint16_t ms);
 
@@ -72,9 +72,16 @@ void led_setState(uint8_t mask) { // sets LEDs to on
 /* ---------------------------------------------------------------------- */
 /* ----------------------------- USB Report ----------------------------- */
 /* ---------------------------------------------------------------------- */
+// void led_usbTask(void) {
+//     uint8_t map = led_getMap();
+//     udi_hid_led_send_report_in(&map);
+// }
 void led_usbTask(void) {
-    uint8_t map = led_getMap();
-    udi_hid_led_send_report_in(&map);
+    uint16_t fullMap = led_getMap();
+    uint8_t  report[2];
+    report[0] = (uint8_t)(fullMap & 0xFF);
+    report[1] = (uint8_t)((fullMap >> 8) & 0xFF);
+    udi_hid_led_send_report_in(report);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -88,9 +95,9 @@ static void led_updateState(uint8_t mask, bool state) {
     }
 }
 
-uint8_t led_getMap(void) {
-    uint8_t map = 0;
-    for (uint8_t i = 0; i < 8; i++) {
+uint16_t led_getMap(void) {
+    uint16_t map = 0;
+    for (uint8_t i = 0; i < 16; i++) {
         if (ledMap[i]) {
             map |= (1 << i);
         }
@@ -118,14 +125,20 @@ uint8_t led_getMap(void) {
 /* ---------------------------------------------------------------------- */
 void led_statusOn(void) { // status LED on
     STATUS_LED_PORT.OUTCLR = LEDS_PIN;
+
+    ledMap[8] = true;
 }
 
 void led_statusOff(void) { // status LED off
     STATUS_LED_PORT.OUTSET = LEDS_PIN;
+
+    ledMap[8] = false;
 }
 
 void led_statusToggle(void) { // toggle status LED
     STATUS_LED_PORT.OUTTGL = LEDS_PIN;
+
+    ledMap[8] = !ledMap[8];
 }
 
 void testIndicator(void) { // blink status LED when in test mode

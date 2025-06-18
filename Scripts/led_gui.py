@@ -70,13 +70,13 @@ class LED_Toggler(tk.Tk):
 
     def poll(self):
         # try reading exactly one data byte (should always be the case)
-        rpt = self.device.read(1)
+        rpt = self.device.read(2)
         if rpt:
             if self.skip_count > 0:
                 # drop stale values as many times as needed
                 self.skip_count -= 1
             else:
-                new_mask = rpt[0]
+                new_mask = rpt[1]
                 # update local states & visuals
                 for i in range(8):
                     self.states[i] = bool((new_mask >> i) & 1)

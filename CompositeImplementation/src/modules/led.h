@@ -45,7 +45,7 @@ void led_statusOn     (void);
 void led_statusOff    (void);
 void led_statusToggle (void);
 
-uint8_t led_getMap(void);
+uint16_t led_getMap(void);
 // bool led_getStateIndex(uint8_t index);
 // bool led_getStateMask(uint8_t mask);
 

@@ -20,7 +20,8 @@
 void io_ui_process(void);
 
 /* --------------- Startup -------------- */
-void startup_ui_process(uint8_t sequence);
+void startup_ui_process(uint8_t startupSeq);
+void idle_ui_process   (uint8_t idleSeq);
 
 /* -------------- Joystick -------------- */
 void jstk_ui_process(void);

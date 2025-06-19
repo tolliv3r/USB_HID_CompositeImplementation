@@ -8,7 +8,8 @@ static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
 static volatile bool main_b_led_enable = false;
 
-static const uint8_t sequence = 8;
+static const uint8_t startupSequence = 1;
+static const uint8_t idleSequence    = 8;
 
 int main (void)
 {
@@ -21,7 +22,8 @@ int main (void)
 
 	udc_start();               // starts USB device controller
 
-	startup_ui_process(sequence); // pick preferred sequence (1-5)
+	startup_ui_process(startupSequence);
+	idle_ui_process(idleSequence);
 
 	while (true) { }
 }

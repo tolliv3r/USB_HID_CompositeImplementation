@@ -7,7 +7,7 @@
 
 static bool userActivity(void);
 
-// static volatile uint16_t sof_ms = 0;
+static volatile uint16_t sof_ms = 0;
 static volatile uint8_t testMode = false;
 static void led_updateState(uint8_t mask, bool state);
 
@@ -127,7 +127,16 @@ void led_statusToggle(void) { // toggle status LED
 }
 
 /* ---------------------------------------------------------------------- */
-/* --------------------------- Startup Logic ---------------------------- */
+/* -------------------------------- Idle -------------------------------- */
+/* ---------------------------------------------------------------------- */
+void startupSequence(uint8_t sequence) {
+    
+}
+
+
+
+/* ---------------------------------------------------------------------- */
+/* ------------------------------- Startup ------------------------------ */
 /* ---------------------------------------------------------------------- */
 static bool userActivity(void) {
     testMode = PORTB.IN;
@@ -137,7 +146,7 @@ static bool userActivity(void) {
             (jstk_readMask()     != 0);
 }
 
-void startupSequence(uint8_t sequence) // startup LED animation
+void idleSequence(uint8_t sequence) // startup LED animation
 {
     const uint8_t seq[8] = {
         LED1_PIN,

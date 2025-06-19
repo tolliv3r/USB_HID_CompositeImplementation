@@ -38,12 +38,17 @@ void io_ui_process(void) {
 // initializes all IO ports
 
 /* -------------------------------------- */
-/* --------------- Startup -------------- */
+/* ----------- Startup & Idle ----------- */
 /* -------------------------------------- */
-void startup_ui_process(uint8_t sequence) {
-	startupSequence(sequence);
+void startup_ui_process(uint8_t startupSeq) {
+	startupSequence(startupSeq);
 }
 // performs startup LED sequence
+
+void idle_ui_process(uint8_t idleSeq) {
+	idleSequence(idleSeq);
+}
+// performs idle LED sequence
 
 /* -------------------------------------- */
 /* -------------- Joystick -------------- */

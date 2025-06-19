@@ -26,8 +26,6 @@ static volatile uint8_t kpd_currentCode;      // code sent over USB
 static volatile uint8_t kpd_exitTestMode; // flag to clear LEDs after test
 volatile uint8_t kpd_testMode;            // hardware (switch) test mode input
 
-// static uint8_t keyStatus2Report;
-// static uint8_t key2Report;
 static volatile bool kpd_multiPress = false;
 
 /*

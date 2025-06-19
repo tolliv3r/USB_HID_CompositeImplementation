@@ -5,7 +5,7 @@ from functools import partial
 
 VID = 0x03EB
 PID = 0x2133
-LED_IFACE_NUMBER = 2     # USB device iNumber for the LEDs
+LED_IFACE_NUMBER = 2    # USB device iNumber for the LEDs
 POLL_INTERVAL = 1       # ms
 
 KEY_NAMES = [
@@ -118,8 +118,6 @@ class LED_Toggler(tk.Tk):
 
     def update_buttons(self):
         # reflect self.states in each button’s relief
-        # for i, btn in enumerate(self.buttons):
-        #     btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
         for i in range(8):
             btn = self.buttons[i]
             btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)

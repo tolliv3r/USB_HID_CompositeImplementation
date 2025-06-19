@@ -15,18 +15,27 @@
 #ifndef _UI_H_
 #define _UI_H_
 
-void kbd_ui_process(void);
-void jstk_ui_process(void);
 
-
-void led_ui_report(uint8_t const *mask);
-void gui_ui_process(void);
-void status_ui_process(void);
-
+/* ----------------- IO ----------------- */
 void io_ui_process(void);
 
+/* --------------- Startup -------------- */
 void startup_ui_process(uint8_t sequence);
 
-// void delay_ms_var(uint16_t ms);
+/* -------------- Joystick -------------- */
+void jstk_ui_process(void);
+
+/* -------------- Keyboard -------------- */
+void kbd_ui_process(void);
+
+/* ---------------- LEDs ---------------- */
+void led_ui_report(uint8_t const *mask);
+
+/* ----------------- GUI ---------------- */
+void gui_ui_process(void);
+
+/* ------------- Status LED ------------- */
+void status_ui_process(void);
+
 
 #endif // _UI_H_

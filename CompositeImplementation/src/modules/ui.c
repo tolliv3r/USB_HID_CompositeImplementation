@@ -19,8 +19,6 @@
  *----------------------------------------
 */
 #include <asf.h>
-// #include <util/delay.h>
-
 #include "conf_usb.h"
 
 #include "ui.h"
@@ -30,16 +28,22 @@
 #include "joystick.h"
 
 /* -------------------------------------- */
-/* -------- UI process callbacks -------- */
+/* ----------------- IO ----------------- */
 /* -------------------------------------- */
 void io_ui_process(void) {
 	io_init();
 }
 
+/* -------------------------------------- */
+/* --------------- Startup -------------- */
+/* -------------------------------------- */
 void startup_ui_process(uint8_t sequence) {
 	startupSequence(sequence);
 }
 
+/* -------------------------------------- */
+/* -------------- Joystick -------------- */
+/* -------------------------------------- */
 void jstk_ui_process(void) {
 	uint8_t jstk_mask = jstk_readMask();
 	uint8_t jstk_testMode = PORTB.IN;
@@ -54,15 +58,24 @@ void jstk_ui_process(void) {
 	}
 }
 
+/* -------------------------------------- */
+/* -------------- Keyboard -------------- */
+/* -------------------------------------- */
 void kbd_ui_process(void) {
 	keypad_poll();
 	keypad_report();
 }
 
+/* -------------------------------------- */
+/* ---------------- LEDs ---------------- */
+/* -------------------------------------- */
 void led_ui_report(uint8_t const *mask) {
 	led_setState(mask[0]);
 }
 
+/* -------------------------------------- */
+/* ----------------- GUI ---------------- */
+/* -------------------------------------- */
 void gui_ui_process(void) {
 	uint16_t ledBits   = led_getMap();
 	uint16_t keyBits   = kbd_getMap();
@@ -76,15 +89,9 @@ void gui_ui_process(void) {
 	udi_hid_led_send_report_in(report);
 }
 
+/* -------------------------------------- */
+/* ------------- Status LED ------------- */
+/* -------------------------------------- */
 void status_ui_process(void) {
 	testIndicator();
 }
-
-/* -------------------------------------- */
-/* ---------- helper functions ---------- */
-/* -------------------------------------- */
-// void delay_ms_var(uint16_t ms) {
-//     while (ms--) {
-//         _delay_ms(1);
-//     }
-// }

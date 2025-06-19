@@ -27,7 +27,9 @@
 #include "keypad.h"
 #include "joystick.h"
 
-static volatile uint16_t sof_ms = 0;
+static volatile uint16_t sof_ms       = 0;
+static volatile bool     startupCheck = 1;
+static bool              userActive   = 0;
 
 /* -------------------------------------- */
 /* ----------------- IO ----------------- */
@@ -40,8 +42,8 @@ void io_ui_process(void) {
 /* -------------------------------------- */
 /* ----------- Startup & Idle ----------- */
 /* -------------------------------------- */
-void startup_ui_process(uint8_t startupSeq) {
-	startupSequence(startupSeq);
+void startup_ui_process(void) {
+	startupCheck = startupSequence();
 }
 // performs startup LED sequence
 
@@ -61,6 +63,8 @@ void jstk_ui_process(void) {
 		if (jstk_mask) {
 			led_allOff();
 			led_on(jstk_mask);
+
+			activityEnable();
 		}
 	} else {
 		jstk_usbTask();
@@ -109,13 +113,31 @@ void status_ui_process(void) {
     sof_ms++;
 
     if ((PORTB.IN & PIN4_bm) == 0) {
+    	activityEnable();
         if (sof_ms >= 500) {
             led_statusToggle();
             sof_ms = 0;
         }
-    } else {
-        led_statusOn();
+    } else if (!startupCheck) {
+        led_statusOff();
         sof_ms = 0;
+    } else {
+    	sof_ms = 0;
     }
 }
 // blink status LED when in test mode
+
+/* -------------------------------------- */
+/* ---------- Helper Functions ---------- */
+/* -------------------------------------- */
+void activityEnable(void) {
+	userActive = 1;
+}
+
+void activityReset(void) {
+	userActive = 0;
+}
+
+bool activityCheck(void) {
+	return userActive;
+}

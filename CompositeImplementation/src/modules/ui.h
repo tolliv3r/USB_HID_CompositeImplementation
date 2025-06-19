@@ -20,7 +20,7 @@
 void io_ui_process(void);
 
 /* --------------- Startup -------------- */
-void startup_ui_process(uint8_t startupSeq);
+void startup_ui_process(void);
 void idle_ui_process   (uint8_t idleSeq);
 
 /* -------------- Joystick -------------- */
@@ -37,6 +37,11 @@ void gui_ui_process(void);
 
 /* ------------- Status LED ------------- */
 void status_ui_process(void);
+
+/* ---------- Helper Functions ---------- */
+void activityEnable(void);
+void activityReset(void);
+bool activityCheck(void);
 
 
 #endif // _UI_H_

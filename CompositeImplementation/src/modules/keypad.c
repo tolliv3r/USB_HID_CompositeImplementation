@@ -246,6 +246,8 @@ void keypad_report(void)
 				default:			kpd_testMask = 0;			break;
 			}
 			if (kpd_testMask) led_toggle(kpd_testMask);
+
+			activityEnable();
 			kpd_exitTestMode = 1;	// flag for exiting test mode
 		}
 	}

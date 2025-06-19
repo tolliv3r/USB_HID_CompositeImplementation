@@ -10,7 +10,7 @@
 #define MAIN_H_
 
 
-/* -------------------------------- USB -------------------------------- */
+/* -------------- USB -------------- */
 void main_sof_action(void);
 
 void main_suspend_action(void);
@@ -19,15 +19,15 @@ void main_resume_action(void);
 void main_remotewakeup_enable(void);
 void main_remotewakeup_disable(void);
 
-/* ----------------------------- keyboard ------------------------------ */
+/* ------------ keyboard ----------- */
 bool main_kbd_enable(void);
 void main_kbd_disable(void);
 
-/* ----------------------------- joystick ------------------------------ */
+/* ------------ joystick ----------- */
 bool main_generic_enable(void);
 void main_generic_disable(void);
 
-/* ------------------------------- LEDs -------------------------------- */
+/* -------------- LEDs ------------- */
 bool main_led_enable(void);
 void main_led_disable(void);
 

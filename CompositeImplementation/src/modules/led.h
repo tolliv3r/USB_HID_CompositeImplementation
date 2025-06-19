@@ -49,7 +49,7 @@ uint16_t led_getMap (void);
 // bool led_getStateIndex(uint8_t index);
 // bool led_getStateMask(uint8_t mask);
 
-void startupSequence (uint8_t sequence);
+bool startupSequence (void);
 void idleSequence    (uint8_t sequence);
 
 

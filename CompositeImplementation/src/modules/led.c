@@ -5,8 +5,6 @@
 #include "keypad.h"
 #include "joystick.h"
 
-static bool userActivity(void);
-
 static volatile uint16_t sof_ms = 0;
 static volatile uint8_t testMode = false;
 static void led_updateState(uint8_t mask, bool state);
@@ -23,7 +21,7 @@ void led_init(void) {
     LED_PORT.OUTSET = LED_MASK;
 
     STATUS_LED_PORT.DIRSET = LEDS_PIN;
-    STATUS_LED_PORT.OUTCLR = LEDS_PIN;
+    STATUS_LED_PORT.OUTSET = LEDS_PIN;
 }
 
 void led_allOn(void) {			// turns all LED's on
@@ -127,26 +125,19 @@ void led_statusToggle(void) { // toggle status LED
 }
 
 /* ---------------------------------------------------------------------- */
-/* -------------------------------- Idle -------------------------------- */
+/* --------------------------- startup & idle --------------------------- */
 /* ---------------------------------------------------------------------- */
-void startupSequence(uint8_t sequence) {
+bool startupSequence(void) {
     led_allOn();
-    _delay_ms(10000);
+    led_statusOn();
+    _delay_ms(15000);
     led_allOff();
+    led_statusOff();
+    _delay_ms(2500);
+
+    return 0;
 }
 
-
-
-/* ---------------------------------------------------------------------- */
-/* ------------------------------- Startup ------------------------------ */
-/* ---------------------------------------------------------------------- */
-static bool userActivity(void) {
-    testMode = PORTB.IN;
-    keypad_poll();
-    return ((testMode & PIN4_bm) == 0)              ||
-            (keypad_getState()   == KEYPAD_PRESSED) ||
-            (jstk_readMask()     != 0);
-}
 
 void idleSequence(uint8_t sequence) // startup LED animation
 {
@@ -171,14 +162,14 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     _delay_ms(850);
                     led_off(seq[i]);
 
-                    user_active = userActivity();
+                    user_active = activityCheck();
                 }
                 for (int i = 7; i >= 0 && !user_active; i--) {
                     led_on(seq[i]);
                     _delay_ms(850);
                     led_off(seq[i]);
 
-                    user_active = userActivity();
+                    user_active = activityCheck();
                 }
             }
             led_allOff();
@@ -195,11 +186,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_off(seq[left]);
                     led_off(seq[right]);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
@@ -210,11 +197,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_off(seq[left]);
                     led_off(seq[right]);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
             }
             led_allOff();
@@ -229,11 +212,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_on(seq[right]);
                     _delay_ms(1750);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
@@ -242,11 +221,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_off(seq[right]);
                     _delay_ms(1750);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
             }
             led_allOff();
@@ -261,11 +236,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_on(seq[right]);
                     _delay_ms(1750);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
                 for (int i = 0; i < 4 && !user_active; i++) {
                     int left = 3 - i;
@@ -274,11 +245,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_off(seq[right]);
                     _delay_ms(1750);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
             }
             led_allOff();
@@ -293,11 +260,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_on(seq[right]);
                     _delay_ms(1750);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
@@ -306,11 +269,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     led_off(seq[right]);
                     _delay_ms(1750);
 
-                    keypad_poll();
-                    if (keypad_getState() == KEYPAD_PRESSED)
-                        user_active = true;
-                    if (jstk_readMask() != 0)
-                        user_active = true;
+                    user_active = activityCheck();
                 }
             }
             led_allOff();
@@ -320,19 +279,19 @@ void idleSequence(uint8_t sequence) // startup LED animation
             while (!user_active) {
                 led_allOn();
                 _delay_ms(2000);
-                user_active = userActivity();
+                user_active = activityCheck();
 
                 led_allOff();
                 _delay_ms(2000);
-                user_active = userActivity();
+                user_active = activityCheck();
 
                 led_setState(0x55);
                 _delay_ms(2000);
-                user_active = userActivity();
+                user_active = activityCheck();
 
                 led_setState(0xAA);
                 _delay_ms(2000);
-                user_active = userActivity();
+                user_active = activityCheck();
             }
             led_allOff();
             break;
@@ -346,7 +305,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 led_setState(mask);
 
                 _delay_ms(1500);
-                user_active = userActivity();
+                user_active = activityCheck();
 
                 pos += dir;
                 if (pos == 0 || pos == (8 - 3)) {
@@ -366,7 +325,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                         led_setState(1 << i);
                         delay_ms_var(delay_ms);
                         
-                        if (userActivity()) {
+                        if (activityCheck()) {
                             user_active = true;
                             break;
                         }
@@ -380,7 +339,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                         led_setState(1 << i);
                         _delay_ms(500);
                         
-                        if (userActivity()) {
+                        if (activityCheck()) {
                             user_active = true;
                             break;
                         }

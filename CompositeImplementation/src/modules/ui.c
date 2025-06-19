@@ -35,6 +35,7 @@ static volatile uint16_t sof_ms = 0;
 void io_ui_process(void) {
 	io_init();
 }
+// initializes all IO ports
 
 /* -------------------------------------- */
 /* --------------- Startup -------------- */
@@ -42,6 +43,7 @@ void io_ui_process(void) {
 void startup_ui_process(uint8_t sequence) {
 	startupSequence(sequence);
 }
+// performs startup LED sequence
 
 /* -------------------------------------- */
 /* -------------- Joystick -------------- */
@@ -59,6 +61,7 @@ void jstk_ui_process(void) {
 		jstk_usbTask();
 	}
 }
+// joystick logic
 
 /* -------------------------------------- */
 /* -------------- Keyboard -------------- */
@@ -67,6 +70,7 @@ void kbd_ui_process(void) {
 	keypad_poll();
 	keypad_report();
 }
+// keyboard logic
 
 /* -------------------------------------- */
 /* ---------------- LEDs ---------------- */
@@ -74,6 +78,7 @@ void kbd_ui_process(void) {
 void led_ui_report(uint8_t const *mask) {
 	led_setState(mask[0]);
 }
+// allows host PC to manually control LEDs
 
 /* -------------------------------------- */
 /* ----------------- GUI ---------------- */

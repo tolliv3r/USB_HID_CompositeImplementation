@@ -43,7 +43,6 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 
 	if (!main_b_led_enable)
 		return;
-//	led_ui_process();
 
 	gui_ui_process();
 	status_ui_process();

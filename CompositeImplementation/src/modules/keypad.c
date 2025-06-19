@@ -4,6 +4,8 @@
 #include "led.h"
 #include "keypad.h"
 
+
+
 // mapping of keypad layout: [column][row] → HID key code
 static volatile uint8_t kpd_keyAssign[KEYPAD_COLS][KEYPAD_ROWS];
 
@@ -11,22 +13,31 @@ static volatile uint8_t kpd_keyAssign[KEYPAD_COLS][KEYPAD_ROWS];
 static volatile uint8_t kpd_colAddr[KEYPAD_COLS];
 
 // raw scan values and detected indices
-static volatile uint8_t kpd_rowVal;       // raw row input bits (PF4-PF7)
-static volatile uint8_t kpd_detectedRow;  // detected row index
-static volatile uint8_t kpd_detectedCol;  // detected column index
+static volatile uint8_t kpd_rowVal;             // raw row input bits (PF4-PF7)
+static volatile uint8_t kpd_detectedRow;        // detected row index
+static volatile uint8_t kpd_detectedCol;        // detected column index
 
 // current and previous press state and last key code
-static volatile uint8_t kpd_keyPressed;   // KEYPAD_PRESSED or KEYPAD_RELEASED
-static volatile uint8_t kpd_code;         // last HID code detected
-static volatile uint8_t kpd_prevState;    // previous button state
-static volatile uint8_t kpd_currState;    // current button state
-static volatile uint8_t kpd_currentCode;      // code sent over USB
+static volatile uint8_t kpd_keyPressed;         // KEYPAD_PRESSED or KEYPAD_RELEASED
+static volatile uint8_t kpd_code;               // last HID code detected
+static volatile uint8_t kpd_prevState;          // previous button state
+static volatile uint8_t kpd_currState;          // current button state
+static volatile uint8_t kpd_currentCode;        // code sent over USB
+static volatile bool    kpd_multiPress = false; // multipress detection
 
 // test mode flags		
-static volatile uint8_t kpd_exitTestMode; // flag to clear LEDs after test
-volatile uint8_t kpd_testMode;            // hardware (switch) test mode input
+static volatile uint8_t kpd_exitTestMode;       // flag to clear LEDs after test
+static volatile uint8_t kpd_testMode;           // hardware (switch) test mode input
 
-static volatile bool kpd_multiPress = false;
+// key map variables
+static bool keyMap[16] = {0};                   // map of current keypad state
+static const int8_t keyIndex[KEYPAD_COLS][KEYPAD_ROWS] = {
+	{  8,  7, -1, -1 },
+	{  6,  5, -1, -1 },
+	{  4, -1, -1, -1 },
+	{ -1, -1,  0,  2 },
+	{ -1, -1,  1,  3 },
+};
 
 /*
  * sets initial states and creates kpd_keyAssign matrix with HID codes.
@@ -103,6 +114,10 @@ void keypad_init(void)
  */
 void keypad_poll(void)
 {
+	for (int i = 0; i < 9; i++) {
+		keyMap[i] = 0;
+	}
+
 	// remember the previous raw row mask between scans
 	static uint8_t prevRowMask = 0;
 	// track the last detected key position
@@ -127,6 +142,15 @@ void keypad_poll(void)
 		if (rowMask & 0x20) pressedCount++;
 		if (rowMask & 0x40) pressedCount++;
 		if (rowMask & 0x80) pressedCount++;
+
+		for (uint8_t bit = 0; bit < KEYPAD_ROWS; bit++) {
+			if (rowMask & (1 << (bit + 4))) {
+				int8_t idx = keyIndex[col][bit];
+				if (idx >= 0 && idx < 9) {
+					keyMap[idx] = 1;
+				}
+			}
+		}
 
 		uint8_t selectMask; // if >1 bit is set, isolate the newest bit
 		if ((rowMask & (rowMask - 1)) != 0) {
@@ -181,6 +205,19 @@ uint8_t keypad_getState(void) {
 uint8_t keypad_getCode(void) {
 	return(kpd_code);
 }
+
+uint16_t kbd_getMap(void) {
+	uint16_t bits = 0;
+
+	for (uint8_t i = 0; i < 9; ++i) {
+		if (keyMap[i]) {
+			bits |= (1 << i);
+		}
+	}
+
+	return bits;
+}
+
 
 // toggles LED's in test mode, sends HID code over USB in normal mode
 void keypad_report(void)

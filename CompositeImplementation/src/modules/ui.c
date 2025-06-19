@@ -41,7 +41,17 @@ void startup_ui_process(uint8_t sequence) {
 }
 
 void jstk_ui_process(void) {
-	joystick();
+	uint8_t jstk_mask = jstk_readMask();
+	uint8_t jstk_testMode = PORTB.IN;
+
+	if ((jstk_testMode & PIN4_bm) == 0) {
+		if (jstk_mask) {
+			led_allOff();
+			led_on(jstk_mask);
+		}
+	} else {
+		jstk_usbTask();
+	}
 }
 
 void kbd_ui_process(void) {
@@ -53,7 +63,16 @@ void ui_led_report(uint8_t const *mask) {
 }
 
 void led_ui_process(void) {
-	led_usbTask();
+	uint16_t ledBits   = led_getMap();
+	uint16_t keyBits   = kbd_getMap();
+	
+	uint8_t  report[4] = {
+		(uint8_t)( ledBits       & 0xFF),
+		(uint8_t)((ledBits >> 8) & 0xFF),
+		(uint8_t)( keyBits       & 0xFF),
+		(uint8_t)((keyBits >> 8) & 0xFF)
+	};
+	udi_hid_led_send_report_in(report);
 }
 
 void status_ui_process(void) {

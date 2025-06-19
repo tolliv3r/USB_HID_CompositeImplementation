@@ -76,13 +76,14 @@ void led_setState(uint8_t mask) { // sets LEDs to on
 //     uint8_t map = led_getMap();
 //     udi_hid_led_send_report_in(&map);
 // }
-void led_usbTask(void) {
-    uint16_t fullMap = led_getMap();
-    uint8_t  report[2];
-    report[0] = (uint8_t)(fullMap & 0xFF);
-    report[1] = (uint8_t)((fullMap >> 8) & 0xFF);
-    udi_hid_led_send_report_in(report);
-}
+
+// void led_usbTask(void) {
+//     uint16_t fullMap = led_getMap();
+//     uint8_t  report[2];
+//     report[0] = (uint8_t)(fullMap & 0xFF);
+//     report[1] = (uint8_t)((fullMap >> 8) & 0xFF);
+//     udi_hid_led_send_report_in(report);
+// }
 
 /* ---------------------------------------------------------------------- */
 /* ---------------------------- LED State Map --------------------------- */

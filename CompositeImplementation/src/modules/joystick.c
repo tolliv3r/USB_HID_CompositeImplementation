@@ -132,19 +132,3 @@ void jstk_usbTask(void)
         }
     }
 }
-
-void joystick(void) 
-{
-    jstk_mask = jstk_readMask();            // pick LED's
-    jstk_testMode = PORTB.IN;               // checks switch for testing mode
-
-    if ((jstk_testMode & PIN4_bm) == 0) {   // test mode
-        if (jstk_mask) {
-            led_allOff();
-            led_on(jstk_mask);
-        }
-    } else {                                // normal mode
-        // led_allOff();                       // for testing
-        jstk_usbTask();                     // send to USB
-    }
-}

@@ -46,32 +46,56 @@ class LED_Toggler(tk.Tk):
                 relief=tk.RAISED,
                 command=partial(self.toggle, i)
             )
-            btn.grid(row=i//4, column=i%4 + 2, padx=5, pady=5)
+            btn.grid(row=1, column=i + 2, padx=5, pady=5)
             self.buttons.append(btn)
+
+        # LED indicators
+        self.led_canvases = []
+        self.led_ovals = []
+        for i in range(8):
+            canvas = tk.Canvas(
+                self,
+                width=20,
+                height=20,
+                highlightthickness=0
+            )
+            canvas.grid(row=0, column=i+2, pady=(0,5))
+            oval = canvas.create_oval(2, 2, 18, 18, fill="gray")
+            self.led_canvases.append(canvas)
+            self.led_ovals.append(oval)
 
         # status LED indicator
         self.status_canvas = tk.Canvas(
             self,
             width=20,
-            height=32,
+            height=20,
             highlightthickness=0
         )
-        self.status_canvas.grid(row=0, column=1, pady=(10,0))
-        self.status_oval = self.status_canvas.create_oval(2,2,18,18,fill="gray") # off = grey
+        self.status_canvas.grid(row=0, column=1, pady=(0,5))
+        self.status_oval = self.status_canvas.create_oval(2, 2, 18, 18, fill="gray") # off = grey
 
         # key indicators
         self.key_states = [False] * len(KEY_NAMES)
         self.key_labels = []
         for i, name in enumerate(KEY_NAMES):
-            lbl = tk.Label(
+            btn = tk.Button(
                 self,
                 text=name,
                 width=8,
-                bg="gray",
-                relief=tk.SUNKEN
+                relief=tk.RAISED,
+                bd=2,
+                command=lambda: None
             )
-            lbl.grid(row=(i//4) + 5, column=i%4, padx=5, pady=5)
-            self.key_labels.append(lbl)
+            btn.config(bg="lightblue")
+            if i < 4:
+                row = 5
+                column = i + 2
+            else:
+                # row = i - 4
+                row = 9 - i
+                column = 10
+            btn.grid(row=row, column=column, padx=5, pady=5)
+            self.key_labels.append(btn)
 
         # begin polling
         self.poll()
@@ -94,8 +118,13 @@ class LED_Toggler(tk.Tk):
 
     def update_buttons(self):
         # reflect self.states in each button’s relief
-        for i, btn in enumerate(self.buttons):
+        # for i, btn in enumerate(self.buttons):
+        #     btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
+        for i in range(8):
+            btn = self.buttons[i]
             btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
+            color = "red" if self.states[i] else "gray"
+            self.led_canvases[i].itemconfig(self.led_ovals[i], fill=color)
 
     def poll(self):
         rpt = self.device.read(4)
@@ -121,7 +150,10 @@ class LED_Toggler(tk.Tk):
                 for i, lbl in enumerate(self.key_labels):
                     pressed = bool((key_bits >> i) & 1)
                     self.key_states[i] = pressed
-                    lbl.config(bg="blue" if pressed else "gray")
+                    lbl.config(
+                        # bg="blue" if pressed else "lightblue",
+                        relief=tk.SUNKEN if pressed else tk.RAISED
+                    )
 
         # schedule next poll
         self.after(POLL_INTERVAL, self.poll)

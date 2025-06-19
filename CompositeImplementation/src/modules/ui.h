@@ -19,8 +19,8 @@ void kbd_ui_process(void);
 void jstk_ui_process(void);
 
 
-void ui_led_report(uint8_t const *mask);
-void led_ui_process(void);
+void led_ui_report(uint8_t const *mask);
+void gui_ui_process(void);
 void status_ui_process(void);
 
 void io_ui_process(void);

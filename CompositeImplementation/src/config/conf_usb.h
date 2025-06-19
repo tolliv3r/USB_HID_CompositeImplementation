@@ -116,7 +116,7 @@
 /* ---------------------------------------------------------------------- */
 #define UDI_HID_LED_ENABLE_EXT()            main_led_enable()
 #define UDI_HID_LED_DISABLE_EXT()           main_led_disable()
-#define UDI_HID_LED_REPORT_OUT(ptr)         ui_led_report(ptr)
+#define UDI_HID_LED_REPORT_OUT(ptr)         led_ui_report(ptr)
 
 #define UDI_HID_LED_REPORT_IN_SIZE          4
 #define UDI_HID_LED_REPORT_OUT_SIZE         1

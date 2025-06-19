@@ -9,7 +9,6 @@
 #define KEYPAD_COLS		5
 #define KEYPAD_ROWS		4
 
-void keypad(void);
 void keypad_init(void);		   // initialize keypad matrix
 void keypad_poll(void);		   // scan keypad matrix
 void keypad_report(void);      // usb report or LED report

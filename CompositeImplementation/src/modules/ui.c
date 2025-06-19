@@ -55,14 +55,15 @@ void jstk_ui_process(void) {
 }
 
 void kbd_ui_process(void) {
-	keypad();
+	keypad_poll();
+	keypad_report();
 }
 
-void ui_led_report(uint8_t const *mask) {
+void led_ui_report(uint8_t const *mask) {
 	led_setState(mask[0]);
 }
 
-void led_ui_process(void) {
+void gui_ui_process(void) {
 	uint16_t ledBits   = led_getMap();
 	uint16_t keyBits   = kbd_getMap();
 	

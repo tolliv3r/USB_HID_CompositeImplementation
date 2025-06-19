@@ -284,9 +284,3 @@ void keypad_report(void)
 	}
 	kpd_prevState = kpd_currState;
 }
-
-void keypad(void)
-{
-	keypad_poll();
-	keypad_report();
-}

@@ -27,6 +27,8 @@
 #include "keypad.h"
 #include "joystick.h"
 
+static volatile uint16_t sof_ms = 0;
+
 /* -------------------------------------- */
 /* ----------------- IO ----------------- */
 /* -------------------------------------- */
@@ -88,10 +90,22 @@ void gui_ui_process(void) {
 	};
 	udi_hid_led_send_report_in(report);
 }
+// 4 bytes outputted from device
 
 /* -------------------------------------- */
 /* ------------- Status LED ------------- */
 /* -------------------------------------- */
 void status_ui_process(void) {
-	testIndicator();
+    sof_ms++;
+
+    if ((PORTB.IN & PIN4_bm) == 0) {
+        if (sof_ms >= 500) {
+            led_statusToggle();
+            sof_ms = 0;
+        }
+    } else {
+        led_statusOn();
+        sof_ms = 0;
+    }
 }
+// blink status LED when in test mode

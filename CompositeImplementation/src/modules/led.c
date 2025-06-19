@@ -7,7 +7,7 @@
 
 static bool userActivity(void);
 
-static volatile uint16_t sof_ms = 0;
+// static volatile uint16_t sof_ms = 0;
 static volatile uint8_t testMode = false;
 static void led_updateState(uint8_t mask, bool state);
 
@@ -70,22 +70,6 @@ void led_setState(uint8_t mask) { // sets LEDs to on
 }
 
 /* ---------------------------------------------------------------------- */
-/* ----------------------------- USB Report ----------------------------- */
-/* ---------------------------------------------------------------------- */
-// void led_usbTask(void) {
-//     uint8_t map = led_getMap();
-//     udi_hid_led_send_report_in(&map);
-// }
-
-// void led_usbTask(void) {
-//     uint16_t fullMap = led_getMap();
-//     uint8_t  report[2];
-//     report[0] = (uint8_t)(fullMap & 0xFF);
-//     report[1] = (uint8_t)((fullMap >> 8) & 0xFF);
-//     udi_hid_led_send_report_in(report);
-// }
-
-/* ---------------------------------------------------------------------- */
 /* ---------------------------- LED State Map --------------------------- */
 /* ---------------------------------------------------------------------- */
 static void led_updateState(uint8_t mask, bool state) {
@@ -140,20 +124,6 @@ void led_statusToggle(void) { // toggle status LED
     STATUS_LED_PORT.OUTTGL = LEDS_PIN;
 
     ledMap[8] = !ledMap[8];
-}
-
-void testIndicator(void) { // blink status LED when in test mode
-    sof_ms++;
-
-    if ((PORTB.IN & PIN4_bm) == 0) {
-        if (sof_ms >= 500) {
-            led_statusToggle();
-            sof_ms = 0;
-        }
-    } else {
-        led_statusOn();
-        sof_ms = 0;
-    }
 }
 
 /* ---------------------------------------------------------------------- */

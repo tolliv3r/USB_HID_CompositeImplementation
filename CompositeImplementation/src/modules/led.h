@@ -50,9 +50,6 @@ uint16_t led_getMap(void);
 // bool led_getStateMask(uint8_t mask);
 
 void startupSequence (uint8_t sequence);
-void testIndicator   (void);
-
-// void led_usbTask(void);
 
 
 #endif // LED_H

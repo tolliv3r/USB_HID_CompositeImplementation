@@ -8,6 +8,11 @@ PID = 0x2133
 LED_IFACE_NUMBER = 2     # USB device iNumber for the LEDs
 POLL_INTERVAL = 1       # ms
 
+KEY_NAMES = [
+    "F1", "F2", "F3", "F4",
+    "DISPLAY", "CANCEL", "ENTER", "CLEAR", "NULL"
+]
+
 class LED_Toggler(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -54,6 +59,20 @@ class LED_Toggler(tk.Tk):
         self.status_canvas.grid(row=0, column=1, pady=(10,0))
         self.status_oval = self.status_canvas.create_oval(2,2,18,18,fill="gray") # off = grey
 
+        # key indicators
+        self.key_states = [False] * len(KEY_NAMES)
+        self.key_labels = []
+        for i, name in enumerate(KEY_NAMES):
+            lbl = tk.Label(
+                self,
+                text=name,
+                width=8,
+                bg="gray",
+                relief=tk.SUNKEN
+            )
+            lbl.grid(row=(i//4) + 5, column=i%4, padx=5, pady=5)
+            self.key_labels.append(lbl)
+
         # begin polling
         self.poll()
 
@@ -71,7 +90,7 @@ class LED_Toggler(tk.Tk):
 
         self.update_buttons()
         # skip the next bunch of polls (idk man buttons look weird otherwise)
-        self.skip_count = 40
+        self.skip_count = 100
 
     def update_buttons(self):
         # reflect self.states in each button’s relief
@@ -79,24 +98,30 @@ class LED_Toggler(tk.Tk):
             btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
 
     def poll(self):
-        # try reading exactly one data byte (should always be the case)
-        rpt = self.device.read(2)
-        if rpt:
+        rpt = self.device.read(4)
+        if rpt and len(rpt) >= 4:
             if self.skip_count > 0:
                 # drop stale values as many times as needed
                 self.skip_count -= 1
             else:
-                lo, hi = rpt[0], rpt[1]
+                leds, status, keysLo, keysHi = rpt[0], rpt[1], rpt[2], rpt[3]
 
-                # update local states & visuals
+                # update LED states & visuals
                 for i in range(8):
-                    self.states[i] = bool((lo >> i) & 1)
+                    self.states[i] = bool((leds >> i) & 1)
                 self.update_buttons()
 
                 # update status LED indicator
-                status_on = bool(hi & 0x01)
+                status_on = bool(status & 0x01)
                 color = "yellow" if status_on else "gray"
                 self.status_canvas.itemconfig(self.status_oval, fill=color)
+
+                # update key indicators
+                key_bits = keysLo | (keysHi << 8)
+                for i, lbl in enumerate(self.key_labels):
+                    pressed = bool((key_bits >> i) & 1)
+                    self.key_states[i] = pressed
+                    lbl.config(bg="blue" if pressed else "gray")
 
         # schedule next poll
         self.after(POLL_INTERVAL, self.poll)

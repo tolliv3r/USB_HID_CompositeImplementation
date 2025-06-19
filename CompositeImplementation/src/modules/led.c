@@ -130,7 +130,9 @@ void led_statusToggle(void) { // toggle status LED
 /* -------------------------------- Idle -------------------------------- */
 /* ---------------------------------------------------------------------- */
 void startupSequence(uint8_t sequence) {
-    
+    led_allOn();
+    _delay_ms(10000);
+    led_allOff();
 }
 
 

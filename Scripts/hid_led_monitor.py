@@ -23,12 +23,15 @@ def main():
     print("Opened device, listening for IN reports… (Ctrl-C to quit)")
     try:
         while True:
-            rpt = dev.read(3)      # read ReportID+mask, or [mask] if no ReportID
+            rpt = dev.read(2)      # read ReportID+mask, or [mask] if no ReportID
             if rpt:
                 # if your report is just one byte, rpt == [mask]
-                mask = rpt[1]
+                mask = rpt[0]
                 bits = [(mask>>i)&1 for i in range(8)]
                 print(f"raw={rpt!r}  mask=0x{mask:02X}  bits={bits}")
+
+                lo = rpt[0]
+                hi = rpt[1]
             time.sleep(0.05)
     except KeyboardInterrupt:
         pass

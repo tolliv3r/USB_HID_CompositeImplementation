@@ -6,17 +6,12 @@ from functools import partial
 VID = 0x03EB
 PID = 0x2133
 LED_IFACE_NUMBER = 2     # USB device iNumber for the LEDs
-POLL_INTERVAL = 10       # ms
+POLL_INTERVAL = 1       # ms
 
 class LED_Toggler(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Front-Panel LEDs")
-
-        # track each LED’s on/off
-        self.states = [False] * 8
-        self.buttons = []
-        self.skip_count = 0
 
         # open the HID LED interface
         self.device = None
@@ -32,6 +27,11 @@ class LED_Toggler(tk.Tk):
             self.destroy()
             return
 
+        # track each LED’s on/off
+        self.states = [False] * 8
+        self.buttons = []
+        self.skip_count = 0
+
         # 8 buttons
         for i in range(8):
             btn = tk.Button(
@@ -41,10 +41,20 @@ class LED_Toggler(tk.Tk):
                 relief=tk.RAISED,
                 command=partial(self.toggle, i)
             )
-            btn.grid(row=i//4, column=i%4, padx=5, pady=5)
+            btn.grid(row=i//4, column=i%4 + 2, padx=5, pady=5)
             self.buttons.append(btn)
 
-        # kick off polling
+        # status LED indicator
+        self.status_canvas = tk.Canvas(
+            self,
+            width=20,
+            height=32,
+            highlightthickness=0
+        )
+        self.status_canvas.grid(row=0, column=1, pady=(10,0))
+        self.status_oval = self.status_canvas.create_oval(2,2,18,18,fill="gray") # off = grey
+
+        # begin polling
         self.poll()
 
     def toggle(self, idx):
@@ -60,7 +70,7 @@ class LED_Toggler(tk.Tk):
             return
 
         self.update_buttons()
-        # skip the next 40 polls (idk man buttons look weird otherwise)
+        # skip the next bunch of polls (idk man buttons look weird otherwise)
         self.skip_count = 40
 
     def update_buttons(self):
@@ -76,11 +86,18 @@ class LED_Toggler(tk.Tk):
                 # drop stale values as many times as needed
                 self.skip_count -= 1
             else:
-                new_mask = rpt[1]
+                lo, hi = rpt[0], rpt[1]
+
                 # update local states & visuals
                 for i in range(8):
-                    self.states[i] = bool((new_mask >> i) & 1)
+                    self.states[i] = bool((lo >> i) & 1)
                 self.update_buttons()
+
+                # update status LED indicator
+                status_on = bool(hi & 0x01)
+                color = "yellow" if status_on else "gray"
+                self.status_canvas.itemconfig(self.status_oval, fill=color)
+
         # schedule next poll
         self.after(POLL_INTERVAL, self.poll)
 

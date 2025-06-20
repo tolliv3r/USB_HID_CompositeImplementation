@@ -171,4 +171,5 @@ void io_init(void)
 
 	led_init();
 	keypad_init();
+	idle_start();
 }

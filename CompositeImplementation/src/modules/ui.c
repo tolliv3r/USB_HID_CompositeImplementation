@@ -31,6 +31,7 @@ static volatile uint16_t sof_ms       = 0;
 static volatile bool     startupCheck = 1;
 static bool              userActive   = 0;
 
+
 /* -------------------------------------- */
 /* ----------------- IO ----------------- */
 /* -------------------------------------- */
@@ -39,18 +40,34 @@ void io_ui_process(void) {
 }
 // initializes all IO ports
 
-/* -------------------------------------- */
-/* ----------- Startup & Idle ----------- */
-/* -------------------------------------- */
-void startup_ui_process(void) {
-	startupCheck = startupSequence();
-}
-// performs startup LED sequence
 
-void idle_ui_process(uint8_t idleSeq) {
-	idleSequence(idleSeq);
+/* -------------------------------------- */
+/* ----------------- GUI ---------------- */
+/* -------------------------------------- */
+void gui_ui_process(void) {
+	uint16_t ledBits   = led_getMap();
+	uint16_t keyBits   = kbd_getMap();
+	
+	uint8_t  report[4] = {
+		(uint8_t)( ledBits       & 0xFF),
+		(uint8_t)((ledBits >> 8) & 0xFF),
+		(uint8_t)( keyBits       & 0xFF),
+		(uint8_t)((keyBits >> 8) & 0xFF)
+	};
+	udi_hid_led_send_report_in(report);
 }
-// performs idle LED sequence
+// 4 byte output for GUI
+
+
+/* -------------------------------------- */
+/* -------------- Keyboard -------------- */
+/* -------------------------------------- */
+void kbd_ui_process(void) {
+	keypad_poll();
+	keypad_report();
+}
+// keyboard logic
+
 
 /* -------------------------------------- */
 /* -------------- Joystick -------------- */
@@ -72,49 +89,22 @@ void jstk_ui_process(void) {
 }
 // joystick logic
 
-/* -------------------------------------- */
-/* -------------- Keyboard -------------- */
-/* -------------------------------------- */
-void kbd_ui_process(void) {
-	keypad_poll();
-	keypad_report();
-}
-// keyboard logic
 
 /* -------------------------------------- */
 /* ---------------- LEDs ---------------- */
 /* -------------------------------------- */
 void led_ui_report(uint8_t const *mask) {
-	// led_setState(mask[0]);
-	static uint8_t seq = 8;
-
 	if (mask[0] == 0x80) {
 		activityEnable();
 	} else if (mask[0] == 0x81) {
 		activityReset();
-		idleSequence(seq);
+		idle_start();
 	} else {
 		led_setState(mask[0]);
 	}
 }
 // allows host PC to manually control LEDs
 
-/* -------------------------------------- */
-/* ----------------- GUI ---------------- */
-/* -------------------------------------- */
-void gui_ui_process(void) {
-	uint16_t ledBits   = led_getMap();
-	uint16_t keyBits   = kbd_getMap();
-	
-	uint8_t  report[4] = {
-		(uint8_t)( ledBits       & 0xFF),
-		(uint8_t)((ledBits >> 8) & 0xFF),
-		(uint8_t)( keyBits       & 0xFF),
-		(uint8_t)((keyBits >> 8) & 0xFF)
-	};
-	udi_hid_led_send_report_in(report);
-}
-// 4 bytes outputted from device
 
 /* -------------------------------------- */
 /* ------------- Status LED ------------- */
@@ -135,10 +125,26 @@ void status_ui_process(void) {
     	sof_ms = 0;
     }
 }
-// blink status LED when in test mode
+// blink status LED in test mode
+
 
 /* -------------------------------------- */
-/* ---------- Helper Functions ---------- */
+/* ----------- Startup & Idle ----------- */
+/* -------------------------------------- */
+void startup_ui_process(void) {
+	startupCheck = startupSequence();
+}
+// performs startup LED sequence
+
+
+void idle_ui_process(void) {
+	idle_poll();
+}
+// performs idle LED sequence
+
+
+/* -------------------------------------- */
+/* ------- LED Activity Detection ------- */
 /* -------------------------------------- */
 void activityEnable(void) {
 	userActive = 1;

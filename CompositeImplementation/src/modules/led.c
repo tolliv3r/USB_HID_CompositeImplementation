@@ -5,19 +5,30 @@
 #include "keypad.h"
 #include "joystick.h"
 
+#include <stdbool.h>
+
+typedef struct {
+    bool     running;
+    uint8_t  stage;
+    uint8_t  pass;
+    uint8_t  step;
+    uint16_t timer;
+    uint16_t period;
+} idle_t;
+
+static idle_t idle = {0};
+
 static volatile uint16_t sof_ms = 0;
 static volatile uint8_t testMode = false;
 static void led_updateState(uint8_t mask, bool state);
 
 static bool ledMap[16] = {0};
 
-static void delay_ms_var(uint16_t ms);
-
 // silent LED control functions
 static void led_quiet_allOn(void);
 static void led_quiet_allOff(void);
-static void led_quiet_on(uint8_t mask);
-static void led_quiet_off(uint8_t mask);
+// static void led_quiet_on(uint8_t mask);
+// static void led_quiet_off(uint8_t mask);
 // static void led_quiet_toggle(uint8_t mask);
 static void led_quiet_setState(uint8_t mask);
 
@@ -96,17 +107,17 @@ static void led_quiet_allOff(void) {         // turns all LED's off
     led_updateState(LED_MASK, false);
 }
 
-static void led_quiet_on(uint8_t mask) {     // LED on
-    LED_PORT.OUTCLR = mask;     // drive low (on)
+// static void led_quiet_on(uint8_t mask) {     // LED on
+//     LED_PORT.OUTCLR = mask;     // drive low (on)
 
-    led_updateState(mask, true);
-}
+//     led_updateState(mask, true);
+// }
 
-static void led_quiet_off(uint8_t mask) {    // LED off
-    LED_PORT.OUTSET = mask;     // drive high (off)
+// static void led_quiet_off(uint8_t mask) {    // LED off
+//     LED_PORT.OUTSET = mask;     // drive high (off)
 
-    led_updateState(mask, false);
-}
+//     led_updateState(mask, false);
+// }
 
 // static void led_quiet_toggle(uint8_t mask) { // toggle LED
 //     LED_PORT.OUTTGL = mask;
@@ -198,225 +209,270 @@ bool startupSequence(void) {
     return 0;
 }
 
+void idle_start(void) {
+    idle.running   = true;
+    idle.stage     = 0;
+    idle.pass      = 0;
+    idle.step      = 0;
+    idle.timer     = 0;
+    idle.period    = 250;
+}
 
-void idleSequence(uint8_t sequence) // startup LED animation
-{
-    const uint8_t seq[8] = {
-        LED1_PIN,
-        LED2_PIN,
-        LED3_PIN,
-        LED4_PIN,
-        LED5_PIN,
-        LED6_PIN,
-        LED7_PIN,
-        LED8_PIN
-    };
-    volatile bool user_active = false;
+void idle_stop(void) {
+    idle.running = false;
+    led_quiet_allOff();
+}
 
-    switch (sequence) {
-        case 1:
-            /* ---------------- sequential ----------------- */
-            while (!user_active) {
-                for (int i = 0; i < 8 && !user_active; i++) {
-                    led_quiet_on(seq[i]);
-                    _delay_ms(850);
-                    led_quiet_off(seq[i]);
+void idle_poll(void) {
+    if (!idle.running)
+        return;
+    if (activityCheck()) {
+        idle_stop();
+        return;
+    }
 
-                    user_active = activityCheck();
-                }
-                for (int i = 7; i >= 0 && !user_active; i--) {
-                    led_quiet_on(seq[i]);
-                    _delay_ms(850);
-                    led_quiet_off(seq[i]);
+    if (++idle.timer < idle.period)
+        return;
+    idle.timer = 0;
 
-                    user_active = activityCheck();
-                }
+    if (idle.step >= 8) {
+        idle.step = 0;
+
+        if (idle.stage == 0) {
+            idle.pass++;
+
+            if (idle.period > 100) {
+                idle.period -= 75;
+            } else {
+                idle.period = 50;
             }
-            led_quiet_allOff();
-            break;
-        case 2:
-            /* ---------------- out-n-back ----------------- */
-            while (!user_active) {
-                for (int i = 0; i < 4 && !user_active; i++) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_on(seq[left]);
-                    led_quiet_on(seq[right]);
-                    _delay_ms(900);
-                    led_quiet_off(seq[left]);
-                    led_quiet_off(seq[right]);
-
-                    user_active = activityCheck();
-                }
-                for (int i = 3; i >= 0 && !user_active; i--) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_on(seq[left]);
-                    led_quiet_on(seq[right]);
-                    _delay_ms(900);
-                    led_quiet_off(seq[left]);
-                    led_quiet_off(seq[right]);
-
-                    user_active = activityCheck();
-                }
+            if (idle.pass >= 4) {
+                idle.stage = 1;
+                idle.period = 50;
             }
-            led_quiet_allOff();
-            break;
-        case 3:
-            /* --------------- grow-n-shrink ---------------- */
-            while (!user_active) {
-                for (int i = 0; i < 4 && !user_active; i++) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_on(seq[left]);
-                    led_quiet_on(seq[right]);
-                    _delay_ms(1750);
-
-                    user_active = activityCheck();
-                }
-                for (int i = 3; i >= 0 && !user_active; i--) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_off(seq[left]);
-                    led_quiet_off(seq[right]);
-                    _delay_ms(1750);
-
-                    user_active = activityCheck();
-                }
-            }
-            led_quiet_allOff();
-            break;
-        case 4:
-            /* --------------- outward waves --------------- */
-            while (!user_active) {
-                for (int i = 0; i < 4 && !user_active; i++) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_on(seq[left]);
-                    led_quiet_on(seq[right]);
-                    _delay_ms(1750);
-
-                    user_active = activityCheck();
-                }
-                for (int i = 0; i < 4 && !user_active; i++) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_off(seq[left]);
-                    led_quiet_off(seq[right]);
-                    _delay_ms(1750);
-
-                    user_active = activityCheck();
-                }
-            }
-            led_quiet_allOff();
-            break;
-        case 5:
-            /* ---------------- inward waves --------------- */
-            while (!user_active) {
-                for (int i = 3; i >= 0 && !user_active; i--) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_on(seq[left]);
-                    led_quiet_on(seq[right]);
-                    _delay_ms(1750);
-
-                    user_active = activityCheck();
-                }
-                for (int i = 3; i >= 0 && !user_active; i--) {
-                    int left = 3 - i;
-                    int right = 4 + i;
-                    led_quiet_off(seq[left]);
-                    led_quiet_off(seq[right]);
-                    _delay_ms(1750);
-
-                    user_active = activityCheck();
-                }
-            }
-            led_quiet_allOff();
-            break;
-        case 6:
-            /* ---------------- stripes idk ---------------- */
-            while (!user_active) {
-                led_quiet_allOn();
-                _delay_ms(2000);
-                user_active = activityCheck();
-
-                led_quiet_allOff();
-                _delay_ms(2000);
-                user_active = activityCheck();
-
-                led_quiet_setState(0x55);
-                _delay_ms(2000);
-                user_active = activityCheck();
-
-                led_quiet_setState(0xAA);
-                _delay_ms(2000);
-                user_active = activityCheck();
-            }
-            led_quiet_allOff();
-            break;
-        case 7: {
-            /* ---------------- 3 led bounce --------------- */
-            uint8_t pos = 0;
-            int8_t  dir = +1;
-
-            while (!user_active) {
-                uint8_t mask = (0x07 << pos);
-                led_quiet_setState(mask);
-
-                _delay_ms(1500);
-                user_active = activityCheck();
-
-                pos += dir;
-                if (pos == 0 || pos == (8 - 3)) {
-                    dir = -dir;
-                }
-            }
-            led_quiet_allOff();
-            break;
         }
-        case 8: {
-            /* ---------- warp-speed acceleration ---------- */
-            uint16_t delay_ms = 2500;
+    }
 
-            while (!user_active) {
-                for (uint8_t p = 0; p < 8 && !user_active; ++p) {
-                    for (uint8_t i = 0; i < 8; ++i) {
-                        led_quiet_setState(1 << i);
-                        delay_ms_var(delay_ms);
+    led_quiet_setState(1 << idle.step);
+    idle.step++;
+}
 
-                        if (activityCheck()) {
-                            user_active = true;
-                            break;
-                        }
-                    }
-                    if (delay_ms > 500)
-                        delay_ms -= 250;
-                }
 
-                while (!user_active) {
-                    for (uint8_t i = 0; i < 8; ++i) {
-                        led_quiet_setState(1 << i);
-                        _delay_ms(500);
+// void idleSequence(uint8_t sequence) {
+//     idle_start(sequence);
+// }
+
+// void idleSequence(uint8_t sequence) // startup LED animation
+// {
+//     const uint8_t seq[8] = {
+//         LED1_PIN,
+//         LED2_PIN,
+//         LED3_PIN,
+//         LED4_PIN,
+//         LED5_PIN,
+//         LED6_PIN,
+//         LED7_PIN,
+//         LED8_PIN
+//     };
+//     volatile bool user_active = false;
+
+//     switch (sequence) {
+//         case 1:
+//             /* ---------------- sequential ----------------- */
+//             while (!user_active) {
+//                 for (int i = 0; i < 8 && !user_active; i++) {
+//                     led_quiet_on(seq[i]);
+//                     _delay_ms(850);
+//                     led_quiet_off(seq[i]);
+
+//                     user_active = activityCheck();
+//                 }
+//                 for (int i = 7; i >= 0 && !user_active; i--) {
+//                     led_quiet_on(seq[i]);
+//                     _delay_ms(850);
+//                     led_quiet_off(seq[i]);
+
+//                     user_active = activityCheck();
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         case 2:
+//             /* ---------------- out-n-back ----------------- */
+//             while (!user_active) {
+//                 for (int i = 0; i < 4 && !user_active; i++) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_on(seq[left]);
+//                     led_quiet_on(seq[right]);
+//                     _delay_ms(900);
+//                     led_quiet_off(seq[left]);
+//                     led_quiet_off(seq[right]);
+
+//                     user_active = activityCheck();
+//                 }
+//                 for (int i = 3; i >= 0 && !user_active; i--) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_on(seq[left]);
+//                     led_quiet_on(seq[right]);
+//                     _delay_ms(900);
+//                     led_quiet_off(seq[left]);
+//                     led_quiet_off(seq[right]);
+
+//                     user_active = activityCheck();
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         case 3:
+//             /* --------------- grow-n-shrink ---------------- */
+//             while (!user_active) {
+//                 for (int i = 0; i < 4 && !user_active; i++) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_on(seq[left]);
+//                     led_quiet_on(seq[right]);
+//                     _delay_ms(1750);
+
+//                     user_active = activityCheck();
+//                 }
+//                 for (int i = 3; i >= 0 && !user_active; i--) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_off(seq[left]);
+//                     led_quiet_off(seq[right]);
+//                     _delay_ms(1750);
+
+//                     user_active = activityCheck();
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         case 4:
+//             /* --------------- outward waves --------------- */
+//             while (!user_active) {
+//                 for (int i = 0; i < 4 && !user_active; i++) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_on(seq[left]);
+//                     led_quiet_on(seq[right]);
+//                     _delay_ms(1750);
+
+//                     user_active = activityCheck();
+//                 }
+//                 for (int i = 0; i < 4 && !user_active; i++) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_off(seq[left]);
+//                     led_quiet_off(seq[right]);
+//                     _delay_ms(1750);
+
+//                     user_active = activityCheck();
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         case 5:
+//             /* ---------------- inward waves --------------- */
+//             while (!user_active) {
+//                 for (int i = 3; i >= 0 && !user_active; i--) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_on(seq[left]);
+//                     led_quiet_on(seq[right]);
+//                     _delay_ms(1750);
+
+//                     user_active = activityCheck();
+//                 }
+//                 for (int i = 3; i >= 0 && !user_active; i--) {
+//                     int left = 3 - i;
+//                     int right = 4 + i;
+//                     led_quiet_off(seq[left]);
+//                     led_quiet_off(seq[right]);
+//                     _delay_ms(1750);
+
+//                     user_active = activityCheck();
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         case 6:
+//             /* ---------------- stripes idk ---------------- */
+//             while (!user_active) {
+//                 led_quiet_allOn();
+//                 _delay_ms(2000);
+//                 user_active = activityCheck();
+
+//                 led_quiet_allOff();
+//                 _delay_ms(2000);
+//                 user_active = activityCheck();
+
+//                 led_quiet_setState(0x55);
+//                 _delay_ms(2000);
+//                 user_active = activityCheck();
+
+//                 led_quiet_setState(0xAA);
+//                 _delay_ms(2000);
+//                 user_active = activityCheck();
+//             }
+//             led_quiet_allOff();
+//             break;
+//         case 7: {
+//             /* ---------------- 3 led bounce --------------- */
+//             uint8_t pos = 0;
+//             int8_t  dir = +1;
+
+//             while (!user_active) {
+//                 uint8_t mask = (0x07 << pos);
+//                 led_quiet_setState(mask);
+
+//                 _delay_ms(1500);
+//                 user_active = activityCheck();
+
+//                 pos += dir;
+//                 if (pos == 0 || pos == (8 - 3)) {
+//                     dir = -dir;
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         }
+//         case 8: {
+//             /* ---------- warp-speed acceleration ---------- */
+//             uint16_t delay_ms = 2500;
+
+//             while (!user_active) {
+//                 for (uint8_t p = 0; p < 8 && !user_active; ++p) {
+//                     for (uint8_t i = 0; i < 8; ++i) {
+//                         led_quiet_setState(1 << i);
+//                         delay_ms_var(delay_ms);
+
+//                         if (activityCheck()) {
+//                             user_active = true;
+//                             break;
+//                         }
+//                     }
+//                     if (delay_ms > 500)
+//                         delay_ms -= 250;
+//                 }
+
+//                 while (!user_active) {
+//                     for (uint8_t i = 0; i < 8; ++i) {
+//                         led_quiet_setState(1 << i);
+//                         _delay_ms(500);
                         
-                        if (activityCheck()) {
-                            user_active = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            led_quiet_allOff();
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-
-void delay_ms_var(uint16_t ms) {
-    while (ms--) {
-        _delay_ms(1);
-    }
-}
+//                         if (activityCheck()) {
+//                             user_active = true;
+//                             break;
+//                         }
+//                     }
+//                 }
+//             }
+//             led_quiet_allOff();
+//             break;
+//         }
+//         default:
+//             break;
+//     }
+// }

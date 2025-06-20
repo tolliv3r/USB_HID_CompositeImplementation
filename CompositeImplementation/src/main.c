@@ -8,35 +8,40 @@ static volatile bool main_b_kbd_enable = false;
 static volatile bool main_b_generic_enable = false;
 static volatile bool main_b_led_enable = false;
 
-// static const uint8_t startupSequence = 1;
-static const uint8_t idleSequence    = 8;
 
 int main (void)
 {
-	irq_initialize_vectors();  // initializes vector table
-	cpu_irq_enable();          // enables CPU interrupts
-	sleepmgr_init();           // initialize sleep manager
-	sysclk_init();             // initialize clock
+	// initializes vector table
+	irq_initialize_vectors();
+	// enables CPU interrupts
+	cpu_irq_enable();
+	// initialize sleep manager
+	sleepmgr_init();
+	// initialize clock
+	sysclk_init();
 
-	io_ui_process(); // initializes board i/o pins
+	// initializes i/o pins & sub-devices
+	io_ui_process();
 
-	udc_start();               // starts USB device controller
+	// starts USB device controller
+	udc_start();
 
+	// startup sequence (blocking)
 	startup_ui_process();
-	idle_ui_process(idleSequence);
 
 	while (true) { }
 }
 
-/* --------------------------------------------------------------------- */
-/* -------------------------------- USB -------------------------------- */
-/* --------------------------------------------------------------------- */
+
+/* -------------------------------------- */
+/* ----------------- USB ---------------- */
+/* -------------------------------------- */
 void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
-void main_sof_action(void) {	// called each Start of Frame event (1 ms)
+void main_sof_action(void) {
 	if (!main_b_kbd_enable)
-	return;
+		return;
 	kbd_ui_process();
 
 	if (!main_b_generic_enable)
@@ -48,14 +53,17 @@ void main_sof_action(void) {	// called each Start of Frame event (1 ms)
 
 	gui_ui_process();
 	status_ui_process();
+
+	idle_ui_process();
 }
 
 void main_remotewakeup_enable(void) { }
 void main_remotewakeup_disable(void) { }
 
-/* --------------------------------------------------------------------- */
-/* ----------------------------- keyboard ------------------------------ */
-/* --------------------------------------------------------------------- */
+
+/* -------------------------------------- */
+/* -------------- Keyboard -------------- */
+/* -------------------------------------- */
 bool main_kbd_enable(void) {
 	main_b_kbd_enable = true;
 	return true;
@@ -65,9 +73,10 @@ void main_kbd_disable(void) {
 	main_b_kbd_enable = false;
 }
 
-/* --------------------------------------------------------------------- */
-/* ----------------------------- joystick ------------------------------ */
-/* --------------------------------------------------------------------- */
+
+/* -------------------------------------- */
+/* -------------- Joystick -------------- */
+/* -------------------------------------- */
 bool main_generic_enable(void) {
 	main_b_generic_enable = true;
 	return true;
@@ -77,9 +86,10 @@ void main_generic_disable(void) {
 	main_b_generic_enable = false;
 }
 
-/* --------------------------------------------------------------------- */
-/* ------------------------------- LEDs -------------------------------- */
-/* --------------------------------------------------------------------- */
+
+/* -------------------------------------- */
+/* ---------------- LEDs ---------------- */
+/* -------------------------------------- */
 bool main_led_enable(void) {
 	main_b_led_enable = true;
 	return true;

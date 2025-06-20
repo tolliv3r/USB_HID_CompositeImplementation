@@ -50,7 +50,11 @@ uint16_t led_getMap (void);
 // bool led_getStateMask(uint8_t mask);
 
 bool startupSequence (void);
-void idleSequence    (uint8_t sequence);
+// void idleSequence    (uint8_t sequence);
+
+void idle_start(void);
+void idle_stop (void);
+void idle_poll (void);
 
 
 #endif // LED_H

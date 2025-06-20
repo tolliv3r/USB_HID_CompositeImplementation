@@ -66,30 +66,29 @@ class LED_Toggler(tk.Tk):
             bg="lightcoral",
             command=self.set_all_off
         )
-        # self.all_on_btn.grid(row=4, column=7, padx=3, pady=3)
-        # self.all_off_btn.grid(row=5, column=7, padx=3, pady=3)
-        self.all_on_btn.grid(row=2, column=1, padx=3, pady=3)
-        self.all_off_btn.grid(row=3, column=1, padx=3, pady=3)
-
-        self.stop_btn = tk.Button(
-            self,
-            text="Stop",
-            width=5,
-            relief=tk.FLAT,
-            bg="orange",
-            command=self.stop_activity
-        )
-        self.stop_btn.grid(row=4, column=1, padx=3, pady=3)
-
         self.start_btn = tk.Button(
             self,
             text="Start",
             width=5,
             relief=tk.FLAT,
-            bg="lightblue",
+            bg="#66b0ff",
+            # fg="white",
             command=self.start_sequence
         )
-        self.start_btn.grid(row=5, column=1, padx=3, pady=3)
+        self.stop_btn = tk.Button(
+            self,
+            text="Stop",
+            width=5,
+            relief=tk.FLAT,
+            bg="#feae6d",
+            # fg="white",
+            command=self.stop_activity
+        )
+
+        self.all_on_btn.grid(row=2, column=1, padx=3, pady=3)
+        self.all_off_btn.grid(row=3, column=1, padx=3, pady=3)
+        self.start_btn.grid(row=4, column=7, padx=3, pady=3)
+        self.stop_btn.grid(row=5, column=7, padx=3, pady=3)
 
         # LED indicators
         self.led_canvases = []

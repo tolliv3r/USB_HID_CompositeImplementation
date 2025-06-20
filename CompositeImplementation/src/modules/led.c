@@ -257,6 +257,10 @@ void idle_poll(void) {
     idle.step++;
 }
 
+bool idleStatus(void) {
+    return idle.running;
+}
+
 
 // void idleSequence(uint8_t sequence) {
 //     idle_start(sequence);

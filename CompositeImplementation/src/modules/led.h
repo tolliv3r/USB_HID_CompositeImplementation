@@ -55,6 +55,7 @@ bool startupSequence (void);
 void idle_start(void);
 void idle_stop (void);
 void idle_poll (void);
+bool idleStatus(void);
 
 
 #endif // LED_H

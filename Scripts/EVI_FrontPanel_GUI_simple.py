@@ -87,10 +87,8 @@ class LED_Toggler(tk.Tk):
 
         self.all_on_btn.grid(row=2, column=1, padx=3, pady=3)
         self.all_off_btn.grid(row=3, column=1, padx=3, pady=3)
-        # self.start_btn.grid(row=4, column=7, padx=3, pady=3)
-        # self.stop_btn.grid(row=4, column=1, padx=3, pady=3)
-
-        self.start_btn.grid_remove()
+        self.start_btn.grid(row=4, column=7, padx=3, pady=3)
+        self.stop_btn.grid(row=5, column=7, padx=3, pady=3)
 
         # LED indicators
         self.led_canvases = []
@@ -143,14 +141,6 @@ class LED_Toggler(tk.Tk):
         # begin polling
         self.poll()
 
-    def show_start(self):
-        self.stop_btn.grid_remove()
-        self.start_btn.grid(row=4, column=1, padx=3, pady=3)
-
-    def show_stop(self):
-        self.start_btn.grid_remove()
-        self.stop_btn.grid(row=4, column=1, padx=3, pady=3)
-
     def toggle(self, idx):
         # flip local state
         self.states[idx] = not self.states[idx]
@@ -164,17 +154,15 @@ class LED_Toggler(tk.Tk):
             return
 
         self.update_buttons()
-        # self.show_start()
 
         # skip the next bunch of polls (idk man buttons look weird otherwise)
         self.skip_count = 100
     def set_all_on(self):
+        self.stop_activity()
         try:
             self.device.write(bytes([0x00, 0xFF]))
             self.states = [True]*8
             self.update_buttons()
-            # self.show_start()
-            # self.skip_count = 100
         except Exception as e:
             messagebox.showerror("HID Write Error", str(e))
 
@@ -183,22 +171,18 @@ class LED_Toggler(tk.Tk):
             self.device.write(bytes([0x00, 0x00]))
             self.states = [False]*8
             self.update_buttons()
-            # self.show_start()
-            # self.skip_count = 100
         except Exception as e:
             messagebox.showerror("HID Write Error", str(e))
 
     def stop_activity(self):
         try:
             self.device.write(bytes([0x00, 0x80]))
-            # self.show_start()
         except Exception as e:
             messagebox.showerror("HID oops", str(e))
 
     def start_sequence(self):
         try:
             self.device.write(bytes([0x00, 0x81]))
-            # self.show_stop()
         except Exception as e:
             messagebox.showerror("oopsies the HID", str(e))
 
@@ -235,14 +219,8 @@ class LED_Toggler(tk.Tk):
                     pressed = bool((key_bits >> i) & 1)
                     self.key_states[i] = pressed
                     lbl.config(
-                        # bg="blue" if pressed else "lightblue",
                         relief=tk.SUNKEN if pressed else tk.RAISED
                     )
-
-                if status & 0x02:
-                    self.show_stop()
-                else:
-                    self.show_start()
 
         # schedule next poll
         self.after(POLL_INTERVAL, self.poll)

@@ -467,7 +467,6 @@ Discarded input sections
  .text.led_allOn
                 0x00000000       0x12 src/modules/led.o
  .text.led_off  0x00000000       0x10 src/modules/led.o
- .bss.testMode  0x00000000        0x1 src/modules/led.o
  .bss.sof_ms    0x00000000        0x2 src/modules/led.o
  .debug_macro   0x00000000      0xa96 src/modules/led.o
  .debug_macro   0x00000000       0x10 src/modules/led.o
@@ -2819,26 +2818,26 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0xb1ee
+.debug_info     0x00000000     0xb1dd
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x3409 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.3.146/gcc/dev/atxmega256a3u/avrxmega6/crtatxmega256a3u.o
  .debug_info    0x00003409      0x63b src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.o
  .debug_info    0x00003a44      0x3c7 src/modules/io.o
  .debug_info    0x00003e0b      0x6c2 src/modules/joystick.o
  .debug_info    0x000044cd      0x711 src/modules/keypad.o
- .debug_info    0x00004bde      0x878 src/modules/led.o
- .debug_info    0x00005456      0x64d src/modules/ui.o
- .debug_info    0x00005aa3      0x129 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
- .debug_info    0x00005bcc      0xc76 src/ASF/common/services/clock/xmega/sysclk.o
- .debug_info    0x00006842      0x74d src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
- .debug_info    0x00006f8f      0x57d src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
- .debug_info    0x0000750c      0x6c4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
- .debug_info    0x00007bd0      0x383 src/ASF/common/services/usb/class/hid/device/udi_hid.o
- .debug_info    0x00007f53     0x116c src/ASF/common/services/usb/udc/udc.o
- .debug_info    0x000090bf       0xb2 src/ASF/xmega/drivers/nvm/nvm_asm.o
- .debug_info    0x00009171       0xb2 src/ASF/xmega/drivers/cpu/ccp.o
- .debug_info    0x00009223     0x1ba4 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_info    0x0000adc7      0x427 src/main.o
+ .debug_info    0x00004bde      0x867 src/modules/led.o
+ .debug_info    0x00005445      0x64d src/modules/ui.o
+ .debug_info    0x00005a92      0x129 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
+ .debug_info    0x00005bbb      0xc76 src/ASF/common/services/clock/xmega/sysclk.o
+ .debug_info    0x00006831      0x74d src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_info    0x00006f7e      0x57d src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.o
+ .debug_info    0x000074fb      0x6c4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
+ .debug_info    0x00007bbf      0x383 src/ASF/common/services/usb/class/hid/device/udi_hid.o
+ .debug_info    0x00007f42     0x116c src/ASF/common/services/usb/udc/udc.o
+ .debug_info    0x000090ae       0xb2 src/ASF/xmega/drivers/nvm/nvm_asm.o
+ .debug_info    0x00009160       0xb2 src/ASF/xmega/drivers/cpu/ccp.o
+ .debug_info    0x00009212     0x1ba4 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_info    0x0000adb6      0x427 src/main.o
 
 .debug_abbrev   0x00000000     0x5340
  *(.debug_abbrev)
@@ -2910,7 +2909,7 @@ END GROUP
  .debug_str     0x00031569      0x1fe src/modules/keypad.o
                               0x2f3f2 (size before relaxing)
  .debug_str     0x00031767      0x52c src/modules/led.o
-                              0x2f757 (size before relaxing)
+                              0x2f74e (size before relaxing)
  .debug_str     0x00031c93       0xc9 src/modules/ui.o
                               0x2f3e9 (size before relaxing)
  .debug_str     0x00031d5c       0x96 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o

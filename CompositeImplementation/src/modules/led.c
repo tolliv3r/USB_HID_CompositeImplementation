@@ -8,21 +8,22 @@
 #include <stdbool.h>
 
 typedef struct {
-    bool     running;
-    uint8_t  stage;
-    uint8_t  pass;
-    uint8_t  step;
-    uint16_t timer;
-    uint16_t period;
+    bool     running; // idle sequence active or not
+    uint8_t  stage;   // current stage of accel
+    uint8_t  pass;    // # of passes through all LEDs
+    uint8_t  step;    // current LED (0-7)
+    uint16_t timer;   // timer between steps
+    uint16_t period;  // delay for advancing steps
 } idle_t;
 
 static idle_t idle = {0};
 
 static volatile uint16_t sof_ms = 0;
-static volatile uint8_t testMode = false;
-static void led_updateState(uint8_t mask, bool state);
 
+// map of current LED states
 static bool ledMap[16] = {0};
+// function to update software map
+static void led_updateState(uint8_t mask, bool state);
 
 // silent LED control functions
 static void led_quiet_allOn(void);

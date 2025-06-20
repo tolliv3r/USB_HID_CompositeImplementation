@@ -113,7 +113,7 @@ void status_ui_process(void) {
     sof_ms++;
 
     if ((PORTB.IN & PIN4_bm) == 0) {
-    	activityEnable();
+    	// activityEnable();
         if (sof_ms >= 500) {
             led_statusToggle();
             sof_ms = 0;

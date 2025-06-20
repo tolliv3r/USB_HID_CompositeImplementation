@@ -9,7 +9,7 @@ static volatile bool main_b_generic_enable = false;
 static volatile bool main_b_led_enable = false;
 
 // static const uint8_t startupSequence = 1;
-static const uint8_t idleSequence    = 4;
+static const uint8_t idleSequence    = 8;
 
 int main (void)
 {

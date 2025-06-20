@@ -49,6 +49,48 @@ class LED_Toggler(tk.Tk):
             btn.grid(row=1, column=i + 2, padx=5, pady=5)
             self.buttons.append(btn)
 
+        # auxiliary buttons
+        self.all_on_btn = tk.Button(
+            self,
+            text="All On",
+            width=5,
+            relief=tk.FLAT,
+            bg="lightgreen",
+            command=self.set_all_on
+        )
+        self.all_off_btn = tk.Button(
+            self,
+            text="All Off",
+            width=5,
+            relief=tk.FLAT,
+            bg="lightcoral",
+            command=self.set_all_off
+        )
+        # self.all_on_btn.grid(row=4, column=7, padx=3, pady=3)
+        # self.all_off_btn.grid(row=5, column=7, padx=3, pady=3)
+        self.all_on_btn.grid(row=2, column=1, padx=3, pady=3)
+        self.all_off_btn.grid(row=3, column=1, padx=3, pady=3)
+
+        self.stop_btn = tk.Button(
+            self,
+            text="Stop",
+            width=5,
+            relief=tk.FLAT,
+            bg="orange",
+            command=self.stop_activity
+        )
+        self.stop_btn.grid(row=4, column=1, padx=3, pady=3)
+
+        self.start_btn = tk.Button(
+            self,
+            text="Start",
+            width=5,
+            relief=tk.FLAT,
+            bg="lightblue",
+            command=self.start_sequence
+        )
+        self.start_btn.grid(row=5, column=1, padx=3, pady=3)
+
         # LED indicators
         self.led_canvases = []
         self.led_ovals = []
@@ -115,6 +157,35 @@ class LED_Toggler(tk.Tk):
         self.update_buttons()
         # skip the next bunch of polls (idk man buttons look weird otherwise)
         self.skip_count = 100
+    def set_all_on(self):
+        try:
+            self.device.write(bytes([0x00, 0xFF]))
+            self.states = [True]*8
+            self.update_buttons()
+            # self.skip_count = 100
+        except Exception as e:
+            messagebox.showerror("HID Write Error", str(e))
+
+    def set_all_off(self):
+        try:
+            self.device.write(bytes([0x00, 0x00]))
+            self.states = [False]*8
+            self.update_buttons()
+            # self.skip_count = 100
+        except Exception as e:
+            messagebox.showerror("HID Write Error", str(e))
+
+    def stop_activity(self):
+        try:
+            self.device.write(bytes([0x00, 0x80]))
+        except Exception as e:
+            messagebox.showerror("HID oops", str(e))
+
+    def start_sequence(self):
+        try:
+            self.device.write(bytes([0x00, 0x81]))
+        except Exception as e:
+            messagebox.showerror("oopsies the HID", str(e))
 
     def update_buttons(self):
         # reflect self.states in each button’s relief

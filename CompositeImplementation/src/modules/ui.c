@@ -64,7 +64,7 @@ void jstk_ui_process(void) {
 			led_allOff();
 			led_on(jstk_mask);
 
-			activityEnable();
+			// activityEnable();
 		}
 	} else {
 		jstk_usbTask();
@@ -85,7 +85,17 @@ void kbd_ui_process(void) {
 /* ---------------- LEDs ---------------- */
 /* -------------------------------------- */
 void led_ui_report(uint8_t const *mask) {
-	led_setState(mask[0]);
+	// led_setState(mask[0]);
+	static uint8_t seq = 8;
+
+	if (mask[0] == 0x80) {
+		activityEnable();
+	} else if (mask[0] == 0x81) {
+		activityReset();
+		idleSequence(seq);
+	} else {
+		led_setState(mask[0]);
+	}
 }
 // allows host PC to manually control LEDs
 

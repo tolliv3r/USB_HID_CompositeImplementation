@@ -13,6 +13,14 @@ static bool ledMap[16] = {0};
 
 static void delay_ms_var(uint16_t ms);
 
+// silent LED control functions
+static void led_quiet_allOn(void);
+static void led_quiet_allOff(void);
+static void led_quiet_on(uint8_t mask);
+static void led_quiet_off(uint8_t mask);
+// static void led_quiet_toggle(uint8_t mask);
+static void led_quiet_setState(uint8_t mask);
+
 /* ---------------------------------------------------------------------- */
 /* ------------------------- Regular LED Control ------------------------ */
 /* ---------------------------------------------------------------------- */
@@ -28,24 +36,28 @@ void led_allOn(void) {			// turns all LED's on
 	LED_PORT.OUTCLR = LED_MASK;
 
     led_updateState(LED_MASK, true);
+    activityEnable();
 }
 
 void led_allOff(void) {			// turns all LED's off
 	LED_PORT.OUTSET = LED_MASK;
 
     led_updateState(LED_MASK, false);
+    activityEnable();
 }
 
 void led_on(uint8_t mask) {		// LED on
     LED_PORT.OUTCLR = mask;		// drive low (on)
 
     led_updateState(mask, true);
+    activityEnable();
 }
 
 void led_off(uint8_t mask) {	// LED off
     LED_PORT.OUTSET = mask;		// drive high (off)
 
     led_updateState(mask, false);
+    activityEnable();
 }
 
 void led_toggle(uint8_t mask) {	// toggle LED
@@ -56,9 +68,57 @@ void led_toggle(uint8_t mask) {	// toggle LED
             ledMap[i] = !ledMap[i];
         }
     }
+    activityEnable();
 }
 
 void led_setState(uint8_t mask) { // sets LEDs to on
+    LED_PORT.OUTSET = LED_MASK;
+    LED_PORT.OUTCLR = mask;
+
+    for (int i = 0; i < 8; i++) {
+        ledMap[i] = (mask & (1 << i)) != 0;
+    }
+    activityEnable();
+}
+
+/* ---------------------------------------------------------------------- */
+/* ------------------------- Silent LED Control ------------------------- */
+/* ---------------------------------------------------------------------- */
+static void led_quiet_allOn(void) {          // turns all LED's on
+    LED_PORT.OUTCLR = LED_MASK;
+
+    led_updateState(LED_MASK, true);
+}
+
+static void led_quiet_allOff(void) {         // turns all LED's off
+    LED_PORT.OUTSET = LED_MASK;
+
+    led_updateState(LED_MASK, false);
+}
+
+static void led_quiet_on(uint8_t mask) {     // LED on
+    LED_PORT.OUTCLR = mask;     // drive low (on)
+
+    led_updateState(mask, true);
+}
+
+static void led_quiet_off(uint8_t mask) {    // LED off
+    LED_PORT.OUTSET = mask;     // drive high (off)
+
+    led_updateState(mask, false);
+}
+
+// static void led_quiet_toggle(uint8_t mask) { // toggle LED
+//     LED_PORT.OUTTGL = mask;
+
+//     for (int i = 0; i < 8; i++) {
+//         if (mask & (1 << i)) {
+//             ledMap[i] = !ledMap[i];
+//         }
+//     }
+// }
+
+static void led_quiet_setState(uint8_t mask) { // sets LEDs to on
     LED_PORT.OUTSET = LED_MASK;
     LED_PORT.OUTCLR = mask;
 
@@ -128,10 +188,10 @@ void led_statusToggle(void) { // toggle status LED
 /* --------------------------- startup & idle --------------------------- */
 /* ---------------------------------------------------------------------- */
 bool startupSequence(void) {
-    led_allOn();
+    led_quiet_allOn();
     led_statusOn();
     _delay_ms(15000);
-    led_allOff();
+    led_quiet_allOff();
     led_statusOff();
     _delay_ms(2500);
 
@@ -151,28 +211,28 @@ void idleSequence(uint8_t sequence) // startup LED animation
         LED7_PIN,
         LED8_PIN
     };
-    static volatile bool user_active = false;
+    volatile bool user_active = false;
 
     switch (sequence) {
         case 1:
             /* ---------------- sequential ----------------- */
             while (!user_active) {
                 for (int i = 0; i < 8 && !user_active; i++) {
-                    led_on(seq[i]);
+                    led_quiet_on(seq[i]);
                     _delay_ms(850);
-                    led_off(seq[i]);
+                    led_quiet_off(seq[i]);
 
                     user_active = activityCheck();
                 }
                 for (int i = 7; i >= 0 && !user_active; i--) {
-                    led_on(seq[i]);
+                    led_quiet_on(seq[i]);
                     _delay_ms(850);
-                    led_off(seq[i]);
+                    led_quiet_off(seq[i]);
 
                     user_active = activityCheck();
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         case 2:
             /* ---------------- out-n-back ----------------- */
@@ -180,27 +240,27 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 0; i < 4 && !user_active; i++) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_on(seq[left]);
-                    led_on(seq[right]);
+                    led_quiet_on(seq[left]);
+                    led_quiet_on(seq[right]);
                     _delay_ms(900);
-                    led_off(seq[left]);
-                    led_off(seq[right]);
+                    led_quiet_off(seq[left]);
+                    led_quiet_off(seq[right]);
 
                     user_active = activityCheck();
                 }
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_on(seq[left]);
-                    led_on(seq[right]);
+                    led_quiet_on(seq[left]);
+                    led_quiet_on(seq[right]);
                     _delay_ms(900);
-                    led_off(seq[left]);
-                    led_off(seq[right]);
+                    led_quiet_off(seq[left]);
+                    led_quiet_off(seq[right]);
 
                     user_active = activityCheck();
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         case 3:
             /* --------------- grow-n-shrink ---------------- */
@@ -208,8 +268,8 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 0; i < 4 && !user_active; i++) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_on(seq[left]);
-                    led_on(seq[right]);
+                    led_quiet_on(seq[left]);
+                    led_quiet_on(seq[right]);
                     _delay_ms(1750);
 
                     user_active = activityCheck();
@@ -217,14 +277,14 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_off(seq[left]);
-                    led_off(seq[right]);
+                    led_quiet_off(seq[left]);
+                    led_quiet_off(seq[right]);
                     _delay_ms(1750);
 
                     user_active = activityCheck();
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         case 4:
             /* --------------- outward waves --------------- */
@@ -232,8 +292,8 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 0; i < 4 && !user_active; i++) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_on(seq[left]);
-                    led_on(seq[right]);
+                    led_quiet_on(seq[left]);
+                    led_quiet_on(seq[right]);
                     _delay_ms(1750);
 
                     user_active = activityCheck();
@@ -241,14 +301,14 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 0; i < 4 && !user_active; i++) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_off(seq[left]);
-                    led_off(seq[right]);
+                    led_quiet_off(seq[left]);
+                    led_quiet_off(seq[right]);
                     _delay_ms(1750);
 
                     user_active = activityCheck();
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         case 5:
             /* ---------------- inward waves --------------- */
@@ -256,8 +316,8 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_on(seq[left]);
-                    led_on(seq[right]);
+                    led_quiet_on(seq[left]);
+                    led_quiet_on(seq[right]);
                     _delay_ms(1750);
 
                     user_active = activityCheck();
@@ -265,35 +325,35 @@ void idleSequence(uint8_t sequence) // startup LED animation
                 for (int i = 3; i >= 0 && !user_active; i--) {
                     int left = 3 - i;
                     int right = 4 + i;
-                    led_off(seq[left]);
-                    led_off(seq[right]);
+                    led_quiet_off(seq[left]);
+                    led_quiet_off(seq[right]);
                     _delay_ms(1750);
 
                     user_active = activityCheck();
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         case 6:
             /* ---------------- stripes idk ---------------- */
             while (!user_active) {
-                led_allOn();
+                led_quiet_allOn();
                 _delay_ms(2000);
                 user_active = activityCheck();
 
-                led_allOff();
+                led_quiet_allOff();
                 _delay_ms(2000);
                 user_active = activityCheck();
 
-                led_setState(0x55);
+                led_quiet_setState(0x55);
                 _delay_ms(2000);
                 user_active = activityCheck();
 
-                led_setState(0xAA);
+                led_quiet_setState(0xAA);
                 _delay_ms(2000);
                 user_active = activityCheck();
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         case 7: {
             /* ---------------- 3 led bounce --------------- */
@@ -302,7 +362,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
 
             while (!user_active) {
                 uint8_t mask = (0x07 << pos);
-                led_setState(mask);
+                led_quiet_setState(mask);
 
                 _delay_ms(1500);
                 user_active = activityCheck();
@@ -312,7 +372,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     dir = -dir;
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         }
         case 8: {
@@ -322,9 +382,9 @@ void idleSequence(uint8_t sequence) // startup LED animation
             while (!user_active) {
                 for (uint8_t p = 0; p < 8 && !user_active; ++p) {
                     for (uint8_t i = 0; i < 8; ++i) {
-                        led_setState(1 << i);
+                        led_quiet_setState(1 << i);
                         delay_ms_var(delay_ms);
-                        
+
                         if (activityCheck()) {
                             user_active = true;
                             break;
@@ -336,7 +396,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
 
                 while (!user_active) {
                     for (uint8_t i = 0; i < 8; ++i) {
-                        led_setState(1 << i);
+                        led_quiet_setState(1 << i);
                         _delay_ms(500);
                         
                         if (activityCheck()) {
@@ -346,7 +406,7 @@ void idleSequence(uint8_t sequence) // startup LED animation
                     }
                 }
             }
-            led_allOff();
+            led_quiet_allOff();
             break;
         }
         default:

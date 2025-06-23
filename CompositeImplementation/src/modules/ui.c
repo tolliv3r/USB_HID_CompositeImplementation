@@ -118,7 +118,7 @@ void led_ui_report(uint8_t const *mask) {
 		idle_start();
 	} else if (mask[0] == STATUS_ON) {
 		led_statusOn();
-	} else if (mask[1] == STATUS_OFF) {
+	} else if (mask[0] == STATUS_OFF) {
 		led_statusOff();
 	} else {
 		led_setState(mask[0]);

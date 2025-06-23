@@ -172,7 +172,7 @@ class LED_Toggler(tk.Tk):
             messagebox.showerror("HID Write Error", str(e))
             return
 
-        self.skip_count = 1
+        self.skip_count = 100
         self.update_buttons()
 
         # skip the next bunch of polls (idk man buttons look weird otherwise)
@@ -189,12 +189,8 @@ class LED_Toggler(tk.Tk):
             messagebox.showerror("HID cant write", str(e))
             return
         
-        self.update_status_button()
         self.skip_count = 100
-    def update_status_button(self):
-        self.status_btn.config(
-            relief=tk.SUNKEN if self.status_state else tk.RAISED
-        )
+        self.update_status_button()
 
 
     def set_all_on(self):
@@ -240,6 +236,12 @@ class LED_Toggler(tk.Tk):
             btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
             color = "red" if self.states[i] else "gray"
             self.led_canvases[i].itemconfig(self.led_ovals[i], fill=color)
+    def update_status_button(self):
+        self.status_btn.config(
+            relief=tk.SUNKEN if self.status_state else tk.RAISED
+        )
+        color = "yellow" if self.status_state else "gray"
+        self.status_canvas.itemconfig(self.status_oval, fill=color)
 
     def poll(self):
         rpt = self.device.read(4)
@@ -256,9 +258,8 @@ class LED_Toggler(tk.Tk):
                 self.update_buttons()
 
                 # update status LED indicator
-                status_enable = bool(status & 0x01)
-                color = "yellow" if status_enable else "gray"
-                self.status_canvas.itemconfig(self.status_oval, fill=color)
+                self.status_state = bool(status & 0x01)       
+                self.update_status_button()
 
                 # update key indicators
                 key_bits = keysLo | (keysHi << 8)

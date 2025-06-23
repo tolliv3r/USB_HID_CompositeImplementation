@@ -226,7 +226,7 @@ void keypad_report(void)
 	kpd_currState = keypad_getState(); // feel like this one's select explanatory
 	kpd_currentCode = keypad_getCode();    // current code to be outputed
 
-	if ((kpd_testMode & 0x010) == 0)   // test mode enabled
+	if (((kpd_testMode & 0x010) == 0) || checkTestMode())   // test mode enabled
 	{
 		// on press edge, toggle corresponding LED
 		if (kpd_currState == KEYPAD_PRESSED && kpd_prevState == KEYPAD_RELEASED)
@@ -280,7 +280,7 @@ void keypad_report(void)
 		}
 	}
 
-	if (((kpd_testMode & 0x010) != 0) && (kpd_exitTestMode == 1)) {
+	if (((kpd_testMode & 0x010) != 0) && (kpd_exitTestMode == 1) && !checkTestMode()) {
 		led_quiet_allOff();
 		kpd_exitTestMode = 0;
 	}

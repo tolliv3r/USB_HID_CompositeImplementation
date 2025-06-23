@@ -29,8 +29,10 @@
 
 #define IDLE (1 << 1)
 
-#define STOP  0x80
-#define START 0x81
+#define STOP       0x80
+#define START      0x81
+#define ENTER_TEST 0x82
+#define EXIT_TEST  0x83
 
 static volatile uint16_t sof_ms       = 0;
 static volatile bool     startupCheck = 1;
@@ -38,6 +40,9 @@ static bool              userActive   = 0;
 
 static volatile uint8_t jstk_exitTestMode;
 static volatile uint8_t jstk_testMode;
+
+static void enableTestMode(void);
+static void disableTestMode(void);
 
 /* --------------------------------------- */
 /* ------------------ IO ----------------- */
@@ -84,7 +89,8 @@ void jstk_ui_process(void) {
 	uint8_t jstk_mask = jstk_readMask();
 	uint8_t jstk_testMode = PORTB.IN;
 
-	if ((jstk_testMode & PIN4_bm) == 0) {
+	if (((jstk_testMode & PIN4_bm) == 0) ||
+		  checkTestMode()              )  {
 		if (jstk_mask) {
 			led_allOff();
 			led_on(jstk_mask);
@@ -97,13 +103,30 @@ void jstk_ui_process(void) {
 		jstk_usbTask();
 
 		if (((jstk_testMode & 0x010) != 0) && 
-			 (jstk_exitTestMode      == 1)) {
+			 (jstk_exitTestMode      == 1) &&
+			  !checkTestMode()           )  {
 			led_quiet_allOff();
 			jstk_exitTestMode = 0;
 		}
 	}
 }
 // joystick logic
+
+
+/* ---------------------------------------- */
+/* --------------- Test Mode -------------- */
+/* ---------------------------------------- */
+static void enableTestMode(void) {
+	testMode = 1;
+}
+
+static void disableTestMode(void) {
+	testMode = 0;
+}
+
+bool checkTestMode(void) {
+	return testMode;
+}
 
 
 /* ---------------------------------------- */
@@ -115,6 +138,10 @@ void led_ui_report(uint8_t const *mask) {
 	} else if (mask[0] == START) {
 		activityReset();
 		idle_start();
+	} else if (mask[0] == ENTER_TEST) {
+		enableTestMode();
+	} else if (mask[0] == EXIT_TEST) {
+		disableTestMode();
 	} else {
 		led_setState(mask[0]);
 	}

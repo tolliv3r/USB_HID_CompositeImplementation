@@ -41,6 +41,12 @@ void led_off          (uint8_t mask);
 void led_toggle       (uint8_t mask);
 void led_setState     (uint8_t mask);
 
+// void led_quiet_allOn(void);
+void led_quiet_allOff(void);
+// void led_quiet_on(uint8_t mask);
+// void led_quiet_off(uint8_t mask);
+// void led_quiet_toggle(uint8_t mask);
+
 void led_statusOn     (void);
 void led_statusOff    (void);
 void led_statusToggle (void);

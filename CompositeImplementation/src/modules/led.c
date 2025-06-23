@@ -27,7 +27,7 @@ static void led_updateState(uint8_t mask, bool state);
 
 // silent LED control functions
 static void led_quiet_allOn(void);
-static void led_quiet_allOff(void);
+// static void led_quiet_allOff(void);
 // static void led_quiet_on(uint8_t mask);
 // static void led_quiet_off(uint8_t mask);
 // static void led_quiet_toggle(uint8_t mask);
@@ -96,13 +96,13 @@ void led_setState(uint8_t mask) { // sets LEDs to on
 /* ---------------------------------------------------------------------- */
 /* ------------------------- Silent LED Control ------------------------- */
 /* ---------------------------------------------------------------------- */
-static void led_quiet_allOn(void) {          // turns all LED's on
+static void led_quiet_allOn(void) {   // turns all LED's on
     LED_PORT.OUTCLR = LED_MASK;
 
     led_updateState(LED_MASK, true);
 }
 
-static void led_quiet_allOff(void) {         // turns all LED's off
+void led_quiet_allOff(void) {         // turns all LED's off
     LED_PORT.OUTSET = LED_MASK;
 
     led_updateState(LED_MASK, false);

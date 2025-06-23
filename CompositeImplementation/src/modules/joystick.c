@@ -6,7 +6,7 @@
 #define SLIDER_COUNT   12
 
 uint8_t jstk_mask;  // bitmask of LED's to turn on
-volatile uint8_t jstk_testMode;
+
 
 
 static int8_t jstk_scan(uint16_t jstk_bits) {

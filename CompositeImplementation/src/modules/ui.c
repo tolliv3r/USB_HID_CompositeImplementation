@@ -33,6 +33,9 @@ static volatile uint16_t sof_ms       = 0;
 static volatile bool     startupCheck = 1;
 static bool              userActive   = 0;
 
+static volatile uint8_t jstk_exitTestMode;
+static volatile uint8_t jstk_testMode;
+
 /* --------------------------------------- */
 /* ------------------ IO ----------------- */
 /* --------------------------------------- */
@@ -61,9 +64,9 @@ void gui_ui_process(void) {
 // 4 byte output for GUI
 
 
-/* --------------------------------------- */
-/* --------------- Keyboard -------------- */
-/* --------------------------------------- */
+/* ---------------------------------------- */
+/* --------------- Keyboard --------------- */
+/* ---------------------------------------- */
 void kbd_ui_process(void) {
 	keypad_poll();
 	keypad_report();
@@ -71,9 +74,9 @@ void kbd_ui_process(void) {
 // keyboard logic
 
 
-/* --------------------------------------- */
-/* --------------- Joystick -------------- */
-/* --------------------------------------- */
+/* ---------------------------------------- */
+/* --------------- Joystick --------------- */
+/* ---------------------------------------- */
 void jstk_ui_process(void) {
 	uint8_t jstk_mask = jstk_readMask();
 	uint8_t jstk_testMode = PORTB.IN;
@@ -83,18 +86,26 @@ void jstk_ui_process(void) {
 			led_allOff();
 			led_on(jstk_mask);
 
+
+			jstk_exitTestMode = 1;
 			// activityEnable();
 		}
 	} else {
 		jstk_usbTask();
+
+		if (((jstk_testMode & 0x010) != 0) && 
+			 (jstk_exitTestMode      == 1)) {
+			led_quiet_allOff();
+			jstk_exitTestMode = 0;
+		}
 	}
 }
 // joystick logic
 
 
-/* --------------------------------------- */
-/* ----------------- LEDs ---------------- */
-/* --------------------------------------- */
+/* ---------------------------------------- */
+/* ----------------- LEDs ----------------- */
+/* ---------------------------------------- */
 void led_ui_report(uint8_t const *mask) {
 	if (mask[0] == 0x80) {
 		activityEnable();
@@ -108,9 +119,9 @@ void led_ui_report(uint8_t const *mask) {
 // allows host PC to manually control LEDs
 
 
-/* --------------------------------------- */
-/* -------------- Status LED ------------- */
-/* --------------------------------------- */
+/* ---------------------------------------- */
+/* -------------- Status LED -------------- */
+/* ---------------------------------------- */
 void status_ui_process(void) {
     sof_ms++;
 
@@ -130,9 +141,9 @@ void status_ui_process(void) {
 // blink status LED in test mode
 
 
-/* --------------------------------------- */
-/* ------------ Startup & Idle ----------- */
-/* --------------------------------------- */
+/* ---------------------------------------- */
+/* ------------ Startup & Idle ------------ */
+/* ---------------------------------------- */
 void startup_ui_process(void) {
 	startupCheck = startupSequence();
 }
@@ -145,9 +156,9 @@ void idle_ui_process(void) {
 // performs idle LED sequence
 
 
-/* --------------------------------------- */
-/* -------- LED Activity Detection ------- */
-/* --------------------------------------- */
+/* ---------------------------------------- */
+/* -------- LED Activity Detection -------- */
+/* ---------------------------------------- */
 void activityEnable(void) {
 	userActive = 1;
 }

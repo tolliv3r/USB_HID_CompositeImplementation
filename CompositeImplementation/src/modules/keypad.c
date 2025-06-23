@@ -281,7 +281,7 @@ void keypad_report(void)
 	}
 
 	if (((kpd_testMode & 0x010) != 0) && (kpd_exitTestMode == 1)) {
-		led_allOff();
+		led_quiet_allOff();
 		kpd_exitTestMode = 0;
 	}
 	kpd_prevState = kpd_currState;

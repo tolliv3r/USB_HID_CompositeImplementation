@@ -115,6 +115,17 @@ class LED_Toggler(tk.Tk):
         self.status_canvas.grid(row=0, column=1, pady=(0,5))
         self.status_oval = self.status_canvas.create_oval(2, 2, 18, 18, fill="gray") # off = grey
 
+        # status LED toggle button
+        self.status_state = False
+        self.status_btn = tk.Button(
+            self,
+            text="Status",
+            width=8,
+            relief=tk.RAISED,
+            command=self.toggle_status
+        )
+        self.status_btn.grid(row=1, column=1, padx=5, pady=5)
+
         # key indicators
         self.key_states = [False] * len(KEY_NAMES)
         self.key_labels = []
@@ -161,10 +172,31 @@ class LED_Toggler(tk.Tk):
             messagebox.showerror("HID Write Error", str(e))
             return
 
+        self.skip_count = 1
         self.update_buttons()
 
         # skip the next bunch of polls (idk man buttons look weird otherwise)
+        
+
+    def toggle_status(self):
+        self.status_state = not self.status_state
+
+        code = 0x82 if self.status_state else 0x83
+
+        try:
+            self.device.write(bytes([0x00, code]))
+        except Exception as e:
+            messagebox.showerror("HID cant write", str(e))
+            return
+        
+        self.update_status_button()
         self.skip_count = 100
+    def update_status_button(self):
+        self.status_btn.config(
+            relief=tk.SUNKEN if self.status_state else tk.RAISED
+        )
+
+
     def set_all_on(self):
         self.stop_activity()
         try:
@@ -173,7 +205,6 @@ class LED_Toggler(tk.Tk):
             self.update_buttons()
         except Exception as e:
             messagebox.showerror("HID Write Error", str(e))
-
     def set_all_off(self):
         try:
             self.device.write(bytes([0x00, 0x00]))
@@ -187,12 +218,20 @@ class LED_Toggler(tk.Tk):
             self.device.write(bytes([0x00, 0x80]))
         except Exception as e:
             messagebox.showerror("HID oops", str(e))
-
     def start_sequence(self):
         try:
             self.device.write(bytes([0x00, 0x81]))
         except Exception as e:
             messagebox.showerror("oopsies the HID", str(e))
+
+    def status_on(self):
+        try: self.device.write(bytes([0x00, 0x82]))
+        except Exception as e:
+            messagebox.showerror("HID NOOOOO", str(e))
+    def status_off(self):
+        try: self.device.write(bytes([0x00, 0x83]))
+        except Exception as e:
+            messagebox.showerror("nar hid", str(e))
 
     def update_buttons(self):
         # reflect self.states in each button’s relief
@@ -217,8 +256,8 @@ class LED_Toggler(tk.Tk):
                 self.update_buttons()
 
                 # update status LED indicator
-                status_on = bool(status & 0x01)
-                color = "yellow" if status_on else "gray"
+                status_enable = bool(status & 0x01)
+                color = "yellow" if status_enable else "gray"
                 self.status_canvas.itemconfig(self.status_oval, fill=color)
 
                 # update key indicators

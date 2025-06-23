@@ -52,7 +52,7 @@ UDC_DESC_STORAGE udi_hid_led_report_desc_t udi_hid_led_report_desc = { {
 		  0x95, 0x20,		/* report count             */
 		  0x75, 0x01,		/* report size              */
 		  0x19, 0x01,		/* usage minimum            */
-		  0x29, 0x10,		/* usage max                */
+		  0x29, 0x20,		/* usage max                */
 		  0x81, 0x02,		/* input (data,var,abs)     */
 	      /* OUTPUT (host -> device)                    */
 		  0x95, 0x08,		/* report count             */

@@ -29,6 +29,9 @@
 
 #define IDLE (1 << 1)
 
+#define STOP  0x80
+#define START 0x81
+
 static volatile uint16_t sof_ms       = 0;
 static volatile bool     startupCheck = 1;
 static bool              userActive   = 0;
@@ -107,9 +110,9 @@ void jstk_ui_process(void) {
 /* ----------------- LEDs ----------------- */
 /* ---------------------------------------- */
 void led_ui_report(uint8_t const *mask) {
-	if (mask[0] == 0x80) {
+	if (mask[0] == STOP) {
 		activityEnable();
-	} else if (mask[0] == 0x81) {
+	} else if (mask[0] == START) {
 		activityReset();
 		idle_start();
 	} else {

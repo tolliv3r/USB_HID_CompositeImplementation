@@ -23,13 +23,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000d3c  00000000  00000000  0001d234  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00036dda  00000000  00000000  0001df70  2**0
+ 10 .debug_str    00036def  00000000  00000000  0001df70  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00002f57  00000000  00000000  00054d4a  2**0
+ 11 .debug_loc    00002f57  00000000  00000000  00054d5f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000638  00000000  00000000  00057ca8  2**3
+ 12 .debug_ranges 00000638  00000000  00000000  00057cb8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000cd6f  00000000  00000000  000582e0  2**0
+ 13 .debug_macro  0000cd7b  00000000  00000000  000582f0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -794,12 +794,12 @@ static inline void cpu_irq_restore(irqflags_t flags)
 
 00000432 <jstk_readVertIndex>:
      432:	80 91 48 06 	lds	r24, 0x0648	; 0x800648 <__TEXT_REGION_LENGTH__+0x7be648>
-
-uint8_t jstk_idxToAxis(int8_t idx) {
     if (idx < 0)
         return 128; // return to center when no contact
     return jstk_idx2axis[idx];
 }   // conversion runtime is O(1)
+
+
      436:	20 91 68 06 	lds	r18, 0x0668	; 0x800668 <__TEXT_REGION_LENGTH__+0x7be668>
      43a:	90 e0       	ldi	r25, 0x00	; 0
      43c:	92 2b       	or	r25, r18
@@ -873,32 +873,32 @@ uint8_t jstk_idxToAxis(int8_t idx) {
      4c4:	08 95       	ret
 
 000004c6 <jstk_ledMask>:
-    return jstk_ledMask(jstk_use);          // convert to bits
-}   // basically just prioritizes whichever axis is moving more
 
 uint8_t jstk_ledMask(int8_t idx)
 {
     if (idx < 0)    // no touch detected
-     4c6:	88 23       	and	r24, r24
-     4c8:	f4 f1       	brlt	.+124    	; 0x546 <jstk_ledMask+0x80>
         return 0;
 
+     4c6:	88 23       	and	r24, r24
+     4c8:	f4 f1       	brlt	.+124    	; 0x546 <jstk_ledMask+0x80>
     if (idx == 5 || idx == 6)   // center zone
+        return (1u<<3) | (1u<<4);  // LED4 (bit3) + LED5 (bit4)
+
      4ca:	9b ef       	ldi	r25, 0xFB	; 251
      4cc:	98 0f       	add	r25, r24
      4ce:	92 30       	cpi	r25, 0x02	; 2
      4d0:	e0 f1       	brcs	.+120    	; 0x54a <jstk_ledMask+0x84>
-        return (1u<<3) | (1u<<4);  // LED4 (bit3) + LED5 (bit4)
-
     uint8_t d = (idx < 5) ? (5 - idx) : (idx - 6);  // computes 'distance' from center (d)
-     4d2:	85 30       	cpi	r24, 0x05	; 5
-     4d4:	34 f4       	brge	.+12     	; 0x4e2 <jstk_ledMask+0x1c>
     /*
     idx: 0 1 2 3 4 | 5 6 | 7 8 9 10 11
+     4d2:	85 30       	cpi	r24, 0x05	; 5
+     4d4:	34 f4       	brge	.+12     	; 0x4e2 <jstk_ledMask+0x1c>
     d:   5 4 3 2 1 |  -  | 1 2 3  4  5
     */
 
     uint8_t N = (d < 2 ? 2 : (d + 1));  // decide how many LED's should activate (N)
+    if (N > 4) N = 4;
+    /*
      4d6:	95 e0       	ldi	r25, 0x05	; 5
      4d8:	98 1b       	sub	r25, r24
      4da:	92 30       	cpi	r25, 0x02	; 2
@@ -910,19 +910,19 @@ uint8_t jstk_ledMask(int8_t idx)
      4e6:	92 30       	cpi	r25, 0x02	; 2
      4e8:	b0 f5       	brcc	.+108    	; 0x556 <jstk_ledMask+0x90>
      4ea:	31 c0       	rjmp	.+98     	; 0x54e <jstk_ledMask+0x88>
-    d: 1 2 3 4 5
-    N: 2 3 4 4 4
     */
 
     uint8_t jstk_mask = 0;
     if (idx < 5)                            // down/left direction
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (3 - i));   // LED's 3-0
      4ec:	62 e0       	ldi	r22, 0x02	; 2
      4ee:	23 e0       	ldi	r18, 0x03	; 3
      4f0:	30 e0       	ldi	r19, 0x00	; 0
      4f2:	90 e0       	ldi	r25, 0x00	; 0
      4f4:	80 e0       	ldi	r24, 0x00	; 0
+    else                                    // up/right direction
         for (uint8_t i = 0; i < N; i++)
-            jstk_mask |= (1u << (3 - i));   // LED's 3-0
      4f6:	e1 e0       	ldi	r30, 0x01	; 1
      4f8:	f0 e0       	ldi	r31, 0x00	; 0
      4fa:	af 01       	movw	r20, r30
@@ -933,12 +933,12 @@ uint8_t jstk_ledMask(int8_t idx)
      504:	0a 94       	dec	r0
      506:	e2 f7       	brpl	.-8      	; 0x500 <jstk_ledMask+0x3a>
      508:	84 2b       	or	r24, r20
-    N: 2 3 4 4 4
-    */
 
     uint8_t jstk_mask = 0;
     if (idx < 5)                            // down/left direction
         for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (3 - i));   // LED's 3-0
+    else                                    // up/right direction
      50a:	9f 5f       	subi	r25, 0xFF	; 255
      50c:	21 50       	subi	r18, 0x01	; 1
      50e:	31 09       	sbc	r19, r1
@@ -950,20 +950,20 @@ uint8_t jstk_ledMask(int8_t idx)
      51a:	50 e0       	ldi	r21, 0x00	; 0
      51c:	4b 5f       	subi	r20, 0xFB	; 251
      51e:	5f 4f       	sbci	r21, 0xFF	; 255
-    d: 1 2 3 4 5
-    N: 2 3 4 4 4
     */
 
     uint8_t jstk_mask = 0;
     if (idx < 5)                            // down/left direction
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (3 - i));   // LED's 3-0
      520:	24 e0       	ldi	r18, 0x04	; 4
      522:	30 e0       	ldi	r19, 0x00	; 0
      524:	80 e0       	ldi	r24, 0x00	; 0
-        for (uint8_t i = 0; i < N; i++)
-            jstk_mask |= (1u << (3 - i));   // LED's 3-0
     else                                    // up/right direction
         for (uint8_t i = 0; i < N; i++)
             jstk_mask |= (1u << (4 + i));   // LED's 4-7
+    return jstk_mask;
+}
      526:	e1 e0       	ldi	r30, 0x01	; 1
      528:	f0 e0       	ldi	r31, 0x00	; 0
      52a:	bf 01       	movw	r22, r30
@@ -976,110 +976,110 @@ uint8_t jstk_ledMask(int8_t idx)
      538:	86 2b       	or	r24, r22
      53a:	2f 5f       	subi	r18, 0xFF	; 255
      53c:	3f 4f       	sbci	r19, 0xFF	; 255
-    uint8_t jstk_mask = 0;
-    if (idx < 5)                            // down/left direction
         for (uint8_t i = 0; i < N; i++)
-            jstk_mask |= (1u << (3 - i));   // LED's 3-0
-    else                                    // up/right direction
-        for (uint8_t i = 0; i < N; i++)
-     53e:	24 17       	cp	r18, r20
-     540:	35 07       	cpc	r19, r21
-     542:	99 f7       	brne	.-26     	; 0x52a <jstk_ledMask+0x64>
-     544:	08 95       	ret
-}   // basically just prioritizes whichever axis is moving more
-
-uint8_t jstk_ledMask(int8_t idx)
-{
-    if (idx < 0)    // no touch detected
-        return 0;
-     546:	80 e0       	ldi	r24, 0x00	; 0
-     548:	08 95       	ret
-
-    if (idx == 5 || idx == 6)   // center zone
-        return (1u<<3) | (1u<<4);  // LED4 (bit3) + LED5 (bit4)
-     54a:	88 e1       	ldi	r24, 0x18	; 24
-     54c:	08 95       	ret
-    d: 1 2 3 4 5
-    N: 2 3 4 4 4
-    */
-
-    uint8_t jstk_mask = 0;
-    if (idx < 5)                            // down/left direction
-     54e:	85 30       	cpi	r24, 0x05	; 5
-     550:	6c f2       	brlt	.-102    	; 0x4ec <jstk_ledMask+0x26>
-     552:	82 e0       	ldi	r24, 0x02	; 2
-     554:	e0 cf       	rjmp	.-64     	; 0x516 <jstk_ledMask+0x50>
-    /*
-    idx: 0 1 2 3 4 | 5 6 | 7 8 9 10 11
-    d:   5 4 3 2 1 |  -  | 1 2 3  4  5
-    */
-
-    uint8_t N = (d < 2 ? 2 : (d + 1));  // decide how many LED's should activate (N)
-     556:	85 50       	subi	r24, 0x05	; 5
-     558:	85 30       	cpi	r24, 0x05	; 5
-     55a:	08 f0       	brcs	.+2      	; 0x55e <jstk_ledMask+0x98>
-     55c:	84 e0       	ldi	r24, 0x04	; 4
-    uint8_t jstk_mask = 0;
-    if (idx < 5)                            // down/left direction
-        for (uint8_t i = 0; i < N; i++)
-            jstk_mask |= (1u << (3 - i));   // LED's 3-0
-    else                                    // up/right direction
-        for (uint8_t i = 0; i < N; i++)
-     55e:	81 11       	cpse	r24, r1
-     560:	da cf       	rjmp	.-76     	; 0x516 <jstk_ledMask+0x50>
-     562:	08 95       	ret
-    /*
-    idx: 0 1 2 3 4 | 5 6 | 7 8 9 10 11
-    d:   5 4 3 2 1 |  -  | 1 2 3  4  5
-    */
-
-    uint8_t N = (d < 2 ? 2 : (d + 1));  // decide how many LED's should activate (N)
-     564:	66 e0       	ldi	r22, 0x06	; 6
-     566:	68 1b       	sub	r22, r24
-     568:	65 30       	cpi	r22, 0x05	; 5
-     56a:	08 f0       	brcs	.+2      	; 0x56e <jstk_ledMask+0xa8>
-     56c:	64 e0       	ldi	r22, 0x04	; 4
-    N: 2 3 4 4 4
-    */
-
-    uint8_t jstk_mask = 0;
-    if (idx < 5)                            // down/left direction
-        for (uint8_t i = 0; i < N; i++)
-     56e:	61 11       	cpse	r22, r1
-     570:	be cf       	rjmp	.-132    	; 0x4ee <jstk_ledMask+0x28>
-     572:	80 e0       	ldi	r24, 0x00	; 0
             jstk_mask |= (1u << (3 - i));   // LED's 3-0
     else                                    // up/right direction
         for (uint8_t i = 0; i < N; i++)
             jstk_mask |= (1u << (4 + i));   // LED's 4-7
     return jstk_mask;
+     53e:	24 17       	cp	r18, r20
+     540:	35 07       	cpc	r19, r21
+     542:	99 f7       	brne	.-26     	; 0x52a <jstk_ledMask+0x64>
+     544:	08 95       	ret
+uint8_t jstk_ledMask(int8_t idx)
+{
+    if (idx < 0)    // no touch detected
+        return 0;
+
+    if (idx == 5 || idx == 6)   // center zone
+     546:	80 e0       	ldi	r24, 0x00	; 0
+     548:	08 95       	ret
+        return (1u<<3) | (1u<<4);  // LED4 (bit3) + LED5 (bit4)
+
+    uint8_t d = (idx < 5) ? (5 - idx) : (idx - 6);  // computes 'distance' from center (d)
+     54a:	88 e1       	ldi	r24, 0x18	; 24
+     54c:	08 95       	ret
+    */
+
+    uint8_t jstk_mask = 0;
+    if (idx < 5)                            // down/left direction
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (3 - i));   // LED's 3-0
+     54e:	85 30       	cpi	r24, 0x05	; 5
+     550:	6c f2       	brlt	.-102    	; 0x4ec <jstk_ledMask+0x26>
+     552:	82 e0       	ldi	r24, 0x02	; 2
+     554:	e0 cf       	rjmp	.-64     	; 0x516 <jstk_ledMask+0x50>
+    d:   5 4 3 2 1 |  -  | 1 2 3  4  5
+    */
+
+    uint8_t N = (d < 2 ? 2 : (d + 1));  // decide how many LED's should activate (N)
+    if (N > 4) N = 4;
+    /*
+     556:	85 50       	subi	r24, 0x05	; 5
+     558:	85 30       	cpi	r24, 0x05	; 5
+     55a:	08 f0       	brcs	.+2      	; 0x55e <jstk_ledMask+0x98>
+     55c:	84 e0       	ldi	r24, 0x04	; 4
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (3 - i));   // LED's 3-0
+    else                                    // up/right direction
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (4 + i));   // LED's 4-7
+    return jstk_mask;
+     55e:	81 11       	cpse	r24, r1
+     560:	da cf       	rjmp	.-76     	; 0x516 <jstk_ledMask+0x50>
+     562:	08 95       	ret
+    d:   5 4 3 2 1 |  -  | 1 2 3  4  5
+    */
+
+    uint8_t N = (d < 2 ? 2 : (d + 1));  // decide how many LED's should activate (N)
+    if (N > 4) N = 4;
+    /*
+     564:	66 e0       	ldi	r22, 0x06	; 6
+     566:	68 1b       	sub	r22, r24
+     568:	65 30       	cpi	r22, 0x05	; 5
+     56a:	08 f0       	brcs	.+2      	; 0x56e <jstk_ledMask+0xa8>
+     56c:	64 e0       	ldi	r22, 0x04	; 4
+
+    uint8_t jstk_mask = 0;
+    if (idx < 5)                            // down/left direction
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (3 - i));   // LED's 3-0
+    else                                    // up/right direction
+     56e:	61 11       	cpse	r22, r1
+     570:	be cf       	rjmp	.-132    	; 0x4ee <jstk_ledMask+0x28>
+     572:	80 e0       	ldi	r24, 0x00	; 0
+        for (uint8_t i = 0; i < N; i++)
+            jstk_mask |= (1u << (4 + i));   // LED's 4-7
+    return jstk_mask;
 }
+
+static uint8_t jstk_usbReport[2];
      574:	08 95       	ret
 
 00000576 <jstk_readMask>:
-    return jstk_idx2axis[idx];
-}   // conversion runtime is O(1)
 
 
 uint8_t jstk_readMask(void)
 {
-     576:	cf 93       	push	r28
     int8_t vi = jstk_readVertIndex();       // -1 to 11
+    int8_t hi = jstk_readHoriIndex();       // -1 to 11
+     576:	cf 93       	push	r28
+
      578:	5c df       	rcall	.-328    	; 0x432 <jstk_readVertIndex>
      57a:	c8 2f       	mov	r28, r24
-    int8_t hi = jstk_readHoriIndex();       // -1 to 11
+    if (vi < 0 && hi < 0)
      57c:	81 df       	rcall	.-254    	; 0x480 <jstk_readHoriIndex>
      57e:	cc 23       	and	r28, r28
+        return 0;                           // no contact
 
-    if (vi < 0 && hi < 0)
      580:	24 f4       	brge	.+8      	; 0x58a <jstk_readMask+0x14>
      582:	88 23       	and	r24, r24
      584:	c4 f0       	brlt	.+48     	; 0x5b6 <jstk_readMask+0x40>
      586:	90 e0       	ldi	r25, 0x00	; 0
-        return 0;                           // no contact
-
     // decide which slider is moved furthest from center buy computing 'distance' from middle
     uint8_t dV = (vi < 0) ? 0 : (vi > 5 ? vi - 5 : 5 - vi); // vertical slider distance   (dV)
+    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider distance (dH)
+
      588:	09 c0       	rjmp	.+18     	; 0x59c <jstk_readMask+0x26>
      58a:	c6 30       	cpi	r28, 0x06	; 6
      58c:	1c f0       	brlt	.+6      	; 0x594 <jstk_readMask+0x1e>
@@ -1089,7 +1089,7 @@ uint8_t jstk_readMask(void)
      594:	95 e0       	ldi	r25, 0x05	; 5
      596:	9c 1b       	sub	r25, r28
      598:	88 23       	and	r24, r24
-    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider distance (dH)
+    int8_t jstk_use = (dV >= dH) ? vi : hi; // slider with greatest distance wins
      59a:	54 f0       	brlt	.+20     	; 0x5b0 <jstk_readMask+0x3a>
      59c:	86 30       	cpi	r24, 0x06	; 6
      59e:	1c f0       	brlt	.+6      	; 0x5a6 <jstk_readMask+0x30>
@@ -1100,42 +1100,42 @@ uint8_t jstk_readMask(void)
      5a8:	28 1b       	sub	r18, r24
      5aa:	92 17       	cp	r25, r18
 
-    int8_t jstk_use = (dV >= dH) ? vi : hi; // slider with greatest distance wins
+    return jstk_ledMask(jstk_use);          // convert to bits
      5ac:	08 f4       	brcc	.+2      	; 0x5b0 <jstk_readMask+0x3a>
      5ae:	c8 2f       	mov	r28, r24
+}   // basically just prioritizes whichever axis is moving more
 
-    return jstk_ledMask(jstk_use);          // convert to bits
      5b0:	8c 2f       	mov	r24, r28
      5b2:	89 df       	rcall	.-238    	; 0x4c6 <jstk_ledMask>
      5b4:	01 c0       	rjmp	.+2      	; 0x5b8 <jstk_readMask+0x42>
      5b6:	80 e0       	ldi	r24, 0x00	; 0
-{
-    int8_t vi = jstk_readVertIndex();       // -1 to 11
     int8_t hi = jstk_readHoriIndex();       // -1 to 11
 
     if (vi < 0 && hi < 0)
         return 0;                           // no contact
-     5b8:	cf 91       	pop	r28
-    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider distance (dH)
 
+    // decide which slider is moved furthest from center buy computing 'distance' from middle
+     5b8:	cf 91       	pop	r28
     int8_t jstk_use = (dV >= dH) ? vi : hi; // slider with greatest distance wins
 
     return jstk_ledMask(jstk_use);          // convert to bits
 }   // basically just prioritizes whichever axis is moving more
+
+uint8_t jstk_ledMask(int8_t idx)
      5ba:	08 95       	ret
 
 000005bc <jstk_usbTask>:
      5bc:	61 df       	rcall	.-318    	; 0x480 <jstk_readHoriIndex>
-    92,     116,    139,    162,
-    185,    208,    231,    255
 };  // lookup table for the 12 discrete slider positions to avoid long division
 
 uint8_t jstk_idxToAxis(int8_t idx) {
     if (idx < 0)
-     5be:	88 23       	and	r24, r24
-     5c0:	3c f0       	brlt	.+14     	; 0x5d0 <jstk_usbTask+0x14>
         return 128; // return to center when no contact
     return jstk_idx2axis[idx];
+     5be:	88 23       	and	r24, r24
+     5c0:	3c f0       	brlt	.+14     	; 0x5d0 <jstk_usbTask+0x14>
+}   // conversion runtime is O(1)
+
      5c2:	e8 2f       	mov	r30, r24
      5c4:	88 0f       	add	r24, r24
      5c6:	ff 0b       	sbc	r31, r31
@@ -1143,32 +1143,32 @@ uint8_t jstk_idxToAxis(int8_t idx) {
      5ca:	fe 4d       	sbci	r31, 0xDE	; 222
      5cc:	80 81       	ld	r24, Z
      5ce:	01 c0       	rjmp	.+2      	; 0x5d2 <jstk_usbTask+0x16>
-    185,    208,    231,    255
-};  // lookup table for the 12 discrete slider positions to avoid long division
 
 uint8_t jstk_idxToAxis(int8_t idx) {
     if (idx < 0)
-        return 128; // return to center when no contact
-     5d0:	80 e8       	ldi	r24, 0x80	; 128
-{
-    // sample test-mode switch
-    // jstk_testMode = PORTB.IN;
-    
-    // sample current joystick/slider indices
-    jstk_usbReport[0] = jstk_idxToAxis(jstk_readHoriIndex());   // x
-     5d2:	80 93 9e 21 	sts	0x219E, r24	; 0x80219e <jstk_usbReport>
-    jstk_usbReport[1] = jstk_idxToAxis(jstk_readVertIndex());   // y
-     5d6:	2d df       	rcall	.-422    	; 0x432 <jstk_readVertIndex>
-    92,     116,    139,    162,
-    185,    208,    231,    255
-};  // lookup table for the 12 discrete slider positions to avoid long division
-
-uint8_t jstk_idxToAxis(int8_t idx) {
-    if (idx < 0)
-     5d8:	88 23       	and	r24, r24
-     5da:	3c f0       	brlt	.+14     	; 0x5ea <jstk_usbTask+0x2e>
         return 128; // return to center when no contact
     return jstk_idx2axis[idx];
+}   // conversion runtime is O(1)
+     5d0:	80 e8       	ldi	r24, 0x80	; 128
+    jstk_usbReport[0] = jstk_idxToAxis(jstk_readHoriIndex());   // x
+    jstk_usbReport[1] = jstk_idxToAxis(jstk_readVertIndex());   // y
+
+    // send if value changed & IN endpoint ready
+    if ((jstk_usbReport[0] != jstk_prevReport[0]) || (jstk_usbReport[1] != jstk_prevReport[1])) { // value changed?
+        if (udi_hid_generic_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
+     5d2:	80 93 9e 21 	sts	0x219E, r24	; 0x80219e <jstk_usbReport>
+            jstk_prevReport[0] = jstk_usbReport[0];
+     5d6:	2d df       	rcall	.-422    	; 0x432 <jstk_readVertIndex>
+};  // lookup table for the 12 discrete slider positions to avoid long division
+
+uint8_t jstk_idxToAxis(int8_t idx) {
+    if (idx < 0)
+        return 128; // return to center when no contact
+    return jstk_idx2axis[idx];
+     5d8:	88 23       	and	r24, r24
+     5da:	3c f0       	brlt	.+14     	; 0x5ea <jstk_usbTask+0x2e>
+}   // conversion runtime is O(1)
+
      5dc:	e8 2f       	mov	r30, r24
      5de:	88 0f       	add	r24, r24
      5e0:	ff 0b       	sbc	r31, r31
@@ -1176,25 +1176,25 @@ uint8_t jstk_idxToAxis(int8_t idx) {
      5e4:	fe 4d       	sbci	r31, 0xDE	; 222
      5e6:	80 81       	ld	r24, Z
      5e8:	01 c0       	rjmp	.+2      	; 0x5ec <jstk_usbTask+0x30>
-    185,    208,    231,    255
-};  // lookup table for the 12 discrete slider positions to avoid long division
 
 uint8_t jstk_idxToAxis(int8_t idx) {
     if (idx < 0)
         return 128; // return to center when no contact
+    return jstk_idx2axis[idx];
+}   // conversion runtime is O(1)
      5ea:	80 e8       	ldi	r24, 0x80	; 128
-    // sample test-mode switch
-    // jstk_testMode = PORTB.IN;
-    
-    // sample current joystick/slider indices
-    jstk_usbReport[0] = jstk_idxToAxis(jstk_readHoriIndex());   // x
     jstk_usbReport[1] = jstk_idxToAxis(jstk_readVertIndex());   // y
-     5ec:	ee e9       	ldi	r30, 0x9E	; 158
-     5ee:	f1 e2       	ldi	r31, 0x21	; 33
-     5f0:	81 83       	std	Z+1, r24	; 0x01
 
     // send if value changed & IN endpoint ready
     if ((jstk_usbReport[0] != jstk_prevReport[0]) || (jstk_usbReport[1] != jstk_prevReport[1])) { // value changed?
+        if (udi_hid_generic_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
+            jstk_prevReport[0] = jstk_usbReport[0];
+     5ec:	ee e9       	ldi	r30, 0x9E	; 158
+     5ee:	f1 e2       	ldi	r31, 0x21	; 33
+     5f0:	81 83       	std	Z+1, r24	; 0x01
+            jstk_prevReport[1] = jstk_usbReport[1];
+        }
+    }
      5f2:	20 81       	ld	r18, Z
      5f4:	90 91 26 20 	lds	r25, 0x2026	; 0x802026 <jstk_prevReport>
      5f8:	29 13       	cpse	r18, r25
@@ -1202,20 +1202,17 @@ uint8_t jstk_idxToAxis(int8_t idx) {
      5fc:	90 91 27 20 	lds	r25, 0x2027	; 0x802027 <jstk_prevReport+0x1>
      600:	98 17       	cp	r25, r24
      602:	71 f0       	breq	.+28     	; 0x620 <jstk_usbTask+0x64>
-        if (udi_hid_generic_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
      604:	8e e9       	ldi	r24, 0x9E	; 158
      606:	91 e2       	ldi	r25, 0x21	; 33
      608:	98 d4       	rcall	.+2352   	; 0xf3a <udi_hid_generic_send_report_in>
      60a:	88 23       	and	r24, r24
      60c:	49 f0       	breq	.+18     	; 0x620 <jstk_usbTask+0x64>
-            jstk_prevReport[0] = jstk_usbReport[0];
      60e:	e6 e2       	ldi	r30, 0x26	; 38
      610:	f0 e2       	ldi	r31, 0x20	; 32
      612:	ae e9       	ldi	r26, 0x9E	; 158
      614:	b1 e2       	ldi	r27, 0x21	; 33
      616:	8c 91       	ld	r24, X
      618:	80 83       	st	Z, r24
-            jstk_prevReport[1] = jstk_usbReport[1];
      61a:	11 96       	adiw	r26, 0x01	; 1
      61c:	8c 91       	ld	r24, X
      61e:	81 83       	std	Z+1, r24	; 0x01

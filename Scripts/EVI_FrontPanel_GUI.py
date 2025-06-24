@@ -5,7 +5,10 @@ from functools import partial
 
 VID = 0x03EB
 PID = 0x2133
+
+JSK_IFACE_NUMBER = 1    # USB device iNumber for the joystick
 LED_IFACE_NUMBER = 2    # USB device iNumber for the LEDs
+
 POLL_INTERVAL = 1       # ms
 
 KEY_NAMES = [
@@ -26,11 +29,21 @@ class LED_Toggler(tk.Tk):
                 self.device.open_path(d['path'])
                 self.device.set_nonblocking(True)
                 break
-
         if not self.device:
             messagebox.showerror("Error", f"LED interface {LED_IFACE_NUMBER} not found.")
             self.destroy()
             return
+
+        self.joystick = None
+        for d in hid.enumerate(VID, PID):
+            if d.get('interface_number') == JSK_IFACE_NUMBER:
+                self.joystick = hid.device()
+                self.joystick.open_path(d['path'])
+                self.joystick.set_nonblocking(True)
+                break
+        if not self.joystick:
+            messagebox.showwarning("Joystick not found",
+                f"Joystick interface {JSK_IFACE_NUMBER} missing.")
 
         # track each LED’s on/off
         self.states = [False] * 8
@@ -148,6 +161,29 @@ class LED_Toggler(tk.Tk):
                 column = 10
             btn.grid(row=row, column=column, padx=5, pady=5)
             self.key_labels.append(btn)
+
+        # joystick visualizer
+        self.joy_size = 150
+
+        # container frame
+        joy_holder = tk.Frame(self, width=self.joy_size, height=self.joy_size)
+        joy_holder.grid_propagate(False)   
+        joy_holder.grid(row=2, column=7, rowspan=5, columnspan=2, pady=(10,0))
+
+        # canvas inside frame
+        self.joy_canvas = tk.Canvas(
+            joy_holder,
+            width=self.joy_size,
+            height=self.joy_size,
+            bd=1,
+            relief=tk.SUNKEN
+        )
+        self.joy_canvas.pack(fill="both", expand=True)
+        self.joy_canvas.create_rectangle(0, 0, self.joy_size, self.joy_size)
+        r = 6
+        cx = cy = self.joy_size // 2
+        self.joy_dot = self.joy_canvas.create_oval(cx-r, cy-r, cx+r, cy+r, fill="blue")
+
 
         # begin polling
         self.poll()
@@ -273,6 +309,22 @@ class LED_Toggler(tk.Tk):
                     self.show_stop()
                 else:
                     self.show_start()
+
+                # read & update joystick
+                if self.joystick:
+                    js = self.joystick.read(2)
+                    if js and len(js) >= 2:
+                        x_raw, y_raw = js[0], js[1]
+                        px = x_raw * self.joy_size / 255
+                        py = y_raw * self.joy_size / 255
+                        r = 6
+                        self.joy_canvas.coords(
+                            self.joy_dot,
+                            px-r,
+                            py-r,
+                            px+r,
+                            py+r
+                        )
 
         # schedule next poll
         self.after(POLL_INTERVAL, self.poll)

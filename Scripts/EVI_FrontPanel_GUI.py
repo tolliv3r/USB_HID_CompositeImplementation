@@ -172,13 +172,9 @@ class LED_Toggler(tk.Tk):
             messagebox.showerror("HID Write Error", str(e))
             return
 
-<<<<<<< HEAD
-=======
+        # skip the next bunch of polls (idk man buttons look weird otherwise)
         self.skip_count = 100
         self.update_buttons()
-
->>>>>>> statusButton
-        # skip the next bunch of polls (idk man buttons look weird otherwise)
         
 
     def toggle_status(self):
@@ -193,12 +189,8 @@ class LED_Toggler(tk.Tk):
             return
         
         self.skip_count = 100
-<<<<<<< HEAD
         self.update_buttons()
-=======
         self.update_status_button()
-
->>>>>>> statusButton
 
     def set_all_on(self):
         self.stop_activity()

@@ -31,6 +31,8 @@
 
 #define STOP  0x80
 #define START 0x81
+#define STATUS_ON  0x82
+#define STATUS_OFF 0x83
 
 static volatile uint16_t sof_ms       = 0;
 static volatile bool     startupCheck = 1;
@@ -89,7 +91,6 @@ void jstk_ui_process(void) {
 			led_allOff();
 			led_on(jstk_mask);
 
-
 			jstk_exitTestMode = 1;
 			// activityEnable();
 		}
@@ -115,6 +116,10 @@ void led_ui_report(uint8_t const *mask) {
 	} else if (mask[0] == START) {
 		activityReset();
 		idle_start();
+	} else if (mask[0] == STATUS_ON) {
+		led_statusOn();
+	} else if (mask[0] == STATUS_OFF) {
+		led_statusOff();
 	} else {
 		led_setState(mask[0]);
 	}

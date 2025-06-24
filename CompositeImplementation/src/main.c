@@ -5,7 +5,7 @@
 #include "modules/ui.h"
 
 static volatile bool main_b_kbd_enable = false;
-static volatile bool main_b_generic_enable = false;
+static volatile bool main_b_joystick_enable = false;
 static volatile bool main_b_led_enable = false;
 
 
@@ -44,7 +44,7 @@ void main_sof_action(void) {
 		return;
 	kbd_ui_process();
 
-	if (!main_b_generic_enable)
+	if (!main_b_joystick_enable)
 		return;
 	jstk_ui_process();
 
@@ -77,13 +77,13 @@ void main_kbd_disable(void) {
 /* -------------------------------------- */
 /* -------------- Joystick -------------- */
 /* -------------------------------------- */
-bool main_generic_enable(void) {
-	main_b_generic_enable = true;
+bool main_joystick_enable(void) {
+	main_b_joystick_enable = true;
 	return true;
 }
 
-void main_generic_disable(void) {
-	main_b_generic_enable = false;
+void main_joystick_disable(void) {
+	main_b_joystick_enable = false;
 }
 
 

@@ -52,7 +52,7 @@ src/modules/led.d src/modules/led.o: ../src/modules/led.c ../src/asf.h \
  ../src/ASF/common/services/clock/xmega/osc.h \
  ../src/ASF/common/services/clock/pll.h \
  ../src/ASF/common/services/clock/xmega/pll.h \
- ../src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.h \
+ ../src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.h \
  ../src/config/conf_usb.h \
  ../src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.h \
  ../src/ASF/common/services/usb/usb_protocol.h \
@@ -186,7 +186,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/ASF/common/services/clock/xmega/pll.h:
 
-../src/ASF/common/services/usb/class/hid/device/generic/udi_hid_generic.h:
+../src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.h:
 
 ../src/config/conf_usb.h:
 

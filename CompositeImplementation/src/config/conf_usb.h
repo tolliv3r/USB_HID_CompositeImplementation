@@ -81,9 +81,9 @@
 /* ---------------------------------------------------------------------- */
 /* ------------------------- USB Configurations ------------------------- */
 /* ---------------------------------------------------------------------- */
-#define  USB_DEVICE_EP_CTRL_SIZE            8
-#define  USB_DEVICE_NB_INTERFACE            3 // total # of interfaces
-#define  USB_DEVICE_MAX_EP                  4
+#define  USB_DEVICE_EP_CTRL_SIZE                 8
+#define  USB_DEVICE_NB_INTERFACE                 3 // total # of interfaces
+#define  USB_DEVICE_MAX_EP                       4
 
 
 /* ---------------------------------------------------------------------- */
@@ -93,23 +93,23 @@
 #define  UDI_HID_KBD_DISABLE_EXT()          main_kbd_disable()
 // #define  UDI_HID_KBD_CHANGE_LED(value)      BD76319_ui_kbd_led(value)
 
-#define  UDI_HID_KBD_EP_IN                 (1 | USB_EP_DIR_IN)
-#define  UDI_HID_KBD_IFACE_NUMBER           0
+#define  UDI_HID_KBD_EP_IN                      (1 | USB_EP_DIR_IN)
+#define  UDI_HID_KBD_IFACE_NUMBER                0
 
 
 /* ---------------------------------------------------------------------- */
 /* ------------------  HID-JOYSTICK interface settings ------------------ */
 /* ---------------------------------------------------------------------- */
-#define  UDI_HID_GENERIC_ENABLE_EXT()       main_generic_enable()
-#define  UDI_HID_GENERIC_DISABLE_EXT()      main_generic_disable()
+#define  UDI_HID_JOYSTICK_ENABLE_EXT()       main_joystick_enable()
+#define  UDI_HID_JOYSTICK_DISABLE_EXT()      main_joystick_disable()
 
-#define  UDI_HID_REPORT_IN_SIZE             2
-#define  UDI_HID_REPORT_OUT_SIZE            0
-#define  UDI_HID_REPORT_FEATURE_SIZE        0
-#define  UDI_HID_GENERIC_EP_SIZE            8
+#define  UDI_HID_JSTK_REPORT_IN_SIZE             2
+#define  UDI_HID_JSTK_REPORT_OUT_SIZE            0
+#define  UDI_HID_JSTK_REPORT_FEATURE_SIZE        0
+#define  UDI_HID_JSTK_EP_SIZE                    8
 
-#define  UDI_HID_GENERIC_EP_IN             (2 | USB_EP_DIR_IN)
-#define  UDI_HID_GENERIC_IFACE_NUMBER       1
+#define  UDI_HID_JOYSTICK_EP_IN                 (2 | USB_EP_DIR_IN)
+#define  UDI_HID_JOYSTICK_IFACE_NUMBER           1
 
 /* ---------------------------------------------------------------------- */
 /* -----------------------  LED interface settings ---------------------- */
@@ -118,36 +118,36 @@
 #define UDI_HID_LED_DISABLE_EXT()           main_led_disable()
 #define UDI_HID_LED_REPORT_OUT(ptr)         led_ui_report(ptr)
 
-#define UDI_HID_LED_REPORT_IN_SIZE          4
-#define UDI_HID_LED_REPORT_OUT_SIZE         1
-#define UDI_HID_LED_REPORT_FEATURE_SIZE     0
-#define UDI_HID_LED_EP_SIZE                 8
+#define UDI_HID_LED_REPORT_IN_SIZE               4
+#define UDI_HID_LED_REPORT_OUT_SIZE              1
+#define UDI_HID_LED_REPORT_FEATURE_SIZE          0
+#define UDI_HID_LED_EP_SIZE                      8
 
-#define UDI_HID_LED_EP_IN                  (4 | USB_EP_DIR_IN)
-#define UDI_HID_LED_EP_OUT                 (3 | USB_EP_DIR_OUT)
-#define UDI_HID_LED_IFACE_NUMBER            2
+#define UDI_HID_LED_EP_IN                       (4 | USB_EP_DIR_IN)
+#define UDI_HID_LED_EP_OUT                      (3 | USB_EP_DIR_OUT)
+#define UDI_HID_LED_IFACE_NUMBER                 2
 
 /* ---------------------------------------------------------------------- */
 /* ------------------------  HID-COMPOSITE stuff ------------------------ */
 /* ---------------------------------------------------------------------- */
 #define UDI_COMPOSITE_DESC_T                           \
 		udi_hid_kbd_desc_t      udi_hid_kbd;           \
-		udi_hid_generic_desc_t  udi_hid_generic;       \
+		udi_hid_joystick_desc_t udi_hid_joystick;      \
 		udi_hid_led_desc_t      udi_hid_led;
 
 #define UDI_COMPOSITE_DESC_FS                          \
 		.udi_hid_kbd       =    UDI_HID_KBD_DESC,      \
-		.udi_hid_generic   =    UDI_HID_GENERIC_DESC,  \
+		.udi_hid_joystick  =    UDI_HID_JOYSTICK_DESC, \
 		.udi_hid_led       =    UDI_HID_LED_DESC
 
 #define UDI_COMPOSITE_DESC_HS                          \
 		.udi_hid_kbd       =    UDI_HID_KBD_DESC,      \
-		.udi_hid_generic   =    UDI_HID_GENERIC_DESC,  \
+		.udi_hid_joystick  =    UDI_HID_JOYSTICK_DESC, \
 		.udi_hid_led       =    UDI_HID_LED_DESC
 
 #define UDI_COMPOSITE_API                              \
 		&udi_api_hid_kbd,                              \
-		&udi_api_hid_generic,                          \
+		&udi_api_hid_joystick,                         \
 		&udi_api_hid_led
 
 
@@ -155,7 +155,7 @@
 /* ------------------- USB Device Driver Configuration ------------------ */
 /* ---------------------------------------------------------------------- */
 #include "udi_hid_kbd.h"
-#include "udi_hid_generic.h"
+#include "udi_hid_joystick.h"
 #include "udi_hid_led.h"
 
 #include "main.h"

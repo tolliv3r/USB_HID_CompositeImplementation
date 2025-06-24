@@ -24,8 +24,8 @@ bool main_kbd_enable(void);
 void main_kbd_disable(void);
 
 /* ------------ joystick ----------- */
-bool main_generic_enable(void);
-void main_generic_disable(void);
+bool main_joystick_enable(void);
+void main_joystick_disable(void);
 
 /* -------------- LEDs ------------- */
 bool main_led_enable(void);

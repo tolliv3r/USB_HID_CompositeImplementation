@@ -19,17 +19,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 0000534d  00000000  00000000  0000e535  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000099f5  00000000  00000000  00013882  2**0
+  8 .debug_line   00009a10  00000000  00000000  00013882  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000d3c  00000000  00000000  0001d278  2**2
+  9 .debug_frame  00000d3c  00000000  00000000  0001d294  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00036e0e  00000000  00000000  0001dfb4  2**0
+ 10 .debug_str    00036e42  00000000  00000000  0001dfd0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00002f93  00000000  00000000  00054dc2  2**0
+ 11 .debug_loc    00002f93  00000000  00000000  00054e12  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000638  00000000  00000000  00057d58  2**3
+ 12 .debug_ranges 00000638  00000000  00000000  00057da8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000cd87  00000000  00000000  00058390  2**0
+ 13 .debug_macro  0000cd87  00000000  00000000  000583e0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1202,10 +1202,10 @@ void jstk_usbTask(void)
      5fc:	90 91 27 20 	lds	r25, 0x2027	; 0x802027 <jstk_prevReport+0x1>
      600:	98 17       	cp	r25, r24
      602:	71 f0       	breq	.+28     	; 0x620 <jstk_usbTask+0x64>
-        if (udi_hid_generic_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
+        if (udi_hid_joystick_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
      604:	8e e9       	ldi	r24, 0x9E	; 158
      606:	91 e2       	ldi	r25, 0x21	; 33
-     608:	a0 d4       	rcall	.+2368   	; 0xf4a <udi_hid_generic_send_report_in>
+     608:	a0 d4       	rcall	.+2368   	; 0xf4a <udi_hid_joystick_send_report_in>
      60a:	88 23       	and	r24, r24
      60c:	49 f0       	breq	.+18     	; 0x620 <jstk_usbTask+0x64>
             jstk_prevReport[0] = jstk_usbReport[0];
@@ -2775,20 +2775,20 @@ static inline void cpu_irq_restore(irqflags_t flags)
      ec2:	cf 91       	pop	r28
      ec4:	08 95       	ret
 
-00000ec6 <udi_hid_generic_getsetting>:
+00000ec6 <udi_hid_joystick_getsetting>:
 
 
-uint8_t udi_hid_generic_getsetting(void)
+uint8_t udi_hid_joystick_getsetting(void)
 {
 	return 0;
 }
      ec6:	80 e0       	ldi	r24, 0x00	; 0
      ec8:	08 95       	ret
 
-00000eca <udi_hid_generic_setreport>:
+00000eca <udi_hid_joystick_setreport>:
 
 
-static bool udi_hid_generic_setreport(void)
+static bool udi_hid_joystick_setreport(void)
 {
 	if ((USB_HID_REPORT_TYPE_FEATURE == (udd_g_ctrlreq.req.wValue >> 8))
      eca:	30 91 e8 23 	lds	r19, 0x23E8	; 0x8023e8 <udd_g_ctrlreq+0x2>
@@ -2796,15 +2796,15 @@ static bool udi_hid_generic_setreport(void)
      ed2:	82 2f       	mov	r24, r18
      ed4:	90 e0       	ldi	r25, 0x00	; 0
      ed6:	03 97       	sbiw	r24, 0x03	; 3
-     ed8:	b1 f4       	brne	.+44     	; 0xf06 <udi_hid_generic_setreport+0x3c>
+     ed8:	b1 f4       	brne	.+44     	; 0xf06 <udi_hid_joystick_setreport+0x3c>
 			&& (0 == (0xFF & udd_g_ctrlreq.req.wValue))
      eda:	31 11       	cpse	r19, r1
-     edc:	16 c0       	rjmp	.+44     	; 0xf0a <udi_hid_generic_setreport+0x40>
-			&& (sizeof(udi_hid_generic_report_feature) ==
+     edc:	16 c0       	rjmp	.+44     	; 0xf0a <udi_hid_joystick_setreport+0x40>
+			&& (sizeof(udi_hid_joystick_report_feature) ==
      ede:	80 91 ec 23 	lds	r24, 0x23EC	; 0x8023ec <udd_g_ctrlreq+0x6>
      ee2:	90 91 ed 23 	lds	r25, 0x23ED	; 0x8023ed <udd_g_ctrlreq+0x7>
      ee6:	89 2b       	or	r24, r25
-     ee8:	91 f4       	brne	.+36     	; 0xf0e <udi_hid_generic_setreport+0x44>
+     ee8:	91 f4       	brne	.+36     	; 0xf0e <udi_hid_joystick_setreport+0x44>
 					udd_g_ctrlreq.req.wLength)) {
 		// Feature type on report ID 0
 		udd_g_ctrlreq.payload =
@@ -2814,8 +2814,8 @@ static bool udi_hid_generic_setreport(void)
      ef0:	91 e2       	ldi	r25, 0x21	; 33
      ef2:	80 87       	std	Z+8, r24	; 0x08
      ef4:	91 87       	std	Z+9, r25	; 0x09
-				(uint8_t *) & udi_hid_generic_report_feature;
-		udd_g_ctrlreq.callback = udi_hid_generic_setfeature_valid;
+				(uint8_t *) & udi_hid_joystick_report_feature;
+		udd_g_ctrlreq.callback = udi_hid_joystick_setfeature_valid;
      ef6:	89 e8       	ldi	r24, 0x89	; 137
      ef8:	97 e0       	ldi	r25, 0x07	; 7
      efa:	84 87       	std	Z+12, r24	; 0x0c
@@ -2823,7 +2823,7 @@ static bool udi_hid_generic_setreport(void)
 		udd_g_ctrlreq.payload_size =
      efe:	12 86       	std	Z+10, r1	; 0x0a
      f00:	13 86       	std	Z+11, r1	; 0x0b
-				sizeof(udi_hid_generic_report_feature);
+				sizeof(udi_hid_joystick_report_feature);
 		return true;
      f02:	81 e0       	ldi	r24, 0x01	; 1
      f04:	08 95       	ret
@@ -2837,62 +2837,62 @@ static bool udi_hid_generic_setreport(void)
 }
      f10:	08 95       	ret
 
-00000f12 <udi_hid_generic_setfeature_valid>:
+00000f12 <udi_hid_joystick_setfeature_valid>:
 
 //--------------------------------------------
 //------ Internal routines
 
-static void udi_hid_generic_setfeature_valid(void)
+static void udi_hid_joystick_setfeature_valid(void)
 {
      f12:	08 95       	ret
 
-00000f14 <udi_hid_generic_report_in_sent>:
+00000f14 <udi_hid_joystick_report_in_sent>:
 		iram_size_t nb_sent, udd_ep_id_t ep)
 {
 	UNUSED(status);
 	UNUSED(nb_sent);
 	UNUSED(ep);
-	udi_hid_generic_b_report_in_free = true;
+	udi_hid_joystick_b_report_in_free = true;
      f14:	81 e0       	ldi	r24, 0x01	; 1
-     f16:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <udi_hid_generic_b_report_in_free>
+     f16:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <udi_hid_joystick_b_report_in_free>
      f1a:	08 95       	ret
 
-00000f1c <udi_hid_generic_enable>:
+00000f1c <udi_hid_joystick_enable>:
 //------ Interface for UDI HID level
 
-bool udi_hid_generic_enable(void)
+bool udi_hid_joystick_enable(void)
 {
 	// Initialize internal values
-	udi_hid_generic_rate = 0;
-     f1c:	10 92 f8 21 	sts	0x21F8, r1	; 0x8021f8 <udi_hid_generic_rate>
-	udi_hid_generic_protocol = 0;
-     f20:	10 92 f6 21 	sts	0x21F6, r1	; 0x8021f6 <udi_hid_generic_protocol>
-	udi_hid_generic_b_report_in_free = true;
+	udi_hid_joystick_rate = 0;
+     f1c:	10 92 f8 21 	sts	0x21F8, r1	; 0x8021f8 <udi_hid_joystick_rate>
+	udi_hid_joystick_protocol = 0;
+     f20:	10 92 f6 21 	sts	0x21F6, r1	; 0x8021f6 <udi_hid_joystick_protocol>
+	udi_hid_joystick_b_report_in_free = true;
      f24:	81 e0       	ldi	r24, 0x01	; 1
-     f26:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <udi_hid_generic_b_report_in_free>
+     f26:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <udi_hid_joystick_b_report_in_free>
 	// if (!udi_hid_generic_report_out_enable())
 	// 	return false;
-	return UDI_HID_GENERIC_ENABLE_EXT();
-     f2a:	0c 94 2b 15 	jmp	0x2a56	; 0x2a56 <main_generic_enable>
+	return UDI_HID_JOYSTICK_ENABLE_EXT();
+     f2a:	0c 94 2b 15 	jmp	0x2a56	; 0x2a56 <main_joystick_enable>
 }
      f2e:	08 95       	ret
 
-00000f30 <udi_hid_generic_disable>:
+00000f30 <udi_hid_joystick_disable>:
 
 
-void udi_hid_generic_disable(void)
+void udi_hid_joystick_disable(void)
 {
-	UDI_HID_GENERIC_DISABLE_EXT();
-     f30:	0c 94 2f 15 	jmp	0x2a5e	; 0x2a5e <main_generic_disable>
+	UDI_HID_JOYSTICK_DISABLE_EXT();
+     f30:	0c 94 2f 15 	jmp	0x2a5e	; 0x2a5e <main_joystick_disable>
      f34:	08 95       	ret
 
-00000f36 <udi_hid_generic_setup>:
+00000f36 <udi_hid_joystick_setup>:
 }
 
 
-bool udi_hid_generic_setup(void)
+bool udi_hid_joystick_setup(void)
 {
-	return udi_hid_setup(&udi_hid_generic_rate,
+	return udi_hid_setup(&udi_hid_joystick_rate,
      f36:	25 e6       	ldi	r18, 0x65	; 101
      f38:	37 e0       	ldi	r19, 0x07	; 7
      f3a:	48 ea       	ldi	r20, 0xA8	; 168
@@ -2902,18 +2902,18 @@ bool udi_hid_generic_setup(void)
      f42:	88 ef       	ldi	r24, 0xF8	; 248
      f44:	91 e2       	ldi	r25, 0x21	; 33
      f46:	f2 c0       	rjmp	.+484    	; 0x112c <udi_hid_setup>
-								&udi_hid_generic_protocol,
-								(uint8_t *) &udi_hid_generic_report_desc,
-								udi_hid_generic_setreport);
+								&udi_hid_joystick_protocol,
+								(uint8_t *) &udi_hid_joystick_report_desc,
+								udi_hid_joystick_setreport);
 }
      f48:	08 95       	ret
 
-00000f4a <udi_hid_generic_send_report_in>:
+00000f4a <udi_hid_joystick_send_report_in>:
 
 //--------------------------------------------
 //------ Interface for application
 
-bool udi_hid_generic_send_report_in(uint8_t *data)
+bool udi_hid_joystick_send_report_in(uint8_t *data)
 {
      f4a:	ff 92       	push	r15
      f4c:	0f 93       	push	r16
@@ -2924,10 +2924,10 @@ bool udi_hid_generic_send_report_in(uint8_t *data)
      f56:	cd b7       	in	r28, 0x3d	; 61
      f58:	de b7       	in	r29, 0x3e	; 62
      f5a:	9c 01       	movw	r18, r24
-	if (!udi_hid_generic_b_report_in_free)
-     f5c:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <udi_hid_generic_b_report_in_free>
+	if (!udi_hid_joystick_b_report_in_free)
+     f5c:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <udi_hid_joystick_b_report_in_free>
      f60:	88 23       	and	r24, r24
-     f62:	09 f1       	breq	.+66     	; 0xfa6 <udi_hid_generic_send_report_in+0x5c>
+     f62:	09 f1       	breq	.+66     	; 0xfa6 <udi_hid_joystick_send_report_in+0x5c>
      f64:	f9 01       	movw	r30, r18
 
 typedef uint8_t irqflags_t;
@@ -2944,18 +2944,18 @@ static inline irqflags_t cpu_irq_save(void)
 		return false;
 	irqflags_t flags = cpu_irq_save();
 	// Fill report
-	memset(&udi_hid_generic_report_in, 0,
-     f6e:	10 92 f2 21 	sts	0x21F2, r1	; 0x8021f2 <udi_hid_generic_report_feature>
-     f72:	10 92 f3 21 	sts	0x21F3, r1	; 0x8021f3 <udi_hid_generic_report_feature+0x1>
-			sizeof(udi_hid_generic_report_in));
-	memcpy(&udi_hid_generic_report_in, data,
+	memset(&udi_hid_joystick_report_in, 0,
+     f6e:	10 92 f2 21 	sts	0x21F2, r1	; 0x8021f2 <udi_hid_joystick_report_feature>
+     f72:	10 92 f3 21 	sts	0x21F3, r1	; 0x8021f3 <udi_hid_joystick_report_feature+0x1>
+			sizeof(udi_hid_joystick_report_in));
+	memcpy(&udi_hid_joystick_report_in, data,
      f76:	80 81       	ld	r24, Z
      f78:	91 81       	ldd	r25, Z+1	; 0x01
-     f7a:	80 93 f2 21 	sts	0x21F2, r24	; 0x8021f2 <udi_hid_generic_report_feature>
-     f7e:	90 93 f3 21 	sts	0x21F3, r25	; 0x8021f3 <udi_hid_generic_report_feature+0x1>
-	      		sizeof(udi_hid_generic_report_in));
-	udi_hid_generic_b_report_in_free =
-			!udd_ep_run(UDI_HID_GENERIC_EP_IN,
+     f7a:	80 93 f2 21 	sts	0x21F2, r24	; 0x8021f2 <udi_hid_joystick_report_feature>
+     f7e:	90 93 f3 21 	sts	0x21F3, r25	; 0x8021f3 <udi_hid_joystick_report_feature+0x1>
+	      		sizeof(udi_hid_joystick_report_in));
+	udi_hid_joystick_b_report_in_free =
+			!udd_ep_run(UDI_HID_JOYSTICK_EP_IN,
      f82:	0a e8       	ldi	r16, 0x8A	; 138
      f84:	17 e0       	ldi	r17, 0x07	; 7
      f86:	22 e0       	ldi	r18, 0x02	; 2
@@ -2966,14 +2966,14 @@ static inline irqflags_t cpu_irq_save(void)
      f90:	82 e8       	ldi	r24, 0x82	; 130
      f92:	0e 94 eb 11 	call	0x23d6	; 0x23d6 <udd_ep_run>
 	// Fill report
-	memset(&udi_hid_generic_report_in, 0,
-			sizeof(udi_hid_generic_report_in));
-	memcpy(&udi_hid_generic_report_in, data,
-	      		sizeof(udi_hid_generic_report_in));
-	udi_hid_generic_b_report_in_free =
+	memset(&udi_hid_joystick_report_in, 0,
+			sizeof(udi_hid_joystick_report_in));
+	memcpy(&udi_hid_joystick_report_in, data,
+	      		sizeof(udi_hid_joystick_report_in));
+	udi_hid_joystick_b_report_in_free =
      f96:	91 e0       	ldi	r25, 0x01	; 1
      f98:	89 27       	eor	r24, r25
-     f9a:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <udi_hid_generic_b_report_in_free>
+     f9a:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <udi_hid_joystick_b_report_in_free>
 }
 
 static inline void cpu_irq_restore(irqflags_t flags)
@@ -2982,12 +2982,12 @@ static inline void cpu_irq_restore(irqflags_t flags)
 	SREG = flags;
      f9e:	ff be       	out	0x3f, r15	; 63
 							false,
-							(uint8_t *) & udi_hid_generic_report_in,
-							sizeof(udi_hid_generic_report_in),
-							udi_hid_generic_report_in_sent);
+							(uint8_t *) & udi_hid_joystick_report_in,
+							sizeof(udi_hid_joystick_report_in),
+							udi_hid_joystick_report_in_sent);
 	cpu_irq_restore(flags);
-	return !udi_hid_generic_b_report_in_free;
-     fa0:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <udi_hid_generic_b_report_in_free>
+	return !udi_hid_joystick_b_report_in_free;
+     fa0:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <udi_hid_joystick_b_report_in_free>
      fa4:	89 27       	eor	r24, r25
 
 }
@@ -7425,8 +7425,8 @@ void main_sof_action(void) {
 	kbd_ui_process();
     2a1e:	0e 94 26 06 	call	0xc4c	; 0xc4c <kbd_ui_process>
 
-	if (!main_b_generic_enable)
-    2a22:	80 91 de 23 	lds	r24, 0x23DE	; 0x8023de <main_b_generic_enable>
+	if (!main_b_joystick_enable)
+    2a22:	80 91 de 23 	lds	r24, 0x23DE	; 0x8023de <main_b_joystick_enable>
     2a26:	88 23       	and	r24, r24
     2a28:	61 f0       	breq	.+24     	; 0x2a42 <main_sof_action+0x2c>
 		return;
@@ -7478,24 +7478,24 @@ void main_kbd_disable(void) {
     2a50:	10 92 df 23 	sts	0x23DF, r1	; 0x8023df <main_b_kbd_enable>
     2a54:	08 95       	ret
 
-00002a56 <main_generic_enable>:
+00002a56 <main_joystick_enable>:
 
 /* -------------------------------------- */
 /* -------------- Joystick -------------- */
 /* -------------------------------------- */
-bool main_generic_enable(void) {
-	main_b_generic_enable = true;
+bool main_joystick_enable(void) {
+	main_b_joystick_enable = true;
     2a56:	81 e0       	ldi	r24, 0x01	; 1
-    2a58:	80 93 de 23 	sts	0x23DE, r24	; 0x8023de <main_b_generic_enable>
+    2a58:	80 93 de 23 	sts	0x23DE, r24	; 0x8023de <main_b_joystick_enable>
 	return true;
 }
     2a5c:	08 95       	ret
 
-00002a5e <main_generic_disable>:
+00002a5e <main_joystick_disable>:
 
-void main_generic_disable(void) {
-	main_b_generic_enable = false;
-    2a5e:	10 92 de 23 	sts	0x23DE, r1	; 0x8023de <main_b_generic_enable>
+void main_joystick_disable(void) {
+	main_b_joystick_enable = false;
+    2a5e:	10 92 de 23 	sts	0x23DE, r1	; 0x8023de <main_b_joystick_enable>
     2a62:	08 95       	ret
 
 00002a64 <main_led_enable>:

@@ -20,7 +20,7 @@ src\ASF\common\services\clock\xmega\sysclk.c
 
 src\ASF\common\services\usb\class\composite\device\udi_composite_desc.c
 
-src\ASF\common\services\usb\class\hid\device\generic\udi_hid_generic.c
+src\ASF\common\services\usb\class\hid\device\joystick\udi_hid_joystick.c
 
 src\ASF\common\services\usb\class\hid\device\kbd\udi_hid_kbd.c
 

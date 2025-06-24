@@ -88,7 +88,7 @@
 #include <sysclk.h>
 
 // From module: USB Device HID Generic (Composite Device)
-#include <udi_hid_generic.h>
+#include <udi_hid_joystick.h>
 
 // From module: USB Device HID Keyboard (Composite Device)
 #include <udi_hid_kbd.h>

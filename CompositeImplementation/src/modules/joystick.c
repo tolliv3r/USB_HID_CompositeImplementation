@@ -126,7 +126,7 @@ void jstk_usbTask(void)
 
     // send if value changed & IN endpoint ready
     if ((jstk_usbReport[0] != jstk_prevReport[0]) || (jstk_usbReport[1] != jstk_prevReport[1])) { // value changed?
-        if (udi_hid_generic_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
+        if (udi_hid_joystick_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
             jstk_prevReport[0] = jstk_usbReport[0];
             jstk_prevReport[1] = jstk_usbReport[1];
         }

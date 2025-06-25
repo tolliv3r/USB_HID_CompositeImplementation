@@ -4,6 +4,7 @@
 #include "joystick.h"
 
 #define SLIDER_COUNT   12
+#define SLIDER_MASK  ((1u << SLIDER_COUNT) - 1) // 0x0FFF
 
 uint8_t jstk_mask;  // bitmask of LED's to turn on
 
@@ -131,4 +132,17 @@ void jstk_usbTask(void)
             jstk_prevReport[1] = jstk_usbReport[1];
         }
     }
+}
+
+uint32_t jstk_getMap(void) {
+    // raw 12 bit words (0 = pressed, 1 = released)
+    uint16_t rawV = jstk_readVertRaw();
+    uint16_t rawH = jstk_readHoriRaw();
+
+    // invert & mask (1 = pressed, 0 = released)
+    uint16_t mapV = (~rawV) & SLIDER_MASK;
+    uint16_t mapH = (~rawH) & SLIDER_MASK;
+
+    // pack vertical into 0-11 bits, horizontal in 12-23 bits
+    return ((uint32_t)mapH << SLIDER_COUNT) | mapV; // 24-31 bits unused
 }

@@ -11,5 +11,7 @@ uint8_t jstk_idxToAxis(int8_t idx);
 
 void jstk_usbTask(void);	// build and send 2 byte report
 
+uint32_t jstk_getMap(void); // 'pressed map' of both sliders
+
 
 #endif // JOYSTICK_H

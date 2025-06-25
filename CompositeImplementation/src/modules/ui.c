@@ -54,19 +54,23 @@ void io_ui_process(void) {
 /* ----------------- GUI ----------------- */
 /* --------------------------------------- */
 void gui_ui_process(void) {
-	uint16_t ledBits   = led_getMap();
-	uint16_t keyBits   = kbd_getMap();
+	uint16_t ledBits   = led_getMap ();
+	uint16_t keyBits   = kbd_getMap ();
+	uint32_t joyBits   = jstk_getMap();
 	
-	uint8_t  report[4] = {
-		(uint8_t)( ledBits       & 0xFF),
-		(uint8_t)((ledBits >> 8) & 0xFF) |
-		          (idleStatus() ? IDLE : 0),
-		(uint8_t)( keyBits       & 0xFF),
-		(uint8_t)((keyBits >> 8) & 0xFF)
+	uint8_t  report[7] = {
+		(uint8_t)( ledBits        & 0xFF),
+		(uint8_t)((ledBits >> 8)  & 0xFF) |
+		          (idleStatus()   ? IDLE:0),
+		(uint8_t)( keyBits        & 0xFF),
+		(uint8_t)((keyBits >> 8)  & 0xFF),
+		(uint8_t)( joyBits        & 0xFF),
+		(uint8_t)((joyBits >> 8)  & 0xFF),
+		(uint8_t)((joyBits >> 16) & 0xFF),
 	};
 	udi_hid_led_send_report_in(report);
 }
-// 4 byte output for GUI
+// 7 byte output for GUI
 
 
 /* ---------------------------------------- */

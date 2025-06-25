@@ -23,7 +23,7 @@ def main():
     print("Opened device, listening for IN reports… (Ctrl-C to quit)")
     try:
         while True:
-            rpt = dev.read(4)      # read ReportID+mask, or [mask] if no ReportID
+            rpt = dev.read(7)      # read ReportID+mask, or [mask] if no ReportID
             if rpt:
                 # if your report is just one byte, rpt == [mask]
                 mask = rpt[2]

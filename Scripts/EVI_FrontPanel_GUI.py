@@ -11,6 +11,9 @@ LED_IFACE_NUMBER = 2    # USB device iNumber for the LEDs
 
 POLL_INTERVAL = 1       # ms
 
+DOT_SIZE   = 8.5
+DOT_MARGIN = 1
+
 KEY_NAMES = [
     "F1", "F2", "F3", "F4",
     "DISPLAY", "CANCEL", "ENTER", "CLEAR", "NULL"
@@ -19,6 +22,7 @@ KEY_NAMES = [
 class LED_Toggler(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.configure(bg="teal")
         self.title("Front-Panel LEDs")
 
         # open the HID LED interface
@@ -57,7 +61,8 @@ class LED_Toggler(tk.Tk):
                 text=f"LED {i+1}",
                 width=8,
                 relief=tk.RAISED,
-                command=partial(self.toggle, i)
+                command=partial(self.toggle, i),
+                bg="#e6e6e6"
             )
             btn.grid(row=1, column=i + 2, padx=5, pady=5)
             self.buttons.append(btn)
@@ -69,6 +74,7 @@ class LED_Toggler(tk.Tk):
             width=5,
             relief=tk.FLAT,
             bg="lightgreen",
+            activebackground="lightgreen",
             command=self.set_all_on
         )
         self.all_off_btn = tk.Button(
@@ -77,6 +83,7 @@ class LED_Toggler(tk.Tk):
             width=5,
             relief=tk.FLAT,
             bg="lightcoral",
+            activebackground="lightcoral",
             command=self.set_all_off
         )
         self.start_btn = tk.Button(
@@ -85,6 +92,7 @@ class LED_Toggler(tk.Tk):
             width=5,
             relief=tk.FLAT,
             bg="#66b0ff",
+            activebackground="#66b0ff",
             # fg="white",
             command=self.start_sequence
         )
@@ -94,6 +102,7 @@ class LED_Toggler(tk.Tk):
             width=5,
             relief=tk.FLAT,
             bg="#feae6d",
+            activebackground="#feae6d",
             # fg="white",
             command=self.stop_activity
         )
@@ -111,7 +120,8 @@ class LED_Toggler(tk.Tk):
                 self,
                 width=20,
                 height=20,
-                highlightthickness=0
+                highlightthickness=0,
+                bg=self["bg"]
             )
             canvas.grid(row=0, column=i+2, pady=(0,5))
             oval = canvas.create_oval(2, 2, 18, 18, fill="gray")
@@ -123,10 +133,12 @@ class LED_Toggler(tk.Tk):
             self,
             width=20,
             height=20,
-            highlightthickness=0
+            highlightthickness=0,
+            bg=self["bg"]
         )
         self.status_canvas.grid(row=0, column=1, pady=(0,5))
-        self.status_oval = self.status_canvas.create_oval(2, 2, 18, 18, fill="gray") # off = grey
+        self.status_oval = self.status_canvas.create_oval(2, 2, 18, 18,
+                                                          fill="gray") # off = grey
 
         # status LED toggle button
         self.status_state = False
@@ -135,7 +147,8 @@ class LED_Toggler(tk.Tk):
             text="Status",
             width=8,
             relief=tk.RAISED,
-            command=self.toggle_status
+            command=self.toggle_status,
+            bg="#e6e6e6"
         )
         self.status_btn.grid(row=1, column=1, padx=5, pady=5)
 
@@ -149,7 +162,8 @@ class LED_Toggler(tk.Tk):
                 width=8,
                 relief=tk.RAISED,
                 bd=2,
-                command=lambda: None
+                command=lambda: None,
+                bg=self["bg"]
             )
             btn.config(bg="lightblue")
             if i < 4:
@@ -166,9 +180,9 @@ class LED_Toggler(tk.Tk):
         self.joy_size = 150
 
         # container frame
-        joy_holder = tk.Frame(self, width=self.joy_size, height=self.joy_size)
+        joy_holder = tk.Frame(self, width=self.joy_size, height=self.joy_size, bg=self["bg"])
         joy_holder.grid_propagate(False)   
-        joy_holder.grid(row=2, column=7, rowspan=5, columnspan=2, pady=(10,0))
+        joy_holder.grid(row=2, column=7, rowspan=4, columnspan=2, padx=0, pady=0)
 
         # canvas inside frame
         self.joy_canvas = tk.Canvas(
@@ -176,17 +190,84 @@ class LED_Toggler(tk.Tk):
             width=self.joy_size,
             height=self.joy_size,
             bd=1,
-            relief=tk.SUNKEN
+            relief=tk.SUNKEN,
+            bg="#e6e6e6"
         )
         self.joy_canvas.pack(fill="both", expand=True)
-        self.joy_canvas.create_rectangle(0, 0, self.joy_size, self.joy_size)
-        r = 6
+        # self.joy_canvas.create_rectangle(0, 0, self.joy_size, self.joy_size,
+        #                                  outline=self["bg"])
+        r = 7
         cx = cy = self.joy_size // 2
-        self.joy_dot = self.joy_canvas.create_oval(cx-r, cy-r, cx+r, cy+r, fill="blue")
+        self.joy_dot = self.joy_canvas.create_oval(cx-r, cy-r, cx+r, cy+r, fill="teal")
 
+        # vertical slider container
+        self.v_slider_frame = tk.Frame(self,
+                                       width=20,
+                                       height=12*17,
+                                       bg=self["bg"]
+                                       # bg="white"
+        )
+        self.v_slider_frame.place(x=613,y=60)
+
+        # horizontal slider container
+        self.h_slider_frame = tk.Frame(self,
+                                       width=12*17,
+                                       height=20,
+                                       bg=self["bg"]
+                                       # bg="white"
+        )
+        self.h_slider_frame.place(x=455,y=218)
+
+        # joystick button visualizers
+        self.joyV_canvases = []
+        self.joyV_ovals    = []
+        self.joyH_canvases = []
+        self.joyH_ovals    = []
+        # vertical slider
+        for i in range(12):
+            cvs = tk.Canvas(self.v_slider_frame,
+                            width=DOT_SIZE,
+                            height=DOT_SIZE,
+                            highlightthickness=0,
+                            bg=self["bg"]
+            )
+            cvs.pack(pady=2)
+            oval = cvs.create_oval(DOT_MARGIN,
+                                   DOT_MARGIN,
+                                   DOT_SIZE - DOT_MARGIN,
+                                   DOT_SIZE - DOT_MARGIN,
+                                   fill="gray",
+                                   outline=self["bg"]
+            )
+            self.joyV_canvases.append(cvs)
+            self.joyV_ovals.append(oval)
+        # horizontal slider
+        for i in range(12):
+            cvs = tk.Canvas(self.h_slider_frame,
+                            width=DOT_SIZE,
+                            height=DOT_SIZE,
+                            highlightthickness=0,
+                            bg=self["bg"]
+            )
+            cvs.pack(side="left", padx=2)
+            oval = cvs.create_oval(DOT_MARGIN,
+                                   DOT_MARGIN,
+                                   DOT_SIZE - DOT_MARGIN,
+                                   DOT_SIZE - DOT_MARGIN,
+                                   fill="gray",
+                                   outline=self["bg"]
+            )
+            self.joyH_canvases.append(cvs)
+            self.joyH_ovals.append(oval)
 
         # begin polling
         self.poll()
+
+        # minimum window size
+        self.update_idletasks()
+        w = self.winfo_width()
+        h = self.winfo_height()
+        self.minsize(w, h + 14)
 
     def show_start(self):
         self.stop_btn.grid_remove()
@@ -269,7 +350,7 @@ class LED_Toggler(tk.Tk):
         for i in range(8):
             btn = self.buttons[i]
             btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
-            color = "red" if self.states[i] else "gray"
+            color = "#ad1f1f" if self.states[i] else "gray"
             self.led_canvases[i].itemconfig(self.led_ovals[i], fill=color)
     def update_status_button(self):
         self.status_btn.config(
@@ -279,13 +360,20 @@ class LED_Toggler(tk.Tk):
         self.status_canvas.itemconfig(self.status_oval, fill=color)
 
     def poll(self):
-        rpt = self.device.read(4)
-        if rpt and len(rpt) >= 4:
+        rpt = self.device.read(7)
+        if rpt and len(rpt) >= 7:
             if self.skip_count > 0:
                 # drop stale values as many times as needed
                 self.skip_count -= 1
             else:
-                leds, status, keysLo, keysHi = rpt[0], rpt[1], rpt[2], rpt[3]
+                leds   = rpt[0]
+                status = rpt[1]
+                keysLo = rpt[2]
+                keysHi = rpt[3]
+                jstkLo = rpt[4]
+                jstkMi = rpt[5]
+                jstkHi = rpt[6]
+                
 
                 # update LED states & visuals
                 for i in range(8):
@@ -325,6 +413,18 @@ class LED_Toggler(tk.Tk):
                             px+r,
                             py+r
                         )
+
+                # update vertical indicators
+                jstk_bits = jstkLo | (jstkMi << 8) | (jstkHi << 16)
+                for i, oval in enumerate(self.joyV_ovals):
+                    pressed = bool((jstk_bits >> i) & 1)
+                    color   = "white" if pressed else "#192166"
+                    self.joyV_canvases[i].itemconfig(oval, fill=color)
+                #update horizontal indicators
+                for i, oval in enumerate(self.joyH_ovals):
+                    pressed = bool((jstk_bits >> (i + 12)) & 1)
+                    color   = "white" if pressed else "#192166"
+                    self.joyH_canvases[i].itemconfig(oval, fill=color)
 
         # schedule next poll
         self.after(POLL_INTERVAL, self.poll)

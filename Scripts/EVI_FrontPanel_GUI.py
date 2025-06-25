@@ -112,6 +112,17 @@ class LED_Toggler(tk.Tk):
 
         self.start_btn.grid_remove()
 
+        self.reset_btn = tk.Button(
+            self,
+            text="Reset",
+            width=5,
+            relief=tk.FLAT,
+            bg="white",
+            activebackground="white",
+            command=self.reset_memory
+        )
+        self.reset_btn.grid(row=5, column=1, padx=3, pady=3)
+
         # LED indicators
         self.led_canvases = []
         self.led_ovals = []
@@ -260,6 +271,9 @@ class LED_Toggler(tk.Tk):
             self.joyH_canvases.append(cvs)
             self.joyH_ovals.append(oval)
 
+        self.joyV_pressed = [False]*12
+        self.joyH_pressed = [False]*12
+
         # begin polling
         self.poll()
 
@@ -359,6 +373,10 @@ class LED_Toggler(tk.Tk):
         color = "yellow" if self.status_state else "gray"
         self.status_canvas.itemconfig(self.status_oval, fill=color)
 
+    def reset_memory(self):
+        self.joyV_pressed = [False]*12
+        self.joyH_pressed = [False]*12
+
     def poll(self):
         rpt = self.device.read(7)
         if rpt and len(rpt) >= 7:
@@ -418,12 +436,20 @@ class LED_Toggler(tk.Tk):
                 jstk_bits = jstkLo | (jstkMi << 8) | (jstkHi << 16)
                 for i, oval in enumerate(self.joyV_ovals):
                     pressed = bool((jstk_bits >> i) & 1)
-                    color   = "white" if pressed else "#192166"
+                    if pressed:
+                        self.joyV_pressed[i] = True
+                        color = "white"
+                    else:
+                        color = "#ababab" if self.joyV_pressed[i] else "#192166"
                     self.joyV_canvases[i].itemconfig(oval, fill=color)
                 #update horizontal indicators
                 for i, oval in enumerate(self.joyH_ovals):
                     pressed = bool((jstk_bits >> (i + 12)) & 1)
-                    color   = "white" if pressed else "#192166"
+                    if pressed:
+                        self.joyH_pressed[i] = True
+                        color = "white"
+                    else:
+                        color = "#ababab" if self.joyH_pressed[i] else "#192166"
                     self.joyH_canvases[i].itemconfig(oval, fill=color)
 
         # schedule next poll

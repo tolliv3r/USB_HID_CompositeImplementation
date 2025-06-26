@@ -166,6 +166,8 @@ class LED_Toggler(tk.Tk):
         # key indicators
         self.key_states = [False] * len(KEY_NAMES)
         self.key_labels = []
+        self.key_pressed = [False] * len(KEY_NAMES)
+
         for i, name in enumerate(KEY_NAMES):
             btn = tk.Button(
                 self,
@@ -376,6 +378,7 @@ class LED_Toggler(tk.Tk):
     def reset_memory(self):
         self.joyV_pressed = [False]*12
         self.joyH_pressed = [False]*12
+        self.key_pressed  = [False]*len(KEY_NAMES)
 
     def poll(self):
         rpt = self.device.read(7)
@@ -406,9 +409,13 @@ class LED_Toggler(tk.Tk):
                 key_bits = keysLo | (keysHi << 8)
                 for i, lbl in enumerate(self.key_labels):
                     pressed = bool((key_bits >> i) & 1)
+                    if pressed:
+                        self.key_pressed[i] = True
                     self.key_states[i] = pressed
+                    key_bg = "lightblue" if pressed else ("gray" if self.key_pressed[i] else "lightblue")
                     lbl.config(
-                        relief=tk.SUNKEN if pressed else tk.RAISED
+                        relief=tk.SUNKEN if pressed else tk.RAISED,
+                        bg=key_bg
                     )
 
                 if status & 0x02:

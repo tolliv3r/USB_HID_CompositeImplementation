@@ -22,7 +22,7 @@ KEY_NAMES = [
 class LED_Toggler(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.configure(bg="teal")
+        self.configure(bg="#4c9a8f")
         self.title("Front-Panel LEDs")
 
         # open the HID LED interface
@@ -176,9 +176,9 @@ class LED_Toggler(tk.Tk):
                 relief=tk.RAISED,
                 bd=2,
                 command=lambda: None,
-                bg=self["bg"]
+                bg="#64b4c4"
             )
-            btn.config(bg="lightblue")
+            btn.config(bg="#64b4c4")
             if i < 4:
                 row = 5
                 column = i + 2
@@ -306,7 +306,7 @@ class LED_Toggler(tk.Tk):
             return
 
         # skip the next bunch of polls (idk man buttons look weird otherwise)
-        self.skip_count = 100
+        # self.skip_count = 100
         self.update_buttons()
         
 
@@ -321,8 +321,7 @@ class LED_Toggler(tk.Tk):
             messagebox.showerror("HID cant write", str(e))
             return
         
-        self.skip_count = 100
-        self.update_buttons()
+        # self.skip_count = 100
         self.update_status_button()
 
     def set_all_on(self):
@@ -366,7 +365,7 @@ class LED_Toggler(tk.Tk):
         for i in range(8):
             btn = self.buttons[i]
             btn.config(relief=tk.SUNKEN if self.states[i] else tk.RAISED)
-            color = "#ad1f1f" if self.states[i] else "gray"
+            color = "red" if self.states[i] else "gray"
             self.led_canvases[i].itemconfig(self.led_ovals[i], fill=color)
     def update_status_button(self):
         self.status_btn.config(
@@ -412,7 +411,7 @@ class LED_Toggler(tk.Tk):
                     if pressed:
                         self.key_pressed[i] = True
                     self.key_states[i] = pressed
-                    key_bg = "lightblue" if pressed else ("gray" if self.key_pressed[i] else "lightblue")
+                    key_bg = "#64b4c4" if pressed else ("gray" if self.key_pressed[i] else "#64b4c4")
                     lbl.config(
                         relief=tk.SUNKEN if pressed else tk.RAISED,
                         bg=key_bg

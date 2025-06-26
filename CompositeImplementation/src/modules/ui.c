@@ -138,20 +138,21 @@ void led_ui_report(uint8_t const *code) {
 /* -------------- Status LED -------------- */
 /* ---------------------------------------- */
 void status_ui_process(void) {
-    sof_ms++;
+	static bool prev = false;
+	bool curr = ((PORTB.IN & PIN4_bm) == 0);
+	sof_ms++;
 
-    if ((PORTB.IN & PIN4_bm) == 0) {
-    	// activityEnable();
-        if (sof_ms >= 500) {
-            led_statusToggle();
-            sof_ms = 0;
-        }
-    } else if (!startupCheck) {
-        // led_statusOff();
-        sof_ms = 0;
-    } else {
-    	sof_ms = 0;
-    }
+	if (curr) { // if currently in test mode
+		if (sof_ms >= 500) {
+			led_statusToggle();
+			sof_ms = 0;
+		}
+	} else {
+		if (prev) // if just exiting TM
+			led_statusOff();
+		sof_ms = 0; // reset counter
+	}
+	prev = curr;
 }
 // blink status LED in test mode
 

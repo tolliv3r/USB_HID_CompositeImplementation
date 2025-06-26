@@ -29,10 +29,10 @@
 
 #define IDLE (1 << 1)
 
-#define STOP  0x80
-#define START 0x81
-#define STATUS_ON  0x82
-#define STATUS_OFF 0x83
+#define STOP       0x42
+#define START      0x45
+#define STATUS_ON  0x48
+#define STATUS_OFF 0x51
 
 static volatile uint16_t sof_ms       = 0;
 static volatile bool     startupCheck = 1;
@@ -114,18 +114,21 @@ void jstk_ui_process(void) {
 /* ---------------------------------------- */
 /* ----------------- LEDs ----------------- */
 /* ---------------------------------------- */
-void led_ui_report(uint8_t const *mask) {
-	if (mask[0] == STOP) {
+void led_ui_report(uint8_t const *code) {
+	uint8_t ledMask = code[0];
+	uint8_t command = code[1];
+
+	if        (command == STOP)       {
 		activityEnable();
-	} else if (mask[0] == START) {
+	} else if (command == START)      {
 		activityReset();
 		idle_start();
-	} else if (mask[0] == STATUS_ON) {
+	} else if (command == STATUS_ON)  {
 		led_statusOn();
-	} else if (mask[0] == STATUS_OFF) {
+	} else if (command == STATUS_OFF) {
 		led_statusOff();
-	} else {
-		led_setState(mask[0]);
+	} else                            {
+		led_setState(ledMask);
 	}
 }
 // allows host PC to manually control LEDs
@@ -144,7 +147,7 @@ void status_ui_process(void) {
             sof_ms = 0;
         }
     } else if (!startupCheck) {
-        led_statusOff();
+        // led_statusOff();
         sof_ms = 0;
     } else {
     	sof_ms = 0;

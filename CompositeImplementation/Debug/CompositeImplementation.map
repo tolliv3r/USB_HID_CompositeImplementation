@@ -2281,11 +2281,11 @@ END GROUP
                 0x00000cbe       0x34 src/modules/ui.o
                 0x00000cbe                jstk_ui_process
  .text.led_ui_report
-                0x00000cf2       0x30 src/modules/ui.o
+                0x00000cf2       0x32 src/modules/ui.o
                 0x00000cf2                led_ui_report
  .text.status_ui_process
-                0x00000d22       0x52 src/modules/ui.o
-                0x00000d22                status_ui_process
+                0x00000d24       0x50 src/modules/ui.o
+                0x00000d24                status_ui_process
  .text.startup_ui_process
                 0x00000d74        0x8 src/modules/ui.o
                 0x00000d74                startup_ui_process
@@ -2826,7 +2826,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0xb2ff
+.debug_info     0x00000000     0xb314
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x3409 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.3.146/gcc/dev/atxmega256a3u/avrxmega6/crtatxmega256a3u.o
  .debug_info    0x00003409      0x63b src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.o
@@ -2834,18 +2834,18 @@ END GROUP
  .debug_info    0x00003e0b      0x772 src/modules/joystick.o
  .debug_info    0x0000457d      0x711 src/modules/keypad.o
  .debug_info    0x00004c8e      0x852 src/modules/led.o
- .debug_info    0x000054e0      0x6d4 src/modules/ui.o
- .debug_info    0x00005bb4      0x129 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
- .debug_info    0x00005cdd      0xc76 src/ASF/common/services/clock/xmega/sysclk.o
- .debug_info    0x00006953      0x74d src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
- .debug_info    0x000070a0      0x57d src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.o
- .debug_info    0x0000761d      0x6c4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
- .debug_info    0x00007ce1      0x383 src/ASF/common/services/usb/class/hid/device/udi_hid.o
- .debug_info    0x00008064     0x116c src/ASF/common/services/usb/udc/udc.o
- .debug_info    0x000091d0       0xb2 src/ASF/xmega/drivers/nvm/nvm_asm.o
- .debug_info    0x00009282       0xb2 src/ASF/xmega/drivers/cpu/ccp.o
- .debug_info    0x00009334     0x1ba4 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_info    0x0000aed8      0x427 src/main.o
+ .debug_info    0x000054e0      0x6e9 src/modules/ui.o
+ .debug_info    0x00005bc9      0x129 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
+ .debug_info    0x00005cf2      0xc76 src/ASF/common/services/clock/xmega/sysclk.o
+ .debug_info    0x00006968      0x74d src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_info    0x000070b5      0x57d src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.o
+ .debug_info    0x00007632      0x6c4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
+ .debug_info    0x00007cf6      0x383 src/ASF/common/services/usb/class/hid/device/udi_hid.o
+ .debug_info    0x00008079     0x116c src/ASF/common/services/usb/udc/udc.o
+ .debug_info    0x000091e5       0xb2 src/ASF/xmega/drivers/nvm/nvm_asm.o
+ .debug_info    0x00009297       0xb2 src/ASF/xmega/drivers/cpu/ccp.o
+ .debug_info    0x00009349     0x1ba4 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_info    0x0000aeed      0x427 src/main.o
 
 .debug_abbrev   0x00000000     0x535d
  *(.debug_abbrev)
@@ -2905,7 +2905,7 @@ END GROUP
  .debug_frame   0x00000870      0x424 src/ASF/xmega/drivers/usb/usb_device.o
  .debug_frame   0x00000c94       0xd4 src/main.o
 
-.debug_str      0x00000000    0x36e91
+.debug_str      0x00000000    0x36e99
  *(.debug_str)
  .debug_str     0x00000000     0x223b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.3.146/gcc/dev/atxmega256a3u/avrxmega6/crtatxmega256a3u.o
  .debug_str     0x0000223b    0x2c894 src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.o
@@ -2918,41 +2918,41 @@ END GROUP
                               0x2f415 (size before relaxing)
  .debug_str     0x000317cd      0x51d src/modules/led.o
                               0x2f76b (size before relaxing)
- .debug_str     0x00031cea      0x125 src/modules/ui.o
-                              0x2f487 (size before relaxing)
- .debug_str     0x00031e0f       0x96 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
+ .debug_str     0x00031cea      0x12d src/modules/ui.o
+                              0x2f497 (size before relaxing)
+ .debug_str     0x00031e17       0x96 src/ASF/common/services/sleepmgr/xmega/sleepmgr.o
                               0x299d5 (size before relaxing)
- .debug_str     0x00031ea5      0x7ae src/ASF/common/services/clock/xmega/sysclk.o
+ .debug_str     0x00031ead      0x7ae src/ASF/common/services/clock/xmega/sysclk.o
                               0x2b794 (size before relaxing)
- .debug_str     0x00032653      0x577 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
+ .debug_str     0x0003265b      0x577 src/ASF/common/services/usb/class/composite/device/udi_composite_desc.o
                               0x2cf88 (size before relaxing)
- .debug_str     0x00032bca      0x201 src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.o
+ .debug_str     0x00032bd2      0x201 src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.o
                               0x2cf5d (size before relaxing)
- .debug_str     0x00032dcb      0x21a src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
+ .debug_str     0x00032dd3      0x21a src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
                               0x2ce75 (size before relaxing)
- .debug_str     0x00032fe5      0x222 src/ASF/common/services/usb/class/hid/device/udi_hid.o
+ .debug_str     0x00032fed      0x222 src/ASF/common/services/usb/class/hid/device/udi_hid.o
                               0x2cd64 (size before relaxing)
- .debug_str     0x00033207      0x6e7 src/ASF/common/services/usb/udc/udc.o
+ .debug_str     0x0003320f      0x6e7 src/ASF/common/services/usb/udc/udc.o
                               0x2d5d5 (size before relaxing)
- .debug_str     0x000338ee     0x3532 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_str     0x000338f6     0x3532 src/ASF/xmega/drivers/usb/usb_device.o
                               0x32387 (size before relaxing)
- .debug_str     0x00036e20       0x71 src/main.o
+ .debug_str     0x00036e28       0x71 src/main.o
                               0x2f212 (size before relaxing)
 
-.debug_loc      0x00000000     0x3081
+.debug_loc      0x00000000     0x3131
  *(.debug_loc)
  .debug_loc     0x00000000      0x17f src/ASF/common/services/usb/class/hid/device/led/udi_hid_led.o
  .debug_loc     0x0000017f      0x51f src/modules/joystick.o
  .debug_loc     0x0000069e      0x431 src/modules/keypad.o
  .debug_loc     0x00000acf      0x275 src/modules/led.o
- .debug_loc     0x00000d44      0x1de src/modules/ui.o
- .debug_loc     0x00000f22      0x40a src/ASF/common/services/clock/xmega/sysclk.o
- .debug_loc     0x0000132c       0xd6 src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.o
- .debug_loc     0x00001402      0x3a4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
- .debug_loc     0x000017a6      0x3ba src/ASF/common/services/usb/class/hid/device/udi_hid.o
- .debug_loc     0x00001b60      0x50d src/ASF/common/services/usb/udc/udc.o
- .debug_loc     0x0000206d      0xfc4 src/ASF/xmega/drivers/usb/usb_device.o
- .debug_loc     0x00003031       0x50 src/main.o
+ .debug_loc     0x00000d44      0x28e src/modules/ui.o
+ .debug_loc     0x00000fd2      0x40a src/ASF/common/services/clock/xmega/sysclk.o
+ .debug_loc     0x000013dc       0xd6 src/ASF/common/services/usb/class/hid/device/joystick/udi_hid_joystick.o
+ .debug_loc     0x000014b2      0x3a4 src/ASF/common/services/usb/class/hid/device/kbd/udi_hid_kbd.o
+ .debug_loc     0x00001856      0x3ba src/ASF/common/services/usb/class/hid/device/udi_hid.o
+ .debug_loc     0x00001c10      0x50d src/ASF/common/services/usb/udc/udc.o
+ .debug_loc     0x0000211d      0xfc4 src/ASF/xmega/drivers/usb/usb_device.o
+ .debug_loc     0x000030e1       0x50 src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)

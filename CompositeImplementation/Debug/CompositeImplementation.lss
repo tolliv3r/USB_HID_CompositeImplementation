@@ -15,21 +15,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000005d8  00000000  00000000  00002dc8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000b2ff  00000000  00000000  000033a0  2**0
+  6 .debug_info   0000b314  00000000  00000000  000033a0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000535d  00000000  00000000  0000e69f  2**0
+  7 .debug_abbrev 0000535d  00000000  00000000  0000e6b4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00009a53  00000000  00000000  000139fc  2**0
+  8 .debug_line   00009a53  00000000  00000000  00013a11  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000d68  00000000  00000000  0001d450  2**2
+  9 .debug_frame  00000d68  00000000  00000000  0001d464  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00036e91  00000000  00000000  0001e1b8  2**0
+ 10 .debug_str    00036e99  00000000  00000000  0001e1cc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00003081  00000000  00000000  00055049  2**0
+ 11 .debug_loc    00003131  00000000  00000000  00055065  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000640  00000000  00000000  000580d0  2**3
+ 12 .debug_ranges 00000640  00000000  00000000  00058198  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000cd8d  00000000  00000000  00058710  2**0
+ 13 .debug_macro  0000cd8d  00000000  00000000  000587d8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -374,7 +374,7 @@ static bool udi_hid_led_setreport(void)
 	   (0 == (0xFF & udd_g_ctrlreq.req.wValue))                         &&
      278:	80 91 f0 23 	lds	r24, 0x23F0	; 0x8023f0 <udd_g_ctrlreq+0x6>
      27c:	90 91 f1 23 	lds	r25, 0x23F1	; 0x8023f1 <udd_g_ctrlreq+0x7>
-     280:	01 97       	sbiw	r24, 0x01	; 1
+     280:	02 97       	sbiw	r24, 0x02	; 2
      282:	a1 f4       	brne	.+40     	; 0x2ac <udi_hid_led_setreport+0x48>
 	   (UDI_HID_LED_REPORT_OUT_SIZE == udd_g_ctrlreq.req.wLength))
 	{
@@ -386,7 +386,7 @@ static bool udi_hid_led_setreport(void)
      28c:	80 87       	std	Z+8, r24	; 0x08
      28e:	91 87       	std	Z+9, r25	; 0x09
 		udd_g_ctrlreq.payload_size = UDI_HID_LED_REPORT_OUT_SIZE;
-     290:	81 e0       	ldi	r24, 0x01	; 1
+     290:	82 e0       	ldi	r24, 0x02	; 2
      292:	90 e0       	ldi	r25, 0x00	; 0
      294:	82 87       	std	Z+10, r24	; 0x0a
      296:	93 87       	std	Z+11, r25	; 0x0b
@@ -431,7 +431,7 @@ static bool udi_hid_led_report_out_enable(void) {
 	return udd_ep_run(UDI_HID_LED_EP_OUT,
      2bc:	0b e7       	ldi	r16, 0x7B	; 123
      2be:	11 e0       	ldi	r17, 0x01	; 1
-     2c0:	21 e0       	ldi	r18, 0x01	; 1
+     2c0:	22 e0       	ldi	r18, 0x02	; 2
      2c2:	30 e0       	ldi	r19, 0x00	; 0
      2c4:	42 e9       	ldi	r20, 0x92	; 146
      2c6:	51 e2       	ldi	r21, 0x21	; 33
@@ -485,7 +485,7 @@ static void udi_hid_led_report_out_received(udd_ep_status_t status,
 	if (status == UDD_EP_TRANSFER_OK && 
      2f6:	81 11       	cpse	r24, r1
      2f8:	06 c0       	rjmp	.+12     	; 0x306 <udi_hid_led_report_out_received+0x10>
-     2fa:	61 30       	cpi	r22, 0x01	; 1
+     2fa:	62 30       	cpi	r22, 0x02	; 2
      2fc:	71 05       	cpc	r23, r1
      2fe:	19 f4       	brne	.+6      	; 0x306 <udi_hid_led_report_out_received+0x10>
 		nb_received == UDI_HID_LED_REPORT_OUT_SIZE) {
@@ -2457,50 +2457,50 @@ void activityReset(void) {
 
 00000cf2 <led_ui_report>:
      cf2:	fc 01       	movw	r30, r24
-     cf4:	80 81       	ld	r24, Z
-     cf6:	80 38       	cpi	r24, 0x80	; 128
+     cf4:	91 81       	ldd	r25, Z+1	; 0x01
+     cf6:	92 34       	cpi	r25, 0x42	; 66
      cf8:	21 f4       	brne	.+8      	; 0xd02 <led_ui_report+0x10>
      cfa:	81 e0       	ldi	r24, 0x01	; 1
      cfc:	80 93 f3 21 	sts	0x21F3, r24	; 0x8021f3 <userActive>
      d00:	08 95       	ret
-     d02:	81 38       	cpi	r24, 0x81	; 129
+     d02:	95 34       	cpi	r25, 0x45	; 69
      d04:	21 f4       	brne	.+8      	; 0xd0e <led_ui_report+0x1c>
      d06:	10 92 f3 21 	sts	0x21F3, r1	; 0x8021f3 <userActive>
      d0a:	2a cf       	rjmp	.-428    	; 0xb60 <idle_start>
      d0c:	08 95       	ret
-     d0e:	82 38       	cpi	r24, 0x82	; 130
+     d0e:	98 34       	cpi	r25, 0x48	; 72
      d10:	11 f4       	brne	.+4      	; 0xd16 <led_ui_report+0x24>
      d12:	f3 ce       	rjmp	.-538    	; 0xafa <led_statusOn>
      d14:	08 95       	ret
-     d16:	83 38       	cpi	r24, 0x83	; 131
+     d16:	91 35       	cpi	r25, 0x51	; 81
      d18:	11 f4       	brne	.+4      	; 0xd1e <led_ui_report+0x2c>
      d1a:	f6 ce       	rjmp	.-532    	; 0xb08 <led_statusOff>
      d1c:	08 95       	ret
-     d1e:	ad ce       	rjmp	.-678    	; 0xa7a <led_setState>
-     d20:	08 95       	ret
+     d1e:	80 81       	ld	r24, Z
+     d20:	ac ce       	rjmp	.-680    	; 0xa7a <led_setState>
+     d22:	08 95       	ret
 
-00000d22 <status_ui_process>:
-     d22:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <sof_ms>
-     d26:	90 91 f5 21 	lds	r25, 0x21F5	; 0x8021f5 <sof_ms+0x1>
-     d2a:	01 96       	adiw	r24, 0x01	; 1
-     d2c:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <sof_ms>
-     d30:	90 93 f5 21 	sts	0x21F5, r25	; 0x8021f5 <sof_ms+0x1>
-     d34:	80 91 28 06 	lds	r24, 0x0628	; 0x800628 <__TEXT_REGION_LENGTH__+0x7be628>
-     d38:	84 fd       	sbrc	r24, 4
-     d3a:	0d c0       	rjmp	.+26     	; 0xd56 <status_ui_process+0x34>
-     d3c:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <sof_ms>
-     d40:	90 91 f5 21 	lds	r25, 0x21F5	; 0x8021f5 <sof_ms+0x1>
-     d44:	84 3f       	cpi	r24, 0xF4	; 244
-     d46:	91 40       	sbci	r25, 0x01	; 1
-     d48:	a0 f0       	brcs	.+40     	; 0xd72 <status_ui_process+0x50>
-     d4a:	e4 de       	rcall	.-568    	; 0xb14 <led_statusToggle>
-     d4c:	10 92 f4 21 	sts	0x21F4, r1	; 0x8021f4 <sof_ms>
-     d50:	10 92 f5 21 	sts	0x21F5, r1	; 0x8021f5 <sof_ms+0x1>
-     d54:	08 95       	ret
-     d56:	80 91 28 20 	lds	r24, 0x2028	; 0x802028 <startupCheck>
-     d5a:	81 11       	cpse	r24, r1
-     d5c:	06 c0       	rjmp	.+12     	; 0xd6a <status_ui_process+0x48>
-     d5e:	d4 de       	rcall	.-600    	; 0xb08 <led_statusOff>
+00000d24 <status_ui_process>:
+     d24:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <sof_ms>
+     d28:	90 91 f5 21 	lds	r25, 0x21F5	; 0x8021f5 <sof_ms+0x1>
+     d2c:	01 96       	adiw	r24, 0x01	; 1
+     d2e:	80 93 f4 21 	sts	0x21F4, r24	; 0x8021f4 <sof_ms>
+     d32:	90 93 f5 21 	sts	0x21F5, r25	; 0x8021f5 <sof_ms+0x1>
+     d36:	80 91 28 06 	lds	r24, 0x0628	; 0x800628 <__TEXT_REGION_LENGTH__+0x7be628>
+     d3a:	84 fd       	sbrc	r24, 4
+     d3c:	0d c0       	rjmp	.+26     	; 0xd58 <status_ui_process+0x34>
+     d3e:	80 91 f4 21 	lds	r24, 0x21F4	; 0x8021f4 <sof_ms>
+     d42:	90 91 f5 21 	lds	r25, 0x21F5	; 0x8021f5 <sof_ms+0x1>
+     d46:	84 3f       	cpi	r24, 0xF4	; 244
+     d48:	91 40       	sbci	r25, 0x01	; 1
+     d4a:	98 f0       	brcs	.+38     	; 0xd72 <status_ui_process+0x4e>
+     d4c:	e3 de       	rcall	.-570    	; 0xb14 <led_statusToggle>
+     d4e:	10 92 f4 21 	sts	0x21F4, r1	; 0x8021f4 <sof_ms>
+     d52:	10 92 f5 21 	sts	0x21F5, r1	; 0x8021f5 <sof_ms+0x1>
+     d56:	08 95       	ret
+     d58:	80 91 28 20 	lds	r24, 0x2028	; 0x802028 <startupCheck>
+     d5c:	81 11       	cpse	r24, r1
+     d5e:	05 c0       	rjmp	.+10     	; 0xd6a <status_ui_process+0x46>
      d60:	10 92 f4 21 	sts	0x21F4, r1	; 0x8021f4 <sof_ms>
      d64:	10 92 f5 21 	sts	0x21F5, r1	; 0x8021f5 <sof_ms+0x1>
      d68:	08 95       	ret
@@ -7524,7 +7524,7 @@ void main_sof_action(void) {
 	gui_ui_process();
     2aa2:	0e 94 29 06 	call	0xc52	; 0xc52 <gui_ui_process>
 	status_ui_process();
-    2aa6:	0e 94 91 06 	call	0xd22	; 0xd22 <status_ui_process>
+    2aa6:	0e 94 92 06 	call	0xd24	; 0xd24 <status_ui_process>
 
 	idle_ui_process();
     2aaa:	0c 94 be 06 	jmp	0xd7c	; 0xd7c <idle_ui_process>

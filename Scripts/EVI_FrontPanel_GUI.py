@@ -313,10 +313,10 @@ class LED_Toggler(tk.Tk):
     def toggle_status(self):
         self.status_state = not self.status_state
 
-        code = 0x82 if self.status_state else 0x83
+        code = 0x48 if self.status_state else 0x51
 
         try:
-            self.device.write(bytes([0x00, code]))
+            self.device.write(bytes([0x00, 0x00, code]))
         except Exception as e:
             messagebox.showerror("HID cant write", str(e))
             return
@@ -328,14 +328,14 @@ class LED_Toggler(tk.Tk):
     def set_all_on(self):
         self.stop_activity()
         try:
-            self.device.write(bytes([0x00, 0xFF]))
+            self.device.write(bytes([0x00, 0xFF, 0x00]))
             self.states = [True]*8
             self.update_buttons()
         except Exception as e:
             messagebox.showerror("HID Write Error", str(e))
     def set_all_off(self):
         try:
-            self.device.write(bytes([0x00, 0x00]))
+            self.device.write(bytes([0x00, 0x00, 0x00]))
             self.states = [False]*8
             self.update_buttons()
         except Exception as e:
@@ -343,21 +343,21 @@ class LED_Toggler(tk.Tk):
 
     def stop_activity(self):
         try:
-            self.device.write(bytes([0x00, 0x80]))
+            self.device.write(bytes([0x00, 0x00, 0x42]))
         except Exception as e:
             messagebox.showerror("HID oops", str(e))
     def start_sequence(self):
         try:
-            self.device.write(bytes([0x00, 0x81]))
+            self.device.write(bytes([0x00, 0x00, 0x45]))
         except Exception as e:
             messagebox.showerror("oopsies the HID", str(e))
 
     def status_on(self):
-        try: self.device.write(bytes([0x00, 0x82]))
+        try: self.device.write(bytes([0x00, 0x00, 0x48]))
         except Exception as e:
             messagebox.showerror("HID NOOOOO", str(e))
     def status_off(self):
-        try: self.device.write(bytes([0x00, 0x83]))
+        try: self.device.write(bytes([0x00, 0x00, 0x51]))
         except Exception as e:
             messagebox.showerror("nar hid", str(e))
 

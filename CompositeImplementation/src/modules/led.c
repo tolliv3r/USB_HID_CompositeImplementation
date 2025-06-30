@@ -1,3 +1,15 @@
+/*
+ * led.c – Front‐panel LED control for the EVi Classic firmware
+ *
+ * Author: Jackson Clary
+ * Purpose: Initialize and drive all front‐panel LEDs (on/off/toggle), 
+ *          maintain a software LED state map, and implement startup/idle
+ *          animation sequences in response to user activity.
+ *
+ * History:
+ *   Created June 9, 2025
+ */
+
 #include <asf.h>
 #include <util/delay.h>
 
@@ -20,10 +32,8 @@ static idle_t idle = {0};
 
 static volatile uint16_t sof_ms = 0;
 
-// map of current LED states
-static bool ledMap[16] = {0};
-// function to update software map
-static void led_updateState(uint8_t mask, bool state);
+static bool ledMap[16] = {0}; // map of current LED states
+static void led_updateState(uint8_t mask, bool state); // update bitmap
 
 // silent LED control functions
 static void led_quiet_allOn(void);

@@ -1,13 +1,11 @@
 #include <asf.h>
 #include "conf_usb.h"
 
-// #include "ui.h"
 #include "modules/ui.h"
 
-static volatile bool main_b_kbd_enable = false;
-static volatile bool main_b_joystick_enable = false;
-static volatile bool main_b_led_enable = false;
-
+static volatile bool main_b_kbd_enable  = false;
+static volatile bool main_b_jstk_enable = false;
+static volatile bool main_b_led_enable  = false;
 
 int main (void)
 {
@@ -33,9 +31,9 @@ int main (void)
 }
 
 
-/* -------------------------------------- */
-/* ----------------- USB ---------------- */
-/* -------------------------------------- */
+/* ------------------------------------------ */
+/* ------------------- USB ------------------ */
+/* ------------------------------------------ */
 void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
@@ -44,7 +42,7 @@ void main_sof_action(void) {
 		return;
 	kbd_ui_process();
 
-	if (!main_b_joystick_enable)
+	if (!main_b_jstk_enable)
 		return;
 	jstk_ui_process();
 
@@ -61,40 +59,37 @@ void main_remotewakeup_enable(void) { }
 void main_remotewakeup_disable(void) { }
 
 
-/* -------------------------------------- */
-/* -------------- Keyboard -------------- */
-/* -------------------------------------- */
+/* ------------------------------------------ */
+/* ---------------- Keyboard ---------------- */
+/* ------------------------------------------ */
 bool main_kbd_enable(void) {
 	main_b_kbd_enable = true;
 	return true;
 }
-
 void main_kbd_disable(void) {
 	main_b_kbd_enable = false;
 }
 
 
-/* -------------------------------------- */
-/* -------------- Joystick -------------- */
-/* -------------------------------------- */
+/* ------------------------------------------ */
+/* ---------------- Joystick ---------------- */
+/* ------------------------------------------ */
 bool main_joystick_enable(void) {
-	main_b_joystick_enable = true;
+	main_b_jstk_enable = true;
 	return true;
 }
-
 void main_joystick_disable(void) {
-	main_b_joystick_enable = false;
+	main_b_jstk_enable = false;
 }
 
 
-/* -------------------------------------- */
-/* ---------------- LEDs ---------------- */
-/* -------------------------------------- */
+/* ------------------------------------------ */
+/* ------------------ LEDs ------------------ */
+/* ------------------------------------------ */
 bool main_led_enable(void) {
 	main_b_led_enable = true;
 	return true;
 }
-
 void main_led_disable(void) {
 	main_b_led_enable = false;
 }

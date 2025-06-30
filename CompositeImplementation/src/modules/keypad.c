@@ -1,9 +1,19 @@
+/*
+ * keypad.c – Front‐panel keypad scanning and HID reporting for the EVi Classic firmware
+ *
+ * Author: Jackson Clary
+ * Purpose: Scan the 5×4 keypad matrix, decode discrete key presses, manage test-mode LED toggling,
+ *          and send USB HID keyboard reports in normal mode or toggle LEDs in hardware test mode.
+ *
+ * History:
+ *   Created May 22, 2025
+ */
+
 #include <asf.h>
 
 #include "ui.h"
 #include "led.h"
 #include "keypad.h"
-
 
 
 // mapping of keypad layout: [column][row] → HID key code

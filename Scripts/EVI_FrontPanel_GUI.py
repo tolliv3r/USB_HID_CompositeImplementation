@@ -2,11 +2,12 @@
 # EVI Front-Panel GUI Script
 #
 # Author: Jackson Clary
-# Purpose: GUI for controlling and monitoring the EVi Classic front panel LEDs, keypad, and joystick via HID.
+# Purpose: GUI for controlling and monitoring the EVi Classic front-
+#          -panel LEDs, keypad, and joystick via HID.
 #
 #----------------------------------------
-# Revision History
-# Revision 0 - Created June 30, 2025
+# History:
+#   Created June 12, 2025
 #----------------------------------------
 #  ********************************************************************
 

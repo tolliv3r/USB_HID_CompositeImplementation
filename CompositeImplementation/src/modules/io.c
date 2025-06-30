@@ -7,7 +7,8 @@
 //  ********************************************************************
 /*
  * Author: Rex.Walters
- * Purpose - Project 101202 EVi Classic
+ * Purpose - Configure and initialize all front-panel I/O—LED outputs,
+            keypad scanning, and joystick slider inputs.
  * Firmware - For P/N 76319 EVI Classic Front Panel Interface PCBA
  *
   *----------------------------------------

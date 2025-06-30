@@ -1,6 +1,16 @@
+/*
+ * joystick.c – Front‐panel joystick handling for the EVi Classic firmware
+ *
+ * Author: Jackson Clary
+ * Purpose: Read the two 12-position sliders as discrete button presses,
+ *          convert positions to HID axis values and LED mask bits,
+ *          and send USB HID joystick reports when the slider position changes.
+ *
+ * History:
+ *   Created May 29, 2025
+ */
 #include <asf.h>
 
-#include "led.h"
 #include "joystick.h"
 
 #define SLIDER_COUNT   12

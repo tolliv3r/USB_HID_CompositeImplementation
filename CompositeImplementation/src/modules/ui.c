@@ -1,23 +1,17 @@
 /*
- * GccApplication
- * File --> 76319_ui.c
+ * ui.c – Central UI controller for the EVi Classic firmware
  *
+ * Author: Rex Walters
+ * Purpose: Initialize and coordinate all front-panel I/O and subsystems, including
+ *          GPIO setup (via io_init), composite USB HID report assembly for LEDs,
+ *          keypad, and joystick, processing of host LED commands, status LED control,
+ *          startup and idle animation sequences, and user activity tracking.
+ *
+ * History:
+ *   Created March 5, 2024
+ *   Full overhaul May 22, 2025
  */
 
-//  ********************************************************************
-/*
- * Author: Rex.Walters
- * Purpose - Project 101202 EVi Classic
- * Firmware - For P/N 76319 EVI Classic Front Panel Interface PCBA
- *				Replaces Generic_Example1 ui.c file
- *
- *----------------------------------------
- * EVI Classic Front Panel Interface Firmware Revisions
- * Revision 0
- * Created / Started March 5,2024
- * Finished (Place Date here)
- *----------------------------------------
-*/
 #include <asf.h>
 #include "conf_usb.h"
 

@@ -1,5 +1,5 @@
 #  ********************************************************************
-# EVI Front-Panel GUI Script
+# EVi Front-Panel GUI Script
 #
 # Author: Jackson Clary
 # Purpose: GUI for controlling and monitoring the EVi Classic front-

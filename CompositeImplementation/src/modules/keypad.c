@@ -85,30 +85,30 @@ void keypad_init(void)
 
 
 	// kpd_keyAssign[KEYPAD_COLS][KEYPAD_ROWS]
-	kpd_keyAssign[0][0] = HID_KEYPAD_9;	// NULL Button
-	kpd_keyAssign[0][1] = HID_KEYPAD_8;	// CLEAR Button
+	kpd_keyAssign[0][0] = HID_N;         // NULL Button
+	kpd_keyAssign[0][1] = HID_BACKSPACE; // CLEAR Button
 	kpd_keyAssign[0][2] = 0;
 	kpd_keyAssign[0][3] = 0;
 
-	kpd_keyAssign[1][0] = HID_KEYPAD_7;	// ENTER Button
-	kpd_keyAssign[1][1] = HID_KEYPAD_6;	// CANCEL Button
+	kpd_keyAssign[1][0] = HID_ENTER;     // ENTER Button
+	kpd_keyAssign[1][1] = HID_BACKSPACE; // CANCEL Button
 	kpd_keyAssign[1][2] = 0;
 	kpd_keyAssign[1][3] = 0;
 
-	kpd_keyAssign[2][0] = HID_KEYPAD_5;	// Display
+	kpd_keyAssign[2][0] = HID_D;         // Display
 	kpd_keyAssign[2][1] = 0;
 	kpd_keyAssign[2][2] = 0;
 	kpd_keyAssign[2][3] = 0;
 
 	kpd_keyAssign[3][0] = 0;
 	kpd_keyAssign[3][1] = 0;
-	kpd_keyAssign[3][2] = HID_KEYPAD_1;	// F1 Button
-	kpd_keyAssign[3][3] = HID_KEYPAD_3;	// F3 Button
+	kpd_keyAssign[3][2] = HID_F1;        // F1 Button
+	kpd_keyAssign[3][3] = HID_F3;        // F3 Button
 
 	kpd_keyAssign[4][0] = 0;
 	kpd_keyAssign[4][1] = 0;
-	kpd_keyAssign[4][2] = HID_KEYPAD_2;	// F2 Button
-	kpd_keyAssign[4][3] = HID_KEYPAD_4;	// F4 Button
+	kpd_keyAssign[4][2] = HID_F2;        // F2 Button
+	kpd_keyAssign[4][3] = HID_F4;        // F4 Button
 
 	// Column‐select output patterns (active‐low)
 	kpd_colAddr[0] = 0x0E;	// 1110b – select col 0

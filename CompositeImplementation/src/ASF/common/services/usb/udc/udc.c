@@ -1132,4 +1132,10 @@ bool udc_process_setup(void)
 #endif
 }
 
+// added by UniWest, allows checking of USB connection
+bool udc_is_configured(void) {
+	extern uint8_t udc_num_configuration;
+	return (udc_num_configuration != 0);
+}
+
 //! @}

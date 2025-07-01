@@ -1,5 +1,7 @@
 #include <asf.h>
+#include "udc.h"
 #include "conf_usb.h"
+#include <util/delay.h>
 
 #include "modules/ui.h"
 
@@ -27,7 +29,18 @@ int main (void)
 	// startup sequence (blocking)
 	startup_ui_process();
 
-	while (true) { }
+	// while-loop driven operation
+	// (for testing w/o a USB connection)
+	while (true) {
+		if (udc_is_configured()) {
+			sleepmgr_enter_sleep();
+		} else if ((PORTB.IN & PIN4_bm) == 0) {
+			kbd_ui_process();
+			jstk_ui_process();
+			status_ui_process(0);
+			_delay_ms(1);
+		}
+	}
 }
 
 
@@ -40,19 +53,18 @@ void main_resume_action(void) { }
 void main_sof_action(void) {
 	if (!main_b_kbd_enable)
 		return;
-	kbd_ui_process();
+	kbd_ui_process   ( );
 
 	if (!main_b_jstk_enable)
 		return;
-	jstk_ui_process();
+	jstk_ui_process  ( );
 
 	if (!main_b_led_enable)
 		return;
 
-	gui_ui_process();
-	status_ui_process();
-
-	idle_ui_process();
+	gui_ui_process   ( );
+	status_ui_process(1);
+	idle_ui_process  ( );
 }
 
 void main_remotewakeup_enable(void) { }

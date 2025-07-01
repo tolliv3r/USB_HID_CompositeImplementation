@@ -87,7 +87,6 @@ void jstk_ui_process(void) {
 			led_on(jstk_mask);
 
 			jstk_exitTestMode = 1;
-			// activityEnable();
 		}
 	} else {
 		jstk_usbTask();
@@ -126,20 +125,29 @@ void led_ui_report(uint8_t const *code) {
 /* ---------------------------------------- */
 /* -------------- status LED -------------- */
 /* ---------------------------------------- */
-void status_ui_process(void) {
+void status_ui_process(uint8_t usbMode) {
 	static bool prev = false;
 	bool curr = ((PORTB.IN & PIN4_bm) == 0);
 	sof_ms++;
 
 	if (curr) { // if currently in test mode
-		if (sof_ms >= 500) {
-			led_statusToggle();
-			sof_ms = 0;
+		// SoF driven timer
+		if (usbMode == 1) {
+			if (sof_ms >= 500) {
+				led_statusToggle();
+				sof_ms = 0;
+			}
+		// while-loop driven timer
+		} else if (usbMode == 0) {
+			if (sof_ms >= 1800) {
+				led_statusToggle();
+				sof_ms = 0;
+			}
 		}
-	} else {
-		if (prev) // if just exiting TM
+	} else { // if not currently in test mode
+		if (prev) // if just exiting test mode
 			led_statusOff();
-		sof_ms = 0; // reset counter
+		sof_ms = 0;
 	}
 	prev = curr;
 } // blink status LED in test mode

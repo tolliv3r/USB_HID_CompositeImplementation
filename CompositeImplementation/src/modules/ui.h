@@ -18,7 +18,8 @@ void kbd_ui_process(void);
 void led_ui_report(uint8_t const *mask);
 
 /* ------------ status LED ------------ */
-void status_ui_process(void);
+// void status_ui_process(void);
+void status_ui_process(uint8_t usbMode);
 
 /* ---------- startup & idle ---------- */
 void startup_ui_process(void);

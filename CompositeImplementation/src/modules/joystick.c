@@ -78,23 +78,6 @@ uint8_t jstk_idxToAxis(int8_t idx) {
 }   // conversion runtime is O(1)
 
 
-uint8_t jstk_readMask(void)
-{
-    int8_t vi = jstk_readVertIndex();       // -1 to 11
-    int8_t hi = jstk_readHoriIndex();       // -1 to 11
-
-    if (vi < 0 && hi < 0)
-        return 0;                           // no contact
-
-    // decide which slider is moved furthest from center buy computing 'distance' from middle
-    uint8_t dV = (vi < 0) ? 0 : (vi > 5 ? vi - 5 : 5 - vi); // vertical slider distance   (dV)
-    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider distance (dH)
-
-    int8_t jstk_use = (dV >= dH) ? vi : hi; // slider with greatest distance wins
-
-    return jstk_ledMask(jstk_use);          // convert to bits
-}   // basically just prioritizes whichever axis is moving more
-
 uint8_t jstk_ledMask(int8_t idx)
 {
     if (idx < 0)    // no touch detected
@@ -126,17 +109,58 @@ uint8_t jstk_ledMask(int8_t idx)
     return jstk_mask;
 }
 
+// uint8_t jstk_ledMask(void) {
+//     uint8_t mask = 0;
+
+//     // horizontal axis
+//     int8_t hidx = jstk_readHoriIndex();
+//     if (hidx >= 0) {
+//         uint8_t hval = (uint8_t)(hidx + 1) & 0x0F;
+//         mask |= hval; // bits 0-3 => LEDs 1-4
+//     }
+
+//     // vertical axis
+//     int8_t vidx = jstk_readVertIndex();
+//     if (vidx >= 0) {
+//         uint8_t vval = (uint8_t)(vidx + 1) & 0x0F;
+//         mask |= (vval << 4); // bits 4-7 => LEDs 5-8
+//     }
+
+//     return mask;
+// }
+
+
+uint8_t jstk_readMask(void)
+{
+    int8_t vi = jstk_readVertIndex();       // -1 to 11
+    int8_t hi = jstk_readHoriIndex();       // -1 to 11
+
+    if (vi < 0 && hi < 0)
+        return 0;                           // no contact
+
+    // decide which slider is moved furthest from center buy computing 'distance' from middle
+    uint8_t dV = (vi < 0) ? 0 : (vi > 5 ? vi - 5 : 5 - vi); // vertical slider distance   (dV)
+    uint8_t dH = (hi < 0) ? 0 : (hi > 5 ? hi - 5 : 5 - hi); // horizontal slider distance (dH)
+
+    int8_t jstk_use = (dV >= dH) ? vi : hi; // slider with greatest distance wins
+
+    return jstk_ledMask(jstk_use);          // convert to bits
+}   // basically just prioritizes whichever axis is moving more
+
+
+
 static uint8_t jstk_usbReport[2];
 static uint8_t jstk_prevReport[2] = {128, 128};
 
 void jstk_usbTask(void)
 {
     // sample current joystick/slider indices
-    jstk_usbReport[0] = jstk_idxToAxis(jstk_readHoriIndex());   // x
-    jstk_usbReport[1] = jstk_idxToAxis(jstk_readVertIndex());   // y
+    jstk_usbReport[0] = jstk_idxToAxis(jstk_readHoriIndex());    // x
+    jstk_usbReport[1] = jstk_idxToAxis(jstk_readVertIndex());    // y
 
     // send if value changed & IN endpoint ready
-    if ((jstk_usbReport[0] != jstk_prevReport[0]) || (jstk_usbReport[1] != jstk_prevReport[1])) { // value changed?
+    if ((jstk_usbReport[0] != jstk_prevReport[0]) ||
+        (jstk_usbReport[1] != jstk_prevReport[1])) {             // value changed?
         if (udi_hid_joystick_send_report_in(jstk_usbReport)) {   // IN endpoint ready?
             jstk_prevReport[0] = jstk_usbReport[0];
             jstk_prevReport[1] = jstk_usbReport[1];

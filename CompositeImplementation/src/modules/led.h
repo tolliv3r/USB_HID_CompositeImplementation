@@ -3,9 +3,7 @@
 
 #include <stdint.h>
 
-/* -------------------------------------------- */
-/* ---------------- Definitions --------------- */
-/* -------------------------------------------- */
+
 #define LED1_PIN    (1u << 0)
 #define LED2_PIN    (1u << 1)
 #define LED3_PIN    (1u << 2)
@@ -30,9 +28,8 @@
 #define LED_PORT         PORTA
 #define STATUS_LED_PORT  PORTB
 
-/* -------------------------------------------- */
-/* ---------------- Prototypes ---------------- */
-/* -------------------------------------------- */
+
+/* ------- regular LED control ------- */
 void led_init         (void);
 void led_allOn        (void);
 void led_allOff       (void);
@@ -41,27 +38,32 @@ void led_off          (uint8_t mask);
 void led_toggle       (uint8_t mask);
 void led_setState     (uint8_t mask);
 
-// void led_quiet_allOn(void);
-void led_quiet_allOff(void);
-// void led_quiet_on(uint8_t mask);
-// void led_quiet_off(uint8_t mask);
-// void led_quiet_toggle(uint8_t mask);
 
+/* -------- silent LED control ------- */
+// void led_quiet_allOn  (void);
+void led_quiet_allOff (void);
+// void led_quiet_on     (uint8_t mask);
+// void led_quiet_off    (uint8_t mask);
+// void led_quiet_toggle (uint8_t mask);
+
+
+/* -------- status LED control ------- */
 void led_statusOn     (void);
 void led_statusOff    (void);
 void led_statusToggle (void);
 
-uint16_t led_getMap (void);
-// bool led_getStateIndex(uint8_t index);
-// bool led_getStateMask(uint8_t mask);
 
-bool startupSequence (void);
-// void idleSequence    (uint8_t sequence);
+/* ---------- LED state map ---------- */
+uint16_t led_getMap   (void);
 
-void idle_start(void);
-void idle_stop (void);
-void idle_poll (void);
-bool idleStatus(void);
+
+/* ---------- startup & idle --------- */
+bool startupSequence  (void);
+
+void idleStart        (void);
+void idleStop         (void);
+void idlePoll         (void);
+bool idleStatus       (void);
 
 
 #endif // LED_H

@@ -40,8 +40,7 @@ static volatile uint8_t jstk_testMode;
 /* --------------------------------------- */
 void io_ui_process(void) {
 	io_init();
-}
-// initializes all IO ports
+} // initializes all IO ports
 
 
 /* --------------------------------------- */
@@ -63,22 +62,20 @@ void gui_ui_process(void) {
 		(uint8_t)((joyBits >> 16) & 0xFF),
 	};
 	udi_hid_led_send_report_in(report);
-}
-// 7 byte output for GUI
+} // 7 byte output for GUI
 
 
 /* ---------------------------------------- */
-/* --------------- Keyboard --------------- */
+/* --------------- keyboard --------------- */
 /* ---------------------------------------- */
 void kbd_ui_process(void) {
 	keypad_poll();
 	keypad_report();
-}
-// keyboard logic
+} // keyboard logic
 
 
 /* ---------------------------------------- */
-/* --------------- Joystick --------------- */
+/* --------------- joystick --------------- */
 /* ---------------------------------------- */
 void jstk_ui_process(void) {
 	uint8_t jstk_mask = jstk_readMask();
@@ -101,8 +98,7 @@ void jstk_ui_process(void) {
 			jstk_exitTestMode = 0;
 		}
 	}
-}
-// joystick logic
+} // joystick logic
 
 
 /* ---------------------------------------- */
@@ -116,7 +112,7 @@ void led_ui_report(uint8_t const *code) {
 		activityEnable();
 	} else if (command == START)      {
 		activityReset();
-		idle_start();
+		idleStart();
 	} else if (command == STATUS_ON)  {
 		led_statusOn();
 	} else if (command == STATUS_OFF) {
@@ -124,12 +120,11 @@ void led_ui_report(uint8_t const *code) {
 	} else                            {
 		led_setState(ledMask);
 	}
-}
-// allows host PC to manually control LEDs
+} // allows host PC to manually control LEDs
 
 
 /* ---------------------------------------- */
-/* -------------- Status LED -------------- */
+/* -------------- status LED -------------- */
 /* ---------------------------------------- */
 void status_ui_process(void) {
 	static bool prev = false;
@@ -147,27 +142,24 @@ void status_ui_process(void) {
 		sof_ms = 0; // reset counter
 	}
 	prev = curr;
-}
-// blink status LED in test mode
+} // blink status LED in test mode
 
 
 /* ---------------------------------------- */
-/* ------------ Startup & Idle ------------ */
+/* ------------ startup & idle ------------ */
 /* ---------------------------------------- */
 void startup_ui_process(void) {
 	startupCheck = startupSequence();
-}
-// performs startup LED sequence
+} // performs startup LED sequence
 
 
 void idle_ui_process(void) {
-	idle_poll();
-}
-// performs idle LED sequence
+	idlePoll();
+} // performs idle LED sequence
 
 
 /* ---------------------------------------- */
-/* -------- LED Activity Detection -------- */
+/* -------- LED activity detection -------- */
 /* ---------------------------------------- */
 void activityEnable(void) {
 	userActive = 1;

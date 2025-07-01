@@ -55,26 +55,26 @@ static const int8_t keyIndex[KEYPAD_COLS][KEYPAD_ROWS] = {
 void keypad_init(void)
 {
 	/*
-	NULL Button     --> Column 0, Row 0 (HID_KEYPAD_9)
-	CLEAR Button    --> Column 0, Row 1 (HID_KEYPAD_8)
+	NULL Button     --> Column 0, Row 0 (HID_N)
+	CLEAR Button    --> Column 0, Row 1 (HID_BACKSPACE)
 	No Button       --> Column 0, Row 2 (0)
 	No Button       --> Column 0, Row 3 (0)
-	ENTER Button    --> Column 1, Row 0 (HID_KEYPAD_7)
-	CANCEL Button   --> Column 1, Row 1 (HID_KEYPAD_6)
+	ENTER Button    --> Column 1, Row 0 (HID_ENTER)
+	CANCEL Button   --> Column 1, Row 1 (HID_ESCAPE)
 	No Button       --> Column 1, Row 2 (0)
 	No Button       --> Column 1, Row 3 (0)
-	Display Button  --> Column 2, Row 0 (HID_KEYPAD_5)
+	Display Button  --> Column 2, Row 0 (HID_D)
 	No Button       --> Column 2, Row 1 (0)
 	No Button       --> Column 2, Row 2 (0)
 	No Button       --> Column 2, Row 3 (0)
 	No Button       --> Column 3, Row 0 (0)
 	No Button       --> Column 3, Row 1 (0)
-	F1 Button       --> Column 3, Row 2 (HID_KEYPAD_1)
-	F3 Button       --> Column 3, Row 3 (HID_KEYPAD_2)
+	F1 Button       --> Column 3, Row 2 (HID_F1)
+	F3 Button       --> Column 3, Row 3 (HID_F2)
 	No Button       --> Column 4, Row 0 (0)
 	No Button       --> Column 4, Row 1 (0)
-	F2 Button       --> Column 4, Row 2 (HID_KEYPAD_3)
-	F4 Button       --> Column 4, Row 3 (HID_KEYPAD_4)
+	F2 Button       --> Column 4, Row 2 (HID_F3)
+	F4 Button       --> Column 4, Row 3 (HID_F4)
 	*/
 	kpd_keyPressed = KEYPAD_RELEASED; // no key pressed initially
 	kpd_currState = KEYPAD_RELEASED;
@@ -91,7 +91,7 @@ void keypad_init(void)
 	kpd_keyAssign[0][3] = 0;
 
 	kpd_keyAssign[1][0] = HID_ENTER;     // ENTER Button
-	kpd_keyAssign[1][1] = HID_ESCAPE; // CANCEL Button
+	kpd_keyAssign[1][1] = HID_ESCAPE;    // CANCEL Button
 	kpd_keyAssign[1][2] = 0;
 	kpd_keyAssign[1][3] = 0;
 
@@ -244,16 +244,16 @@ void keypad_report(void)
 			uint8_t kpd_testMask = 0;
 			switch (kpd_currentCode) 
 			{
-				case HID_KEYPAD_1:	kpd_testMask = LED1_PIN;	break;	// F1
-				case HID_KEYPAD_2:	kpd_testMask = LED2_PIN;	break;	// F2
-				case HID_KEYPAD_3:	kpd_testMask = LED3_PIN;	break;	// F3
-				case HID_KEYPAD_4:	kpd_testMask = LED4_PIN;	break;	// F4
-				case HID_KEYPAD_5:	kpd_testMask = LED5_PIN;	break;	// Display
-				case HID_KEYPAD_6:	kpd_testMask = LED6_PIN;	break;	// Cancel
-				case HID_KEYPAD_7:	kpd_testMask = LED7_PIN;	break;	// Enter
-				case HID_KEYPAD_8:	kpd_testMask = LED8_PIN;	break;	// Clear
-				case HID_KEYPAD_9:	kpd_testMask = LED1_PIN;	break;	// Null
-				default:			kpd_testMask = 0;			break;
+				case HID_F1:        kpd_testMask = LED1_PIN;  break;  // F1
+				case HID_F2:        kpd_testMask = LED2_PIN;  break;  // F2
+				case HID_F3:        kpd_testMask = LED3_PIN;  break;  // F3
+				case HID_F4:        kpd_testMask = LED4_PIN;  break;  // F4
+				case HID_D:         kpd_testMask = LED5_PIN;  break;  // Display
+				case HID_ESCAPE:    kpd_testMask = LED6_PIN;  break;  // Cancel
+				case HID_ENTER:     kpd_testMask = LED7_PIN;  break;  // Enter
+				case HID_BACKSPACE:	kpd_testMask = LED8_PIN;  break;  // Clear
+				case HID_N:         kpd_testMask = LED1_PIN;  break;  // Null
+				default:            kpd_testMask = 0;         break;
 			}
 			if (kpd_testMask) led_toggle(kpd_testMask);
 

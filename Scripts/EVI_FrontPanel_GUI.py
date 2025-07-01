@@ -11,17 +11,17 @@
 #----------------------------------------
 #  ********************************************************************
 
-# ----------------------------------------
-# --------------- Imports ----------------
-# ----------------------------------------
+''' ------------------------------------------------ '''
+''' -------------------- imports ------------------- '''
+''' ------------------------------------------------ '''
 import hid
 import tkinter as tk
 from tkinter import messagebox
 from functools import partial
 
-# ----------------------------------------
-# -------------- Constants ---------------
-# ---------------------------------------
+''' ------------------------------------------------ '''
+''' ------------------- constants ------------------ '''
+''' ------------------------------------------------ '''
 VID = 0x03EB # USB Vendor ID for Atmel Devices
 PID = 0x2133 # USB Product ID for XMEGA256A3U front panel
 
@@ -38,9 +38,9 @@ KEY_NAMES = [ # HID key names for keypad buttons
     "DISPLAY", "CANCEL", "ENTER", "CLEAR", "NULL"
 ]
 
-# ----------------------------------------
-# ----------- GUI Application -----------
-# ----------------------------------------
+''' ------------------------------------------------ '''
+''' ---------------- GUI application --------------- '''
+''' ------------------------------------------------ '''
 class LED_Toggler(tk.Tk):
     # Tkinter GUI for front-panel LED control and input visualization.
     def __init__(self):
@@ -50,9 +50,9 @@ class LED_Toggler(tk.Tk):
         self.configure(bg="#4c9a8f")
         self.title("Front-Panel LEDs")
 
-        # -------------------------------
-        # HID LED interface
-        # -------------------------------
+        ''' --------------------------------- '''
+        ''' ------- HID LED interface ------- '''
+        ''' --------------------------------- '''
         self.device = None
         for d in hid.enumerate(VID, PID):
             if d.get('interface_number') == LED_IFACE_NUMBER:
@@ -65,9 +65,9 @@ class LED_Toggler(tk.Tk):
             self.destroy()
             return
 
-        # ---------------------------------
-        # HID Joystick interface
-        # ---------------------------------
+        ''' --------------------------------- '''
+        ''' ----- HID joystick interface ---- '''
+        ''' --------------------------------- '''
         self.joystick = None
         for d in hid.enumerate(VID, PID):
             if d.get('interface_number') == JSK_IFACE_NUMBER:
@@ -79,16 +79,17 @@ class LED_Toggler(tk.Tk):
             messagebox.showwarning("Joystick not found",
                 f"Joystick interface {JSK_IFACE_NUMBER} missing.")
 
-        # ---------------------------------
-        # initialize LED state tracking
-        # ---------------------------------
+
+        ''' --------------------------------- '''
+        ''' - initialize LED state tracking - '''
+        ''' --------------------------------- '''
         self.states = [False] * 8 # track on/off state of each LED
         self.buttons = []         # store LED toggle button widgets
         self.skip_count = 0       # counter of skipped polls
 
-        # ---------------------------------
-        # LED toggle buttons
-        # ---------------------------------
+        ''' --------------------------------- '''
+        ''' ------- LED toggle buttons ------ '''
+        ''' --------------------------------- '''
         for i in range(8):
             btn = tk.Button(
                 self,
@@ -101,9 +102,10 @@ class LED_Toggler(tk.Tk):
             btn.grid(row=1, column=i + 2, padx=5, pady=5)
             self.buttons.append(btn)
 
-        # ---------------------------------
-        # auxiliary buttons
-        # ---------------------------------
+
+        ''' --------------------------------- '''
+        ''' ------- auxiliary buttons ------- '''
+        ''' --------------------------------- '''
         self.all_on_btn = tk.Button(
             self,
             text="All On",
@@ -159,9 +161,10 @@ class LED_Toggler(tk.Tk):
         self.start_btn.grid_remove() # hide start button initially
         self.reset_btn.grid(row=5, column=1, padx=3, pady=3)
 
-        # ---------------------------------
-        # LED status indicators
-        # ---------------------------------
+
+        ''' --------------------------------- '''
+        ''' ----- LED status indicators ----- '''
+        ''' --------------------------------- '''
         self.led_canvases = [] # canvases for LED state indicators
         self.led_ovals = []
         for i in range(8):
@@ -189,9 +192,9 @@ class LED_Toggler(tk.Tk):
         self.status_oval = self.status_canvas.create_oval(2, 2, 18, 18,
                                                           fill="gray") # off = grey
 
-        # ---------------------------------
-        # status LED toggle button
-        # ---------------------------------
+        ''' --------------------------------- '''
+        ''' ---- status LED toggle button --- '''
+        ''' --------------------------------- '''
         self.status_state = False
         self.status_btn = tk.Button(
             self,
@@ -203,9 +206,10 @@ class LED_Toggler(tk.Tk):
         )
         self.status_btn.grid(row=1, column=1, padx=5, pady=5)
 
-        # ---------------------------------
-        # keypad indicators
-        # ---------------------------------
+
+        ''' --------------------------------- '''
+        ''' ------- keypad indicators ------- '''
+        ''' --------------------------------- '''
         self.key_states = [False] * len(KEY_NAMES)  # current press state
         self.key_labels = []                        # button widgets for keys
         self.key_pressed = [False] * len(KEY_NAMES) # press memory
@@ -221,7 +225,7 @@ class LED_Toggler(tk.Tk):
                 bg="#64b4c4"
             )
             btn.config(bg="#64b4c4")
-            key layout
+            # key layout
             if i < 4:
                 row = 5
                 column = i + 2
@@ -232,9 +236,10 @@ class LED_Toggler(tk.Tk):
             btn.grid(row=row, column=column, padx=5, pady=5)
             self.key_labels.append(btn)
 
-        # ---------------------------------
-        # joystick visualizer
-        # ---------------------------------
+
+        ''' --------------------------------- '''
+        ''' ------ joystick visualizer ------ '''
+        ''' --------------------------------- '''
         self.joy_size = 150
         joy_holder = tk.Frame(self, width=self.joy_size, height=self.joy_size, bg=self["bg"])
         joy_holder.grid_propagate(False)   
@@ -320,9 +325,10 @@ class LED_Toggler(tk.Tk):
         self.joyV_pressed = [False]*12
         self.joyH_pressed = [False]*12
 
-        # ---------------------------------
-        # begin polling HID devices
-        # ---------------------------------
+
+        ''' --------------------------------- '''
+        ''' --- begin polling HID devices --- '''
+        ''' --------------------------------- '''
         self.poll()
 
         # minimum window size
@@ -352,18 +358,11 @@ class LED_Toggler(tk.Tk):
         # skip the next bunch of polls (idk man buttons look weird otherwise)
         # self.skip_count = 100
         self.update_buttons()
-        
 
-    def toggle_status(self): # toggles status LED, sends updated bitmask to device
-        self.status_state = not self.status_state
-        code = 0x48 if self.status_state else 0x51
-        try:
-            self.device.write(bytes([0x00, 0x00, code]))
-        except Exception as e:
-            messagebox.showerror("HID cant write", str(e))
-            return
-        self.update_status_button()
 
+    ''' ------------------------------------------------ '''
+    ''' ------------ special control buttons ----------- '''
+    ''' ------------------------------------------------ '''
     def set_all_on(self): # turns all LEDs on, sends updated map to device
         self.stop_activity()
         try:
@@ -379,7 +378,6 @@ class LED_Toggler(tk.Tk):
             self.update_buttons()
         except Exception as e:
             messagebox.showerror("HID Write Error", str(e))
-
     def stop_activity(self): # stops idle sequence
         try:
             self.device.write(bytes([0x00, 0x00, 0x42]))
@@ -391,6 +389,10 @@ class LED_Toggler(tk.Tk):
         except Exception as e:
             messagebox.showerror("oopsies the HID", str(e))
 
+
+    ''' ------------------------------------------------ '''
+    ''' -------------- status LED control -------------- '''
+    ''' ------------------------------------------------ '''
     def status_on(self): # sets status LED on
         try: self.device.write(bytes([0x00, 0x00, 0x48]))
         except Exception as e:
@@ -399,7 +401,20 @@ class LED_Toggler(tk.Tk):
         try: self.device.write(bytes([0x00, 0x00, 0x51]))
         except Exception as e:
             messagebox.showerror("nar hid", str(e))
+    def toggle_status(self): # toggles status LED, sends updated bitmask to device
+        self.status_state = not self.status_state
+        code = 0x48 if self.status_state else 0x51
+        try:
+            self.device.write(bytes([0x00, 0x00, code]))
+        except Exception as e:
+            messagebox.showerror("HID cant write", str(e))
+            return
+        self.update_status_button()
 
+
+    ''' ------------------------------------------------ '''
+    ''' -------------- button update logic ------------- '''
+    ''' ------------------------------------------------ '''
     def update_buttons(self): # ensures each LED's button’s relief accurately reflects it's LED's state
         for i in range(8):
             btn = self.buttons[i]
@@ -413,11 +428,17 @@ class LED_Toggler(tk.Tk):
         color = "yellow" if self.status_state else "gray"
         self.status_canvas.itemconfig(self.status_oval, fill=color)
 
+    ''' ------------------------------------------------ '''
+    ''' ----------- button-press memory logic ---------- '''
+    ''' ------------------------------------------------ '''
     def reset_memory(self): # resets key/joystick indicator memory
         self.joyV_pressed = [False]*12
         self.joyH_pressed = [False]*12
         self.key_pressed  = [False]*len(KEY_NAMES)
 
+    ''' ------------------------------------------------ '''
+    ''' ------------- device polling logic ------------- '''
+    ''' ------------------------------------------------ '''
     def poll(self): # reads the most recent IN report from device
         rpt = self.device.read(7)
         if rpt and len(rpt) >= 7:

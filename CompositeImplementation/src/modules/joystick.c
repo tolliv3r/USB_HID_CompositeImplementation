@@ -109,26 +109,6 @@ uint8_t jstk_ledMask(int8_t idx)
     return jstk_mask;
 }
 
-// uint8_t jstk_ledMask(void) {
-//     uint8_t mask = 0;
-
-//     // horizontal axis
-//     int8_t hidx = jstk_readHoriIndex();
-//     if (hidx >= 0) {
-//         uint8_t hval = (uint8_t)(hidx + 1) & 0x0F;
-//         mask |= hval; // bits 0-3 => LEDs 1-4
-//     }
-
-//     // vertical axis
-//     int8_t vidx = jstk_readVertIndex();
-//     if (vidx >= 0) {
-//         uint8_t vval = (uint8_t)(vidx + 1) & 0x0F;
-//         mask |= (vval << 4); // bits 4-7 => LEDs 5-8
-//     }
-
-//     return mask;
-// }
-
 
 uint8_t jstk_readMask(void)
 {

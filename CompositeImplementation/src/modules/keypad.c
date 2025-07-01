@@ -91,7 +91,7 @@ void keypad_init(void)
 	kpd_keyAssign[0][3] = 0;
 
 	kpd_keyAssign[1][0] = HID_ENTER;     // ENTER Button
-	kpd_keyAssign[1][1] = HID_BACKSPACE; // CANCEL Button
+	kpd_keyAssign[1][1] = HID_ESCAPE; // CANCEL Button
 	kpd_keyAssign[1][2] = 0;
 	kpd_keyAssign[1][3] = 0;
 

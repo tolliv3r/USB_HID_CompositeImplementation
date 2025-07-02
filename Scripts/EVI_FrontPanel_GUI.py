@@ -48,7 +48,7 @@ class LED_Toggler(tk.Tk):
 
         # configure main window styff
         self.configure(bg="#4c9a8f")
-        self.title("Front-Panel LEDs")
+        self.title("EVi Front-Panel GUI")
 
         ''' --------------------------------- '''
         ''' ------- HID LED interface ------- '''

@@ -11,7 +11,7 @@ def find_and_open():
         if d['interface_number'] == LED_IFACE:
             dev = hid.device()
             dev.open_path(d['path'])
-            dev.set_nonblocking(False)
+            dev.set_nonblocking(True)
             return dev
     return None
 
@@ -24,7 +24,7 @@ def main():
     print("Opened LED interface, listening for 7-byte IN reports… (Ctrl-C to quit)\n")
     try:
         while True:
-            dev.write([0x00, 0x00])
+            # dev.write([0x00, 0x00])
 
             rpt = dev.read(7)
             if rpt and len(rpt) >= 7:
@@ -32,31 +32,32 @@ def main():
                 led_lo, led_hi, keys_lo, keys_hi, joy_lo, joy_mid, joy_hi = rpt[:7]
 
                 # reconstruct masks
-                led_mask = led_lo | (led_hi << 8)
                 key_mask = keys_lo | (keys_hi << 8)
                 joy_mask = joy_lo | (joy_mid << 8) | (joy_hi << 16)
 
-                # make led bit mask
-                led_bits = [(led_mask>>i)&1 for i in range(8)]
+                # convert led mask to bitmap
+                led_bits = [(led_lo >> i) & 1 for i in range(8)]
 
-                # split vertical/horizontal 12-bit maps
+                # convert keypad mask to bitmap
+                key_bits = [(key_mask >> i) & 1 for i in range(9)]
+
+                # split vertical/horizontal 12-bit masks
                 vert_mask = joy_mask & 0x0FFF
                 hori_mask = (joy_mask >> 12) & 0x0FFF
 
-                # list which pads are “pressed”
-                vert_pressed = [i for i in range(12) if (vert_mask >> i) & 1]
-                hori_pressed = [i for i in range(12) if (hori_mask >> i) & 1]
+                # convert joystick slider masks to bitmaps
+                vert_bits = [(vert_mask >> i) & 1 for i in range(12)]
+                hori_bits = [(hori_mask >> i) & 1 for i in range(12)]
 
                 # print
-                print(f"LED mask:    0x{led_mask:04X}")
-                print(f"LED bitmask: 0x{led_bits}")
-                print(f"Key mask:    0x{key_mask:04X}")
-                print(f"Joy mask:    0x{joy_mask:06X}")
-                print(f" Vertical:   bits {vert_pressed}")
-                print(f" Horizontal: bits {hori_pressed}")
+                print(f"Status LED:      [{led_hi & 0x01}]\n")
+                print(f"LED bitmap:      {led_bits}\n")
+                print(f"Keypad bitmap:   {key_bits}\n")
+                print(f"V Slider bitmap: {vert_bits}")
+                print(f"H Slider bitmap: {hori_bits}")
                 print("-" * 40)
 
-            time.sleep(0.05)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         pass

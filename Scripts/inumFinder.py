@@ -1,6 +1,8 @@
-import hid, sys
+import hid
+import sys
 
-VID, PID = 0x03EB, 0x2133
+VID = 0x03EB
+PID = 0x2133
 mask = int(sys.argv[1], 0) if len(sys.argv) > 1 else 0xFF
 
 devs = list(hid.enumerate(VID, PID))

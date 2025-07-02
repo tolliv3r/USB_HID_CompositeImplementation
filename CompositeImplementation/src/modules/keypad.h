@@ -1,4 +1,3 @@
-// keypad.h
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
@@ -19,4 +18,4 @@ uint8_t keypad_getCode(void);  // get HID code of last detected key
 uint16_t kbd_getMap(void);     // gets current map of key states
 
 
-#endif // keypad.h
+#endif

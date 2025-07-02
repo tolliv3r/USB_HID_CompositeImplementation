@@ -1,3 +1,18 @@
+/*
+ * main.c – Front-panel firmware entry point and USB event dispatcher for the EVi Classic firmware
+ *
+ * Author: Jackson Clary
+ * Purpose: 
+ *   • Initialize vector table, CPU interrupts, sleep manager, and system clock  
+ *   • Configure front-panel I/O and sub-devices (LEDs, keypad, joystick)  
+ *   • Start the USB device controller and run the startup LED sequence  
+ *   • On USB Start-of-Frame callbacks, service keyboard, joystick, and GUI LED reports when configured  
+ *   • Fallback while-loop to process keyboard, joystick, and status LED blinking w/o a USB connection
+ *
+ * History:
+ *   Created June 3, 2025
+ */
+
 #include <asf.h>
 #include "conf_usb.h"
 #include <util/delay.h>
@@ -29,15 +44,15 @@ int main (void)
 	startup_ui_process();
 
 	// while-loop driven operation
-	// (for testing w/o a USB connection)
+	// *for testing w/o a USB connection*
 	while (true) {
-		if (udc_is_configured()) {
-			sleepmgr_enter_sleep();
+		if (udc_is_configured()) { // usb?
+			sleepmgr_enter_sleep(); // shutoff
 		} else if ((PORTB.IN & PIN4_bm) == 0) {
-			kbd_ui_process();
-			jstk_ui_process();
-			status_ui_process(0);
-			_delay_ms(1);
+			kbd_ui_process    ( );
+			jstk_ui_process   ( );
+			status_ui_process (0);
+			_delay_ms         (1);
 		}
 	}
 }
@@ -50,7 +65,7 @@ void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
 // SoF driven operation
-// (for normal use)
+// *for normal use*
 void main_sof_action(void) {
 	if (!main_b_kbd_enable)
 		return;
@@ -73,7 +88,7 @@ void main_remotewakeup_disable(void) { }
 
 
 /* ------------------------------------------ */
-/* ---------------- Keyboard ---------------- */
+/* ---------------- keyboard ---------------- */
 /* ------------------------------------------ */
 bool main_kbd_enable(void) {
 	main_b_kbd_enable = true;
@@ -85,7 +100,7 @@ void main_kbd_disable(void) {
 
 
 /* ------------------------------------------ */
-/* ---------------- Joystick ---------------- */
+/* ---------------- joystick ---------------- */
 /* ------------------------------------------ */
 bool main_joystick_enable(void) {
 	main_b_jstk_enable = true;

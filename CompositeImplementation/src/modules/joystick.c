@@ -9,6 +9,7 @@
  * History:
  *   Created May 29, 2025
  */
+
 #include <asf.h>
 
 #include "joystick.h"

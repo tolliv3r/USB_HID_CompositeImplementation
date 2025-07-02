@@ -1,24 +1,15 @@
 /*
- * GccApplication
- * File --> 76319_io_initialization.c
+ * io.c – Front‐panel I/O initialization for the EVi Classic firmware
  *
+ * Author: Rex Walters
+ * Purpose: Configure and initialize all front‐panel I/O—set up LED drivers, keypad matrix scanning, 
+ *          and joystick slider inputs by configuring port directions and pull-ups—and invoke the 
+ *          led_init(), keypad_init(), and idleStart() routines to ready the hardware for operation.
+ *
+ * History:
+ *   Created March 5, 2024
+ *	 Revision May 22, 2025 (JC)
  */
-
-//  ********************************************************************
-/*
- * Author: Rex.Walters
- * Purpose - Configure and initialize all front-panel I/O—LED outputs,
-            keypad scanning, and joystick slider inputs.
- * Firmware - For P/N 76319 EVI Classic Front Panel Interface PCBA
- *
-  *----------------------------------------
- * EVI Classic Front Panel Interface Firmware Revisions
- * Revision 0
- * Created / Started March 5,2024
- * Finished (Place Date here)
- *----------------------------------------
-*/
-
 
 /****************************************************/
 // Section - Include File Declarations

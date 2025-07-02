@@ -17,4 +17,4 @@ void jstk_usbTask         (void);
 uint32_t jstk_getMap      (void);
 
 
-#endif // JOYSTICK_H
+#endif

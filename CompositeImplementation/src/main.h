@@ -1,10 +1,3 @@
-/*
- * main.h
- *
- * Created: 6/3/2025 3:51:16 PM
- *  Author: jackson.clary
- */ 
-
 #ifndef MAIN_H_
 #define MAIN_H_
 
@@ -26,9 +19,9 @@ void main_kbd_disable(void);
 bool main_joystick_enable(void);
 void main_joystick_disable(void);
 
-/* -------------- LEDs ------------- */
+/* -------------- LED -------------- */
 bool main_led_enable(void);
 void main_led_disable(void);
 
 
-#endif /* MAIN_H_ */
+#endif

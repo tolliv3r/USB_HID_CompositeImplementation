@@ -9,7 +9,7 @@
  *
  * History:
  *   Created March 5, 2024
- *   Full overhaul May 22, 2025
+ *   Full overhaul May 22, 2025 (JC)
  */
 
 #include <asf.h>

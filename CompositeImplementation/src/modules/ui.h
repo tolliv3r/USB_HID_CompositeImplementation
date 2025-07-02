@@ -31,4 +31,4 @@ void activityReset(void);
 bool activityCheck(void);
 
 
-#endif // _UI_H_
+#endif

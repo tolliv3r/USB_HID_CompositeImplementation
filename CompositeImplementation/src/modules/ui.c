@@ -139,7 +139,7 @@ void status_ui_process(uint8_t usbMode) {
 			}
 		// while-loop driven timer
 		} else if (usbMode == 0) {
-			if (sof_ms >= 1800) {
+			if (sof_ms >= 500) {
 				led_statusToggle();
 				sof_ms = 0;
 			}

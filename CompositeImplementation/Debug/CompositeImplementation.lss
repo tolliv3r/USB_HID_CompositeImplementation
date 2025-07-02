@@ -19,13 +19,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00005446  00000000  00000000  0000eba3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00009bbd  00000000  00000000  00013fe9  2**0
+  8 .debug_line   00009bba  00000000  00000000  00013fe9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000d80  00000000  00000000  0001dba8  2**2
+  9 .debug_frame  00000d80  00000000  00000000  0001dba4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00036f1f  00000000  00000000  0001e928  2**0
+ 10 .debug_str    00036f1f  00000000  00000000  0001e924  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000321f  00000000  00000000  00055847  2**0
+ 11 .debug_loc    0000321f  00000000  00000000  00055843  2**0
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_ranges 000006b0  00000000  00000000  00058a68  2**3
                   CONTENTS, READONLY, DEBUGGING
@@ -1098,8 +1098,6 @@ uint8_t jstk_ledMask(int8_t idx)
      5c0:	08 95       	ret
 
 000005c2 <jstk_readMask>:
-//     return mask;
-// }
 
 
 uint8_t jstk_readMask(void)
@@ -2554,8 +2552,8 @@ void activityReset(void) {
      dc4:	15 c0       	rjmp	.+42     	; 0xdf0 <status_ui_process+0x74>
      dc6:	80 91 fb 21 	lds	r24, 0x21FB	; 0x8021fb <sof_ms>
      dca:	90 91 fc 21 	lds	r25, 0x21FC	; 0x8021fc <sof_ms+0x1>
-     dce:	88 30       	cpi	r24, 0x08	; 8
-     dd0:	97 40       	sbci	r25, 0x07	; 7
+     dce:	84 3f       	cpi	r24, 0xF4	; 244
+     dd0:	91 40       	sbci	r25, 0x01	; 1
      dd2:	70 f0       	brcs	.+28     	; 0xdf0 <status_ui_process+0x74>
      dd4:	cb de       	rcall	.-618    	; 0xb6c <led_statusToggle>
      dd6:	10 92 fb 21 	sts	0x21FB, r1	; 0x8021fb <sof_ms>
@@ -7702,13 +7700,15 @@ void main_resume_action(void) { }
 
 00002b92 <main_sof_action>:
 
+// SoF driven operation
+// (for normal use)
 void main_sof_action(void) {
 	if (!main_b_kbd_enable)
     2b92:	80 91 eb 23 	lds	r24, 0x23EB	; 0x8023eb <main_b_kbd_enable>
     2b96:	88 23       	and	r24, r24
     2b98:	99 f0       	breq	.+38     	; 0x2bc0 <main_sof_action+0x2e>
 		return;
-	kbd_ui_process   ( );
+	kbd_ui_process   ( ); // keypad logic
     2b9a:	0e 94 88 06 	call	0xd10	; 0xd10 <kbd_ui_process>
 
 	if (!main_b_jstk_enable)
@@ -7716,7 +7716,7 @@ void main_sof_action(void) {
     2ba2:	88 23       	and	r24, r24
     2ba4:	69 f0       	breq	.+26     	; 0x2bc0 <main_sof_action+0x2e>
 		return;
-	jstk_ui_process  ( );
+	jstk_ui_process  ( ); // joystick logic
     2ba6:	0e 94 8b 06 	call	0xd16	; 0xd16 <jstk_ui_process>
 
 	if (!main_b_led_enable)
@@ -7725,12 +7725,12 @@ void main_sof_action(void) {
     2bb0:	39 f0       	breq	.+14     	; 0x2bc0 <main_sof_action+0x2e>
 		return;
 
-	gui_ui_process   ( );
+	gui_ui_process   ( ); // sends USB IN report
     2bb2:	0e 94 55 06 	call	0xcaa	; 0xcaa <gui_ui_process>
-	status_ui_process(1);
+	status_ui_process(1); // status LED behavior
     2bb6:	81 e0       	ldi	r24, 0x01	; 1
     2bb8:	0e 94 be 06 	call	0xd7c	; 0xd7c <status_ui_process>
-	idle_ui_process  ( );
+	idle_ui_process  ( ); // idle LED sequence
     2bbc:	0c 94 00 07 	jmp	0xe00	; 0xe00 <idle_ui_process>
     2bc0:	08 95       	ret
 

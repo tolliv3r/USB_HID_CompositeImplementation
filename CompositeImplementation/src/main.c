@@ -1,5 +1,4 @@
 #include <asf.h>
-#include "udc.h"
 #include "conf_usb.h"
 #include <util/delay.h>
 
@@ -50,21 +49,23 @@ int main (void)
 void main_suspend_action(void) { }
 void main_resume_action(void) { }
 
+// SoF driven operation
+// (for normal use)
 void main_sof_action(void) {
 	if (!main_b_kbd_enable)
 		return;
-	kbd_ui_process   ( );
+	kbd_ui_process   ( ); // keypad logic
 
 	if (!main_b_jstk_enable)
 		return;
-	jstk_ui_process  ( );
+	jstk_ui_process  ( ); // joystick logic
 
 	if (!main_b_led_enable)
 		return;
 
-	gui_ui_process   ( );
-	status_ui_process(1);
-	idle_ui_process  ( );
+	gui_ui_process   ( ); // sends USB IN report
+	status_ui_process(1); // status LED behavior
+	idle_ui_process  ( ); // idle LED sequence
 }
 
 void main_remotewakeup_enable(void) { }

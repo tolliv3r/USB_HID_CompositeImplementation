@@ -50,7 +50,7 @@ def main():
                 hori_bits = [(hori_mask >> i) & 1 for i in range(12)]
 
                 # print
-                print(f"Status LED:      [{led_hi & 0x01}]\n")
+                print(f"Status LED:      [{led_hi & 0x01}]")
                 print(f"LED bitmap:      {led_bits}\n")
                 print(f"Keypad bitmap:   {key_bits}\n")
                 print(f"V Slider bitmap: {vert_bits}")

@@ -8,11 +8,11 @@ void io_ui_process(void);
 /* ---------------- GUI --------------- */
 void gui_ui_process(void);
 
-/* ------------- joystick ------------- */
-void jstk_ui_process(void);
-
 /* ------------- keyboard ------------- */
 void kbd_ui_process(void);
+
+/* ------------- joystick ------------- */
+void jstk_ui_process(void);
 
 /* --------------- LEDs --------------- */
 void led_ui_report(uint8_t const *mask);
@@ -27,8 +27,8 @@ void idle_ui_process   (void);
 
 /* ------ LED activity detection ------ */
 void activityEnable(void);
-void activityReset(void);
-bool activityCheck(void);
+void activityReset (void);
+bool activityCheck (void);
 
 
 #endif

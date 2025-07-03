@@ -79,7 +79,7 @@ uint8_t jstk_idxToAxis(int8_t idx) {
 }   // conversion runtime is O(1)
 
 
-uint8_t jstk_ledMask(int8_t idx)
+uint8_t jstk_ledMask(int8_t idx) // converts jstk button press index to LED mask
 {
     if (idx < 0)    // no touch detected
         return 0;
@@ -111,7 +111,7 @@ uint8_t jstk_ledMask(int8_t idx)
 }
 
 
-uint8_t jstk_readMask(void)
+uint8_t jstk_readMask(void) // test mode LED map
 {
     int8_t vi = jstk_readVertIndex();       // -1 to 11
     int8_t hi = jstk_readHoriIndex();       // -1 to 11
@@ -133,7 +133,7 @@ uint8_t jstk_readMask(void)
 static uint8_t jstk_usbReport[2];
 static uint8_t jstk_prevReport[2] = {128, 128};
 
-void jstk_usbTask(void)
+void jstk_usbTask(void) // build and send 2 byte report
 {
     // sample current joystick/slider indices
     jstk_usbReport[0] = jstk_idxToAxis(jstk_readHoriIndex());    // x
@@ -149,7 +149,7 @@ void jstk_usbTask(void)
     }
 }
 
-uint32_t jstk_getMap(void) {
+uint32_t jstk_getMap(void) { // bitmap of both sliders button states
     // raw 12 bit words (0 = pressed, 1 = released)
     uint16_t rawV = jstk_readVertRaw();
     uint16_t rawH = jstk_readHoriRaw();

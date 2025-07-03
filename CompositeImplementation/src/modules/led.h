@@ -1,8 +1,8 @@
 #ifndef LED_H
 #define LED_H
 
-#include <stdint.h>
 
+#include <stdint.h>
 
 #define LED1_PIN    (1u << 0)
 #define LED2_PIN    (1u << 1)
@@ -27,7 +27,6 @@
 
 #define LED_PORT         PORTA
 #define STATUS_LED_PORT  PORTB
-
 
 /* ------- regular LED control ------- */
 void led_init         (void);

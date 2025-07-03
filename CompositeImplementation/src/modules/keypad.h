@@ -2,20 +2,21 @@
 #define KEYPAD_H
 
 
-#define KEYPAD_PRESSED	1
-#define KEYPAD_RELEASED	0
+#define KEYPAD_PRESSED	 1
+#define KEYPAD_RELEASED	 0
 
-#define KEYPAD_COLS		5
-#define KEYPAD_ROWS		4
+#define KEYPAD_COLS		 5
+#define KEYPAD_ROWS		 4
 
-void keypad_init(void);		   // initialize keypad matrix
-void keypad_poll(void);		   // scan keypad matrix
-void keypad_report(void);      // usb report or LED report
+void keypad_init        (void);
 
-uint8_t keypad_getState(void); // get current key press state
-uint8_t keypad_getCode(void);  // get HID code of last detected key
+uint8_t keypad_getState (void);
+uint8_t keypad_getCode  (void);
 
-uint16_t kbd_getMap(void);     // gets current map of key states
+void keypad_poll        (void);
+void keypad_report      (void);
+
+uint16_t kbd_getMap     (void);
 
 
 #endif

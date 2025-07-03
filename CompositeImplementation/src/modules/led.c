@@ -151,28 +151,6 @@ static void led_quiet_setState(uint8_t mask) { // sets LEDs to on
 
 
 /* ---------------------------------------------------------------------- */
-/* ---------------------------- LED state map --------------------------- */
-/* ---------------------------------------------------------------------- */
-static void led_updateState(uint8_t mask, bool state) {
-    for (int i = 0; i < 8; i++) {
-        if (mask & (1 << i)) {
-            ledMap[i] = state;
-        }
-    }
-}
-
-uint16_t led_getMap(void) {
-    uint16_t map = 0;
-    for (uint8_t i = 0; i < 16; i++) {
-        if (ledMap[i]) {
-            map |= (1 << i);
-        }
-    }
-    return map;
-}
-
-
-/* ---------------------------------------------------------------------- */
 /* ------------------------- status LED control ------------------------- */
 /* ---------------------------------------------------------------------- */
 void led_statusOn(void) { // status LED on
@@ -191,6 +169,28 @@ void led_statusToggle(void) { // toggle status LED
     STATUS_LED_PORT.OUTTGL = LEDS_PIN;
 
     ledMap[8] = !ledMap[8];
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* ---------------------------- LED state map --------------------------- */
+/* ---------------------------------------------------------------------- */
+static void led_updateState(uint8_t mask, bool state) {
+    for (int i = 0; i < 8; i++) {
+        if (mask & (1 << i)) {
+            ledMap[i] = state;
+        }
+    }
+}
+
+uint16_t led_getMap(void) {
+    uint16_t map = 0;
+    for (uint8_t i = 0; i < 16; i++) {
+        if (ledMap[i]) {
+            map |= (1 << i);
+        }
+    }
+    return map;
 }
 
 
@@ -216,12 +216,10 @@ void idleStart(void) {
     idle.timer     = 0;
     idle.period    = 250;
 }
-
 void idleStop(void) {
     idle.running = false;
     led_quiet_allOff();
 }
-
 void idlePoll(void) {
     if (!idle.running)
         return;

@@ -119,6 +119,16 @@ void keypad_init(void)
 }
 
 
+// get current press state
+uint8_t keypad_getState(void) {
+	return(kpd_keyPressed);
+}
+// get last detected HID code
+uint8_t keypad_getCode(void) {
+	return(kpd_code);
+}
+
+
 /*
  * scans the keypad matrix
  */
@@ -207,28 +217,6 @@ void keypad_poll(void)
 	kpd_multiPress = (pressedCount > 1);
 }
 
-// get current press state
-uint8_t keypad_getState(void) {
-	return(kpd_keyPressed);
-}
-// get last detected HID code
-uint8_t keypad_getCode(void) {
-	return(kpd_code);
-}
-
-uint16_t kbd_getMap(void) {
-	uint16_t bits = 0;
-
-	for (uint8_t i = 0; i < 9; ++i) {
-		if (keyMap[i]) {
-			bits |= (1 << i);
-		}
-	}
-
-	return bits;
-}
-
-
 // toggles LED's in test mode, sends HID code over USB in normal mode
 void keypad_report(void)
 {	
@@ -257,7 +245,6 @@ void keypad_report(void)
 			}
 			if (kpd_testMask) led_toggle(kpd_testMask);
 
-			// activityEnable();
 			kpd_exitTestMode = 1;	// flag for exiting test mode
 		}
 	}
@@ -295,4 +282,18 @@ void keypad_report(void)
 		kpd_exitTestMode = 0;
 	}
 	kpd_prevState = kpd_currState;
+}
+
+
+// get current map of keypad states
+uint16_t kbd_getMap(void) {
+	uint16_t bits = 0;
+
+	for (uint8_t i = 0; i < 9; ++i) {
+		if (keyMap[i]) {
+			bits |= (1 << i);
+		}
+	}
+
+	return bits;
 }

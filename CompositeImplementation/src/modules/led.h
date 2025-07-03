@@ -2,8 +2,6 @@
 #define LED_H
 
 
-#include <stdint.h>
-
 #define LED1_PIN    (1u << 0)
 #define LED2_PIN    (1u << 1)
 #define LED3_PIN    (1u << 2)

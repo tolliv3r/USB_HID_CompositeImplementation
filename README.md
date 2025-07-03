@@ -24,10 +24,6 @@ This project implements custom firmware for the EVi Classic front panel interfac
 3. **Flash:** Upload firmware to the device.
 4. **Run GUI:** Use `EVi_FrontPanel_GUI.py` (requires `hid` and `tkinter`) to test & interact with the device.
 
-## License
-
-Proprietary / Internal Project. Do not distribute without permission.
-
 ---
 
 © 2025 UniWest Inc. All rights reserved.

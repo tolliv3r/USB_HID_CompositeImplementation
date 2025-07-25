@@ -109,13 +109,16 @@ void led_ui_report(uint8_t const *code) {
 
 	if        (command == STOP)       {
 		activityEnable();
+		led_setState(ledMask);
 	} else if (command == START)      {
 		activityReset();
 		idleStart();
 	} else if (command == STATUS_ON)  {
 		led_statusOn();
+		led_setState(ledMask);
 	} else if (command == STATUS_OFF) {
 		led_statusOff();
+		led_setState(ledMask);
 	} else                            {
 		led_setState(ledMask);
 	}

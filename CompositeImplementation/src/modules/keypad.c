@@ -148,6 +148,7 @@ void keypad_poll(void)
 	// scan each column
 	for (uint8_t col = 0; col < KEYPAD_COLS; ++col) {
 		PORTF.OUT = kpd_colAddr[col]; // drive column select (active = low)
+		// column 4 is wired to PB7 (not PF0-PF3), so drive PB7 low only when scanning that column
 		if (col == 4) {
 			PORTB.OUTCLR = PIN7_bm;
 		} else {
@@ -203,11 +204,12 @@ void keypad_poll(void)
 
 	if (lastRow < KEYPAD_ROWS) { // update global press state & code
 		uint8_t newCode = kpd_keyAssign[lastCol][lastRow];
-		if (kpd_keyPressed == KEYPAD_RELEASED) {
-			kpd_code = newCode;
+		// only update kpd_code on an *event* (initial press or key-change)
+		if (kpd_keyPressed == KEYPAD_RELEASED) {	// skip if same key is still held
+			kpd_code = newCode;						// first key-down edge
 			kpd_keyPressed = KEYPAD_PRESSED;
-		} else if (newCode != kpd_code) {
-			kpd_code = newCode;
+		} else if (newCode != kpd_code) {			// new keypress w/o releasing old
+			kpd_code = newCode;						// update internal currently pressed code
 		}
 	} else {
 		if (kpd_keyPressed == KEYPAD_PRESSED) {

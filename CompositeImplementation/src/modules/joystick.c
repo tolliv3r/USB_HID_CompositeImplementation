@@ -14,18 +14,113 @@
 
 #include "joystick.h"
 
+#define AXIS_VERT       0
+#define AXIS_HORI       1
 #define SLIDER_COUNT   12
 #define SLIDER_MASK  ((1u << SLIDER_COUNT) - 1) // 0x0FFF
 
 uint8_t jstk_mask;  // bitmask of LED's to turn on
 
 
+/*
+static int8_t jstk_scan(uint16_t jstk_bits)
+{
+    uint16_t pressed = (~jstk_bits) & SLIDER_MASK;
 
-static int8_t jstk_scan(uint16_t jstk_bits) {
-    for (int8_t i = 0; i < SLIDER_COUNT; i++)   // iterates through slider
-        if ((jstk_bits & (1u << i)) == 0)       // active when low
-            return i;                           // returns active pad index
-    return -1;                                  // nothing being touched
+    static int8_t latched_idx = -1;
+
+    if (latched_idx >= 0 && (pressed & (1u << latched_idx)))
+        return latched_idx;
+
+    for (int8_t i = 0; i < SLIDER_COUNT; i++) {
+        if (pressed & (1u << i)) {
+            latched_idx = i;
+            return latched_idx;
+        }
+    }
+
+    latched_idx = -1;
+    return -1;
+}
+*/
+static int8_t jstk_scan(uint8_t axis, uint16_t bits)
+{
+    // /* ------------- leading pad joystick -------------- */
+    // static int8_t head[2] = {-1, -1};
+    // static int8_t next[2][SLIDER_COUNT];
+    // static uint8_t inlist[2][SLIDER_COUNT] = {{0}};
+
+    // uint16_t pressed = (~bits) & SLIDER_MASK;
+
+    // // insert new pressed to the front of stack (FIFO)
+    // for (int8_t i = 0; i < SLIDER_COUNT; i++) {
+    //     if ((pressed & (1u << i)) && !inlist[axis][i]) {
+    //         next[axis][i] = head[axis]; // push to front
+    //         head[axis] = i;
+    //         inlist[axis][i] = 1;
+    //     }
+    // }
+
+    // // remove released pads from llist
+    // int8_t *p = &head[axis];
+    // while(*p != -1) {
+    //     int8_t idx = *p;
+    //     if (!(pressed & (1u << idx))) {  // pad released?
+    //         *p = next[axis][idx];        // unlink node
+    //         inlist[axis][idx] = 0;       // do not advance p, `next` is the new `curr`
+    //     } else {
+    //         p = &next[axis][idx];        // step forward
+    //     }
+    // } // O(N^2), i'm fine with it because list is small
+
+    // return head[axis];
+
+    
+    /* ------------- trailing pad joystick ------------- */
+    static int8_t head[2] = {-1, -1};   // oldest pressed pad
+    static int8_t tail[2] = {-1, -1};   // newest pressed pad
+    static int8_t next[2][SLIDER_COUNT];
+    static uint8_t inlist[2][SLIDER_COUNT] = {{0}};
+
+    uint16_t pressed = (~bits) & SLIDER_MASK;
+
+    // insert new presses to the back of queue (LIFO)
+    for (int8_t i = 0; i < SLIDER_COUNT; i++) {
+        if ((pressed & (1u << i)) && !inlist[axis][i]) {
+            next[axis][i] = -1; // push to tail
+            if (tail[axis] == -1) { // if list is empty
+                head[axis] = tail[axis] = i;
+            } else {
+                next[axis][tail[axis]] = i;
+                tail[axis] = i;
+            }
+            inlist[axis][i] = 1;
+        }
+    }
+
+    // remove released pads from queue
+    int8_t prev = -1;
+    int8_t curr = head[axis];
+
+    while (curr != -1) {
+        if (!(pressed & (1u << curr))) {    // pad released?
+            if (prev == -1) // remove head case
+                head[axis] = next[axis][curr];
+            else
+                next[axis][prev] = next[axis][curr];
+
+            if (tail[axis] == curr) // remove tail case
+                tail[axis] = prev;
+
+            inlist[axis][curr] = 0;
+            curr = (prev == -1) ? head[axis] : next[axis][prev];
+        } else {
+            prev = curr;
+            curr = next[axis][curr];
+        }
+    }
+
+    return head[axis];
 }
 
 /*
@@ -43,10 +138,7 @@ static uint16_t jstk_readVertRaw(void) {
 }   // only return C2-C7 and D0-D5
 
 int8_t jstk_readVertIndex(void) {
-    int8_t idx = jstk_scan(jstk_readVertRaw());
-    // if (idx >= 0)
-    //     idx = 11 - idx;
-    return idx;
+    return jstk_scan(AXIS_VERT, jstk_readVertRaw());
 }
 
 // horizontal slider
@@ -58,10 +150,7 @@ static uint16_t jstk_readHoriRaw(void) {
 }
 
 int8_t jstk_readHoriIndex(void) {
-    int8_t idx = jstk_scan(jstk_readHoriRaw());
-    // if (idx >= 0)
-    //     idx = 11 - idx;
-    return idx;
+    return jstk_scan(AXIS_HORI, jstk_readHoriRaw());
 }
 
 

@@ -146,7 +146,7 @@ void status_ui_process(uint8_t usbMode) {
 				led_statusToggle();
 				sof_ms = 0;
 			}
-		}
+		} // adjust timing as needed
 	} else { // if not currently in test mode
 		if (prev) // if just exiting test mode
 			led_statusOff();
